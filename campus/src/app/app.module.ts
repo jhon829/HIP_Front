@@ -12,6 +12,7 @@ import {TopBarComponent} from "./component/top-bar/top-bar.component";
 import {HttpClientModule} from "@angular/common/http";
 import { CommonModule } from '@angular/common';
 import{ExhibitionComponent} from "./exhibitionpage/exhibition/exhibition.component";
+import { CourseService } from './services/course.service'; // 서비스 경로 확인
 
 @NgModule({
   declarations: [AppComponent, AttendanceModalComponent],
@@ -26,7 +27,7 @@ import{ExhibitionComponent} from "./exhibitionpage/exhibition/exhibition.compone
     FormsModule, SidemenuComponent,
 
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy},CourseService,],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
