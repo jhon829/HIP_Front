@@ -12,7 +12,7 @@ export class ClassmyPage implements OnInit {
   newCourseTitle: string = ''; // 새 강의 제목을 저장하는 변수
   courses: string[] = []; // 생성된 강의 목록을 저장하는 배열
 
-  constructor(private authService: AuthService) {}
+  constructor() {}
 
   ngOnInit() {
     // 초기화 로직이 필요하다면 여기에 작성
@@ -22,7 +22,7 @@ export class ClassmyPage implements OnInit {
     this.activeSection = section; // 클릭한 섹션으로 활성화 변경
   }
 
-  async confirmCourse() {
+  /*async confirmCourse() {
     if (this.newCourseTitle) {
       try {
         // 강의 생성 요청
@@ -38,6 +38,6 @@ export class ClassmyPage implements OnInit {
         console.error('Error:', error);
       }
     }
-  }
+  }*/
 
 }
