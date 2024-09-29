@@ -36,7 +36,6 @@ export class ExhibitionComponent {
       outputVideo: this.outputVideo ? this.outputVideo : null // null 체크
     };
 
-    this.exhibitionService.saveExhibitionData(formData);
   }
 
   onOutputImagesChange(event: Event) {
