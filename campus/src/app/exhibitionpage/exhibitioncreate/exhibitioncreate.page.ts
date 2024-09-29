@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ExhibitionService } from "../../services/exhibitionservice.service";
 import { tap } from 'rxjs/operators';
+import {forkJoin, Observable} from 'rxjs';
 
 @Component({
   selector: 'app-exhibitioncreate',
@@ -40,11 +41,13 @@ export class ExhibitioncreatePage {
     if (this.memberName && this.memberImage) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        this.members.push({ name: this.memberName, image: e.target?.result as string });
-        this.memberName = ''; // 입력 필드 초기화
-        this.memberImage = null; // 이미지 초기화
+        if (e.target && e.target.result) {
+          this.members.push({ name: this.memberName, image: e.target.result as string });
+          this.memberName = '';
+          this.memberImage = null;
+        }
       };
-      reader.readAsDataURL(this.memberImage); // 이미지 미리보기 로드
+      reader.readAsDataURL(this.memberImage);
     }
   }
 
@@ -53,13 +56,15 @@ export class ExhibitioncreatePage {
   }
 
   addOutputImage() {
-    if (this.outputImages) {
+    if (this.outputImages && this.outputImages.length > 0) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        this.outputImagesList.push(e.target?.result as string);
+        if (e.target && e.target.result) {
+          this.outputImagesList.push(e.target.result as string);
+        }
       };
-      reader.readAsDataURL(this.outputImages[0]); // 첫 번째 파일만 추가
-      this.outputImages = null; // 입력 필드 초기화
+      reader.readAsDataURL(this.outputImages[0]);
+      this.outputImages = null;
     }
   }
 
@@ -84,24 +89,28 @@ export class ExhibitioncreatePage {
   onFileChange(event: Event) {
     const target = event.target as HTMLInputElement;
     if (target.files && target.files.length > 0) {
-      this.thumbnail = target.files[0]; // thumbnail 파일 설정
+      this.thumbnail = target.files[0];
       const reader = new FileReader();
       reader.onload = (e) => {
-        this.thumbnailPreview = e.target?.result as string; // 미리보기 URL 설정
+        if (e.target && e.target.result) {
+          this.thumbnailPreview = e.target.result as string;
+        }
       };
-      reader.readAsDataURL(this.thumbnail); // 이미지 미리보기 로드
+      reader.readAsDataURL(this.thumbnail);
     }
   }
 
   onOutputVideoChange(event: Event) {
     const target = event.target as HTMLInputElement;
     if (target.files && target.files.length > 0) {
-      this.outputVideo = target.files[0]; // outputVideo 파일 설정
+      this.outputVideo = target.files[0];
       const reader = new FileReader();
       reader.onload = (e) => {
-        this.outputVideoPreview = e.target?.result as string; // 미리보기 URL 설정
+        if (e.target && e.target.result) {
+          this.outputVideoPreview = e.target.result as string;
+        }
       };
-      reader.readAsDataURL(this.outputVideo); // 영상 미리보기 로드
+      reader.readAsDataURL(this.outputVideo);
     }
   }
 
@@ -121,46 +130,69 @@ export class ExhibitioncreatePage {
       alert('Output에서 사용할 사진은 1~3개이어야 합니다.');
       return;
     }
-
-    // FormData 객체 생성
-    const formData = new FormData();
-
-    // 폼 데이터 추가
-    formData.append('projectName', this.projectName);
-    formData.append('teamName', this.teamName);
-    formData.append('course', this.course);
-
+    const exhibitionData = new FormData();
+    exhibitionData.append('projectName', this.projectName);
+    exhibitionData.append('teamName', this.teamName);
+    exhibitionData.append('course', this.course);
     if (this.thumbnail) {
-      formData.append('thumbnail', this.thumbnail); // 썸네일 파일 추가
+      exhibitionData.append('thumbnail', this.thumbnail);
     }
 
-    formData.append('introductions', JSON.stringify(this.introductions)); // Introduce 문장 배열 추가
-
-    this.members.forEach(member => {
-      formData.append('members[]', JSON.stringify(member)); // 각 멤버 추가
+    const introductionsData = new FormData();
+    this.introductions.forEach((intro, index) => {
+      introductionsData.append(`introductions[${index}]`, intro);
     });
 
-    this.outputImagesList.forEach(image => {
-      formData.append('outputImages[]', image); // 출력 이미지 추가
+    const membersData = new FormData();
+    this.members.forEach((member, index) => {
+      membersData.append(`members[${index}][name]`, member.name);
+      membersData.append(`members[${index}][image]`, this.dataURLtoFile(member.image, `member_${index}.jpg`));
     });
 
+    const outputData = new FormData();
+    if (this.outputImages) {
+      Array.from(this.outputImages).forEach((image, index) => {
+        outputData.append(`outputImages[${index}]`, image);
+      });
+    }
     if (this.outputVideo) {
-      formData.append('outputVideo', this.outputVideo); // 비디오 파일 추가
+      outputData.append('outputVideo', this.outputVideo);
     }
 
-    // 데이터 전송
-    this.exhibitionService.saveExhibitionData(formData).pipe(
-      tap({
-        next: (response) => {
-          console.log('전송 성공:', response);
-          // 성공 시 추가 동작 (예: 성공 알림)
-        },
-        error: (error) => {
-          console.error('전송 실패:', error);
-          // 실패 시 추가 동작 (예: 실패 알림)
-        }
-      })
-    ).subscribe();
+    const requests: Observable<any>[] = [
+      this.exhibitionService.saveExhibitionData(exhibitionData),
+      this.exhibitionService.saveIntroductions(introductionsData),
+      this.exhibitionService.saveMembers(membersData),
+      this.exhibitionService.saveOutputs(outputData)
+    ];
+
+    // 모든 요청을 병렬로 실행
+    forkJoin(requests).subscribe({
+      next: (responses) => {
+        console.log('모든 데이터 전송 성공:', responses);
+        // 성공 시 추가 동작 (예: 성공 알림)
+      },
+      error: (error) => {
+        console.error('데이터 전송 실패:', error);
+        // 실패 시 추가 동작 (예: 실패 알림)
+      }
+    });
+
+  }
+  // Data URL을 File 객체로 변환하는 헬퍼 함수
+  dataURLtoFile(dataurl: string, filename: string): File {
+    let arr = dataurl.split(','),
+      mime = arr[0].match(/:(.*?);/);
+    if (mime && mime[1]) {
+      let bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+      while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new File([u8arr], filename, {type:mime[1]});
+    }
+    throw new Error('Invalid data URL');
   }
 
 }

@@ -1,21 +1,29 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable, forkJoin } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExhibitionService {
-  private apiUrl = 'http://localhost:3000/exhibitions'; // 실제 API URL로 변경하세요.
+  private apiUrl = 'http://localhost:3000'; // 실제 API URL로 변경하세요.
 
   constructor(private http: HttpClient) {}
 
+  saveExhibitionData(data: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/exhibitions/register`, data);
+  }
 
-  // Create: 전시물 생성
-  saveExhibitionData(data: any): Observable<any> {
-    const url = this.apiUrl + '/register'
-    console.log(url);
-    return this.http.post(url, data);
+  saveIntroductions(data: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/exhibition-intro/register`, data);
+  }
+
+  saveMembers(data: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/exhibition-docs/register`, data);
+  }
+
+  saveOutputs(data: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/exhibition-members/register`, data);
   }
 
   // 참고
