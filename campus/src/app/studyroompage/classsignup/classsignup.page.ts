@@ -34,7 +34,6 @@ export class ClasssignupPage implements OnInit {
   }
 
 
-
   async openModal() {
     const modal = await this.modalController.create({
       component: CourseCreateModalComponent,
@@ -43,4 +42,21 @@ export class ClasssignupPage implements OnInit {
 
     return await modal.present();
   }
+
+  async delete(courseId: number) {
+    const confirmed = confirm('이 강의를 삭제하시겠습니까?'); // 삭제 확인 다이얼로그
+    if (!confirmed) {
+      return; // 사용자가 삭제를 취소한 경우
+    }
+
+    try {
+      const response = await firstValueFrom(this.courseService.deleteCourse(courseId.toString())); // 숫자를 문자열로 변환하여 삭제 API 호출
+      console.log(response.message); // 삭제 성공 메시지 출력
+      this.loadCourses(); // 삭제 후 목록 갱신
+    } catch (error) {
+      console.error('강의 삭제 중 오류 발생', error);
+    }
+  }
+
+
 }

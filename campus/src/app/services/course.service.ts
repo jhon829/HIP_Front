@@ -40,11 +40,19 @@ export class CourseService {
     });
   }
 
-  // 모든 강의 정보를 불러오는 메서드, 토큰을 헤더에 포함
   // 모든 강의 정보를 불러오는 메서드
   getCourses(): Observable<CourseResponse> {
     const headers = this.getAuthHeaders();
     return this.http.get<CourseResponse>(this.courseApiUrl, { headers });
   }
+
+  // 강의 삭제 메서드 추가
+  deleteCourse(courseId: string): Observable<any> {
+    const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
+    return this.http.delete(`${this.courseApiUrl}/${courseId}`, { headers }); // DELETE 요청
+  }
+
+
+
 
 }
