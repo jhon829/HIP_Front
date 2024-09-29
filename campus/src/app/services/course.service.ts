@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http'; // HttpHeaders 추가
 import { Observable } from 'rxjs';
+import { CourseResponse } from '../services/course-response.interface'; // 인터페이스 경로 수정
 
 @Injectable({
   providedIn: 'root',
@@ -29,9 +30,21 @@ export class CourseService {
     return this.http.post<any>(`${this.courseApiUrl}/register`, courseData, { headers });
   }
 
-  // 모든 강의 정보를 불러오는 메서드 추가
-  getCourses(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.courseApiUrl}`);
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('No token found in localStorage');
+    }
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+  }
+
+  // 모든 강의 정보를 불러오는 메서드, 토큰을 헤더에 포함
+  // 모든 강의 정보를 불러오는 메서드
+  getCourses(): Observable<CourseResponse> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<CourseResponse>(this.courseApiUrl, { headers });
   }
 
 }

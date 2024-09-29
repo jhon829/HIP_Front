@@ -24,20 +24,19 @@
 
         <hr/>
 
-        <div class="project-box">
+        <div class="project-box" *ngFor="let course of courses">
           <ion-grid class="class1">
             <ion-row>
               <ion-col>1</ion-col>
-              <ion-col size="2">웹개발</ion-col>
+              <ion-col size="2">{{ course.instructor_name }}</ion-col> <!-- 강사 이름 -->
               <ion-col size="8" class="class-title">
-                <ion-col class="col">메타버스 아카데미 학생들을 위한 메타버스 플랫폼</ion-col>
-                <br/>
-                <ion-col class="class-team">HIP</ion-col>
+                <ion-col class="col">{{ course.course_title }}</ion-col> <!-- 강의 제목 -->
+                <br />
+                <ion-col class="class-team">{{ course.description }}</ion-col> <!-- 강의 설명 -->
               </ion-col>
               <ion-col class="join-btn">신청하기</ion-col>
             </ion-row>
           </ion-grid>
-
         </div>
       </div>
     </div>
