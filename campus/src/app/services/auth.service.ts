@@ -10,7 +10,6 @@ export class AuthService {
   private loggedIn = new BehaviorSubject<boolean>(false);
   isLoggedIn = this.loggedIn.asObservable();
   private userApiUrl = 'http://localhost:3000/users';
-  private courseApiUrl = 'http://localhost:3000/courses'; // 강의 관련 API URL
   private authApiUrl = 'http://localhost:3000/auth';
 
   constructor(private http: HttpClient) {
@@ -52,12 +51,13 @@ export class AuthService {
   }
 
   // 강의 생성 메서드
-  createCourse(courseData: { course_title: string }): Observable<any> {
+  /*createCourse(courseData: { course_title: string }): Observable<any> {
     const token = localStorage.getItem('token'); // 로그인 시 저장한 토큰을 가져옴
     const headers = { Authorization: `Bearer ${token}` }; // Authorization 헤더에 토큰 추가
 
     return this.http.post(`${this.courseApiUrl}/register`, courseData, { headers });
-  }
+  }*/
+
 
 
 }
