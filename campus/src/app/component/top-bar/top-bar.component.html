@@ -1,0 +1,58 @@
+<ion-toolbar>
+  <div id="inner">
+    <div class="menu-left">
+      <ion-button routerLink="/main" id="button-logo" fill="clear">
+        <img src="../../assets/svg/HIP-Logo.svg" id="logo" alt="Logo">
+        <ion-text id="logo-text">
+          <h6>Hongik University Intelligent Platform</h6>
+        </ion-text>
+      </ion-button>
+      <ng-container *ngIf="!isLoggedIn">
+        <ion-button routerLink="/exhibitionmain" routerDirection="root" fill="clear">
+          <ion-label>전시관</ion-label>
+        </ion-button>
+        <a href="/studyroom" target="_blank">
+          <ion-button routerDirection="root" fill="clear">
+            <ion-label>학습룸</ion-label>
+          </ion-button>
+          <ion-button routerLink="/introduce-metaverse" routerDirection="root" fill="clear">
+            <ion-label>아카데미 소개</ion-label>
+          </ion-button>
+        </a>
+      </ng-container>
+      <ng-container *ngIf="isLoggedIn">
+        <ion-button routerLink="/exhibitionmain" routerDirection="root" fill="clear">
+          <ion-label>전시관</ion-label>
+        </ion-button>
+        <a href="/studyroom" target="_blank">
+          <ion-button routerDirection="root" fill="clear">
+            <ion-label>학습룸</ion-label>
+          </ion-button>
+          <ion-button routerLink="/introduce-metaverse" routerDirection="root" fill="clear">
+            <ion-label>아카데미 소개</ion-label>
+          </ion-button>
+        </a>
+      </ng-container>
+    </div>
+
+    <div class="menu-right">
+      <ng-container *ngIf="!isLoggedIn">
+        <ion-button size="small" routerLink="/loginpage" class="login" fill="clear">
+          <ion-label class="login-text">로그인</ion-label>
+        </ion-button>
+        <ion-button size="small" (click)="openModal()" class="login" fill="clear">
+          <ion-label class="login-text">회원가입</ion-label>
+        </ion-button>
+      </ng-container>
+      <ng-container *ngIf="isLoggedIn">
+        <ion-button class="login" fill="clear">
+          <ion-icon name="person"></ion-icon>
+          <ion-label class="login-text">회원 아이콘</ion-label>
+        </ion-button>
+        <ion-button (click)="logout()" class="login" fill="clear">
+          <ion-label class="login-text">로그아웃하기</ion-label>
+        </ion-button>
+      </ng-container>
+    </div>
+  </div>
+</ion-toolbar>
