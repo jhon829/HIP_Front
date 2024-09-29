@@ -29,4 +29,9 @@ export class CourseService {
     return this.http.post<any>(`${this.courseApiUrl}/register`, courseData, { headers });
   }
 
+  // 모든 강의 정보를 불러오는 메서드 추가
+  getCourses(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.courseApiUrl}`);
+  }
+
 }
