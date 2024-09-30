@@ -11,8 +11,8 @@ import { SidemenuComponent } from './component/sidemenucomponent/sidemenu.compon
 import {TopBarComponent} from "./component/top-bar/top-bar.component";
 import {HttpClientModule} from "@angular/common/http";
 import { CommonModule } from '@angular/common';
-import{ExhibitionComponent} from "./exhibitionpage/exhibition/exhibition.component";
-import { CourseService } from './services/course.service'; // 서비스 경로 확인
+import{ExhibitionComponent} from "./page/exhibitionpage/exhibition/exhibition.component";
+import { CourseService } from './services/course/course.service'; // 서비스 경로 확인
 
 @NgModule({
   declarations: [AppComponent, AttendanceModalComponent],
