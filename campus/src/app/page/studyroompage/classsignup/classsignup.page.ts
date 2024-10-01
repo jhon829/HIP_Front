@@ -4,7 +4,7 @@ import { CourseCreateModalComponent } from '../../../component/course-create-mod
 import { HttpClient, HttpHeaders } from '@angular/common/http'; // HttpHeaders 추가
 import { CourseService } from '../../../services/course/course.service'; // CourseService 가져오기
 import { firstValueFrom } from 'rxjs'; // firstValueFrom 가져오기
-import { CourseResponse } from '../../../services/course/course-response.interface'; // 인터페이스 경로 수정
+import { CourseResponse } from '../../../models/course/courses/course-response.interface'; // 인터페이스 경로 수정
 
 
 @Component({
