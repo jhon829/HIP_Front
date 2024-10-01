@@ -2,7 +2,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http'; // HttpHeaders 추가
 import { Observable } from 'rxjs';
-import { CourseResponse } from './course-response.interface'; // 인터페이스 경로 수정
+import { Course } from '../../models/course/courses/course-response.interface'; // 인터페이스 경로 수정
+import { ApiResponse } from 'src/app/models/common/api-response.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ export class CourseService {
 
   constructor(private http: HttpClient) {}
 
-  createCourse(courseData: any): Observable<any> {
+  createCourse(courseData: any): Observable<ApiResponse<Course[]>> {
     const token = localStorage.getItem('token');
 
     // 토큰이 제대로 불러와지는지 확인하는 로그
@@ -41,15 +42,15 @@ export class CourseService {
   }
 
   // 모든 강의 정보를 불러오는 메서드
-  getCourses(): Observable<CourseResponse> {
+  getCourses(): Observable<ApiResponse<Course[]>> {
     const headers = this.getAuthHeaders();
-    return this.http.get<CourseResponse>(this.courseApiUrl, { headers });
+    return this.http.get<ApiResponse<Course[]>>(this.courseApiUrl, { headers });
   }
 
   // 강의 삭제 메서드 추가
-  deleteCourse(courseId: string): Observable<any> {
+  deleteCourse(courseId: string): Observable<ApiResponse<void>> {
     const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
-    return this.http.delete(`${this.courseApiUrl}/${courseId}`, { headers }); // DELETE 요청
+    return this.http.delete<ApiResponse<void>>(`${this.courseApiUrl}/${courseId}`, { headers }); // DELETE 요청
   }
 
 
