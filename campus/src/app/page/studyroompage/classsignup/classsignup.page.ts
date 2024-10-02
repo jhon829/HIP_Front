@@ -7,14 +7,13 @@ import { firstValueFrom } from 'rxjs'; // firstValueFrom 가져오기
 import { Course } from '../../../models/course/courses/course-response.interface'; // 인터페이스 경로 수정
 import { ApiResponse } from 'src/app/models/common/api-response.interface';
 
-
 @Component({
   selector: 'app-classsignup',
   templateUrl: './classsignup.page.html',
   styleUrls: ['./classsignup.page.scss'],
 })
 export class ClasssignupPage implements OnInit {
-  courses: any[] = []; // 가져온 강의 정보를 저장할 배열
+  courses: Course[] = []; // 가져온 강의 정보를 저장할 배열
 
   constructor(
     private modalController: ModalController,
@@ -33,7 +32,6 @@ export class ClasssignupPage implements OnInit {
       console.error('Error loading courses', error);
     }
   }
-
   
   async createCourse() {
     const modal = await this.modalController.create({
@@ -71,7 +69,6 @@ export class ClasssignupPage implements OnInit {
     return await modal.present();
   }
   
-
   async deleteCourse(courseId: number) {
     const confirmed = confirm('이 강의를 삭제하시겠습니까?'); // 삭제 확인 다이얼로그
     if (!confirmed) {
@@ -85,6 +82,5 @@ export class ClasssignupPage implements OnInit {
       console.error('강의 삭제 중 오류 발생', error);
     }
   }
-
 
 }
