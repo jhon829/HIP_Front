@@ -14,7 +14,8 @@ import { ApiResponse } from 'src/app/models/common/api-response.interface';
   styleUrls: ['./classsignup.page.scss'],
 })
 export class ClasssignupPage implements OnInit {
-  courses: any[] = []; // 가져온 강의 정보를 저장할 배열
+  courses: Course[] = []; // 가져온 강의 정보를 저장할 배열
+  
 
   constructor(
     private modalController: ModalController,
