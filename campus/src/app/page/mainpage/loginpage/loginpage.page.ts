@@ -58,7 +58,6 @@ export class LoginpagePage implements OnInit {
     }
   }
 
-
   async showAlert(header: string, message: string) {
     const alert = await this.alertController.create({
       header,
