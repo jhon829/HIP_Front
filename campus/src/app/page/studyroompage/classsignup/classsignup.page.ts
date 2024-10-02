@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { CourseCreateModalComponent } from '../../../component/course-create-modal/course-create-modal.component';
-import { HttpClient, HttpHeaders } from '@angular/common/http'; // HttpHeaders 추가
 import { CourseService } from '../../../services/course/course.service'; // CourseService 가져오기
 import { firstValueFrom } from 'rxjs'; // firstValueFrom 가져오기
 import { Course } from '../../../models/course/courses/course-response.interface'; // 인터페이스 경로 수정
@@ -43,7 +42,7 @@ export class ClasssignupPage implements OnInit {
 
   async updateCourse(course: Course) {
     // 1. 모달을 열어서 기존 강의 데이터를 전달하고 수정할 수 있게 함
-    const modal = await this.modalController.create({
+    const modal = await this.modalController.create({ 
       component: CourseCreateModalComponent,
       cssClass: 'modal',
       componentProps: { course } // 기존 강의 데이터를 모달에 전달
@@ -75,7 +74,7 @@ export class ClasssignupPage implements OnInit {
       return; // 사용자가 삭제를 취소한 경우
     }
     try {
-      const response = await firstValueFrom(this.courseService.deleteCourse(courseId.toString())); // 숫자를 문자열로 변환하여 삭제 API 호출
+      const response: ApiResponse<void> = await firstValueFrom(this.courseService.deleteCourse(courseId.toString())); // 숫자를 문자열로 변환하여 삭제 API 호출
       console.log(response.message); // 삭제 성공 메시지 출력
       this.loadCourses(); // 삭제 후 목록 갱신
     } catch (error) {
