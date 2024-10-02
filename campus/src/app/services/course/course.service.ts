@@ -47,6 +47,13 @@ export class CourseService {
     return this.http.get<ApiResponse<Course[]>>(this.courseApiUrl, { headers });
   }
 
+
+  updateCourse(courseId: number, courseData: any): Observable<ApiResponse<Course>> {
+    const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
+    return this.http.put<ApiResponse<Course>>(`${this.courseApiUrl}/${courseId}`, courseData, { headers }); // PUT 요청
+  }
+
+  
   // 강의 삭제 메서드 추가
   deleteCourse(courseId: string): Observable<ApiResponse<void>> {
     const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
