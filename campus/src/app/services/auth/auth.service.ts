@@ -41,11 +41,16 @@ export class AuthService {
 
   // 사용자 로그인 메서드
   login(credentials: any): Observable<any> {
-    return this.http.post<{ token: string }>(`${this.authApiUrl}/login`, credentials, { withCredentials: true })
+    return this.http.post<{ token: string }>(`${this.authApiUrl}/login`, credentials)
       .pipe(
         tap(response => {
+          console.log('Login response:', response);
           // 로그인 성공 시 토큰을 저장하고 로그인 상태를 true로 설정
-          this.login_current(response.token);
+          if (response.token) {
+            this.login_current(response.token);
+          } else {
+            console.error('토큰이 응답에 포함되지 않았습니다.');
+          }
         })
       );
   }
