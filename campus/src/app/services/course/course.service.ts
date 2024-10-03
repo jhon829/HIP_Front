@@ -92,10 +92,33 @@ export class CourseService {
   }
 
   // 학습 자료 주제 삭제(DELETE)
-  deleteDocName(courseId: number, topic_id: number): Observable<ApiResponse<DocNameResponseData>> {
+  deleteDocName(courseId: number, topicId: number): Observable<ApiResponse<DocNameResponseData>> {
     const headers = this.getAuthHeaders();
-    return this.http.delete<ApiResponse<DocNameResponseData>>(`${this.courseApiUrl}/${courseId}/docNames/${topic_id}`, { headers })
+    return this.http.delete<ApiResponse<DocNameResponseData>>(`${this.courseApiUrl}/${courseId}/docNames/${topicId}`, { headers })
   }
 
+  // 학습 자료 생성(POST | 파일 업로드)
+  createCourseDoc(courseId: number, topicId: number, CourseDocData: any): Observable<ApiResponse<CourseDocResponseData>> {
+    const headers = this.getAuthHeaders();
+    return this.http.post<ApiResponse<CourseDocResponseData>>(`${this.courseApiUrl}/${courseId}/docNames/${topicId}/courseDocs/register`, CourseDocData, { headers })
+  }
+
+  // 학습 자료 조회(GET | 특정 topic_id에 속한 course_doc 전체 조회)
+  getAllCourseDoc(courseId: number, topicId: number): Observable<ApiResponse<CourseDocResponseData>> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<ApiResponse<CourseDocResponseData>>(`${this.courseApiUrl}/${courseId}/docNames/${topicId}/courseDocs`, { headers })
+  }
+
+  // 학습 자료 다운로드(GET)
+  downloadCourseDoc(courseId: number, topicId: number, fileUrl: string): Observable<ApiResponse<CourseDocResponseData>> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<ApiResponse<CourseDocResponseData>>(`${this.courseApiUrl}/${courseId}/docNames/${topicId}/courseDocs/download/${fileUrl}`, { headers })
+  }
+
+  // 학습 자료 삭제(DELETE)
+  deleteCourseDoc(courseId: number, topicId: number, courseDocId: number): Observable<ApiResponse<CourseDocResponseData>> {
+    const headers = this.getAuthHeaders();
+    return this.http.delete<ApiResponse<CourseDocResponseData>>(`${this.courseApiUrl}/${courseId}/docNames/${topicId}/courseDocs/download/${courseDocId}`, { headers })
+  }
 
 }
