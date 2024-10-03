@@ -34,8 +34,10 @@
                 <br />
                 <ion-col class="class-team">{{ course.description }}</ion-col> <!-- 강의 설명 -->
               </ion-col>
-              <ion-col class="join-btn">신청하기</ion-col>
+              <ion-col class="join-btn">신청하기
+              </ion-col>
               <ion-icon class="delete-icon" name="trash" (click)="deleteCourse(course.course_id)"></ion-icon>
+              <ion-icon class="update-icon" name="heart" (click)="updateCourse(course)"></ion-icon>
             </ion-row>
           </ion-grid>
         </div>
