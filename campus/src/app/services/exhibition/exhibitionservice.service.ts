@@ -32,9 +32,9 @@ export class ExhibitionService {
     return this.http.get<any[]>(`${this.apiUrl}/exhibitions`);
   }
 
-  // Read: 특정 전시물 가져오기
-  getExhibition(id: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/exhibitions/${id}`);
+  // Read: 특정 전시물 가져오기 (디테일페이지)
+  getExhibitionDetails(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/exhibitions/${id}/details`);
   }
 
   // Update: 전시물 수정
