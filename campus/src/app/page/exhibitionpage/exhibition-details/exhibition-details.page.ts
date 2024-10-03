@@ -8,8 +8,12 @@ import { ExhibitionService } from '../../../services/exhibition/exhibitionservic
   styleUrls: ['./exhibition-details.page.scss'],
 })
 export class ExhibitionDetailsPage implements OnInit {
-  exhibitionId: string | null = null;
-  exhibitionDetails: any = null;
+  cardId: number | null = null;
+  cardDetails: any = null;
+  introduce: string[] = [];
+  members: { name: string; image: string }[] = [];
+  outputImage: string = '';
+  noneImage: string = '../assets/svg/none-people.svg';
 
   constructor(
     private route: ActivatedRoute,
@@ -17,15 +21,18 @@ export class ExhibitionDetailsPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.exhibitionId = this.route.snapshot.paramMap.get('id');
-    this.loadExhibitionDetails();
+    this.cardId = Number(this.route.snapshot.paramMap.get('id'));
+    this.loadCardDetails();
   }
 
-  loadExhibitionDetails() {
-    if (this.exhibitionId) {
-      this.exhibitionService.getExhibition(this.exhibitionId).subscribe(
+  loadCardDetails() {
+    if (this.cardId) {
+      this.exhibitionService.getExhibitionDetails(this.cardId).subscribe(
         (data) => {
-          this.exhibitionDetails = data;
+          this.cardDetails = data;
+          this.introduce = data.introduce || [];
+          this.members = data.members || [];
+          this.outputImage = data.outputImage || '';
         },
         (error) => {
           console.error('전시관 상세 정보 로딩 실패:', error);
