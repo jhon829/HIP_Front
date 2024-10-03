@@ -48,13 +48,13 @@
     <div class="section2">
 
 
-      <ng-container *ngFor="let card of cards" class="cardcontainer">
+      <ng-container *ngFor="let exhibition of exhibitions">
         <app-card class="card"
-                  [id]="card.id"
-                  [title]="card.title"
-                  [teamname]="card.teamname"
-                  [content]="card.content"
-                  [image]="card.image">
+                  [id]="exhibition.id"
+                  [title]="exhibition.projectName"
+                  [teamname]="exhibition.teamName"
+                  [content]="exhibition.course"
+                  [image]="exhibition.thumbnailUrl">
         </app-card>
       </ng-container>
       <!--   정렬 기능-->
