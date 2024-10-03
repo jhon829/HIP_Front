@@ -26,32 +26,25 @@ export class ExhibitionService {
     return this.http.post(`${this.apiUrl}/exhibition-members/register`, data);
   }
 
-  // 참고
-  // saveExhibitionData(formData: FormData): Observable<any> {
-  //   const headers = new HttpHeaders({ 'enctype': 'multipart/form-data' });
-  //   const url = this.apiUrl + '/register'
-  //   console.log(url);
-  //   return this.http.post(url, formData, { headers, withCredentials: true });
-  // }
 
-  // Read: 전시물 목록 가져오기
+  // Read: 전시물 목록 가져오기 (메인페이지)
   getExhibitions(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+    return this.http.get<any[]>(`${this.apiUrl}/exhibitions`);
   }
 
   // Read: 특정 전시물 가져오기
   getExhibition(id: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${id}`);
+    return this.http.get<any>(`${this.apiUrl}/exhibitions/${id}`);
   }
 
   // Update: 전시물 수정
   updateExhibition(id: string, formData: FormData): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}`, formData);
+    return this.http.put<any>(`${this.apiUrl}/exhibitions/${id}`, formData);
   }
 
   // Delete: 전시물 삭제
   deleteExhibition(id: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+    return this.http.delete<any>(`${this.apiUrl}/exhibitions/${id}`);
   }
 }
 
