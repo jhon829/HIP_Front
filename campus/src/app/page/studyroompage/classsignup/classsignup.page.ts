@@ -3,7 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { CourseCreateModalComponent } from '../../../component/course-create-modal/course-create-modal.component';
 import { CourseService } from '../../../services/course/course.service'; // CourseService 가져오기
 import { firstValueFrom } from 'rxjs'; // firstValueFrom 가져오기
-import { Course } from '../../../models/course/courses/course-response.interface'; // 인터페이스 경로 수정
+import { CourseResponseData } from '../../../models/course/courses/course-response.interface'; // 인터페이스 경로 수정
 import { ApiResponse } from 'src/app/models/common/api-response.interface';
 
 @Component({
@@ -12,7 +12,7 @@ import { ApiResponse } from 'src/app/models/common/api-response.interface';
   styleUrls: ['./classsignup.page.scss'],
 })
 export class ClasssignupPage implements OnInit {
-  courses: Course[] = []; // 가져온 강의 정보를 저장할 배열
+  courses: CourseResponseData[] = []; // 가져온 강의 정보를 저장할 배열
 
   constructor(
     private modalController: ModalController,
@@ -25,7 +25,7 @@ export class ClasssignupPage implements OnInit {
 
   async loadCourses() {
     try {
-      const response: ApiResponse<Course[]> = await firstValueFrom(this.courseService.getCourses());
+      const response: ApiResponse<CourseResponseData[]> = await firstValueFrom(this.courseService.getAllCourses());
       this.courses = response.data; // response.data에서 배열 추출
     } catch (error) {
       console.error('Error loading courses', error);
@@ -40,7 +40,7 @@ export class ClasssignupPage implements OnInit {
     return await modal.present();
   }
 
-  async updateCourse(course: Course) {
+  async updateCourse(course: CourseResponseData) {
     // 1. 모달을 열어서 기존 강의 데이터를 전달하고 수정할 수 있게 함
     const modal = await this.modalController.create({ 
       component: CourseCreateModalComponent,
