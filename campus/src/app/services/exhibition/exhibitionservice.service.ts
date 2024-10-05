@@ -70,7 +70,7 @@ export class ExhibitionService {
     return this.http.get<any>(`${this.apiUrl}/exhibition-members/${id}`);
   }
 
-  // Update: 전시물 수정
+  // Update: 전시물 수정(파일을 삭제하고 올릴 수 있게)
   updateExhibition(id: string, exhibitionData: FormData, introData: FormData, membersData: FormData, outputsData: FormData): Observable<any> {
     return forkJoin({
       exhibition: this.http.put(`${this.apiUrl}/exhibitions/${id}`, exhibitionData),
