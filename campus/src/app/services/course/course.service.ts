@@ -53,13 +53,13 @@ export class CourseService {
 
   updateCourse(courseId: number, courseData: any): Observable<ApiResponse<CourseResponseData>> {
     const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
-    return this.http.patch<ApiResponse<CourseResponseData>>(`${this.courseApiUrl}/${courseId}`, courseData, { headers }); // PUT 요청
+    return this.http.patch<ApiResponse<CourseResponseData>>(`${this.courseApiUrl}/${courseId}/update`, courseData, { headers }); // PUT 요청
   }
 
   // 강의 삭제 메서드 추가
   deleteCourse(courseId: string): Observable<ApiResponse<void>> {
     const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
-    return this.http.delete<ApiResponse<void>>(`${this.courseApiUrl}/course/${courseId}`, { headers }); // DELETE 요청
+    return this.http.delete<ApiResponse<void>>(`${this.courseApiUrl}/course/${courseId}/delete`, { headers }); // DELETE 요청
   }
   
   // 2024-10-03
@@ -78,19 +78,19 @@ export class CourseService {
   // 학습 자료 주제 조회(GET | 특정 pa_topic_id를 갖는 topic 조회) => topic_id로 특정 pa_topic_id를 갖는 topic들 반환, 즉 파라미터로 받는 topic_id를 pa_topic_id로 하는 모든 topic 조회
   getDocName(courseId: number, topicId: number): Observable<ApiResponse<DocNameResponseData>> {
     const headers = this.getAuthHeaders();
-    return this.http.get<ApiResponse<DocNameResponseData>>(`${this.courseApiUrl}/${courseId}/docNames/${topicId}`, { headers })
+    return this.http.get<ApiResponse<DocNameResponseData>>(`${this.courseApiUrl}/${courseId}/docNames/${topicId}/read`, { headers })
   }
 
   // 학습 자료 주제명 수정(PATCH)
-  updateDocName(courseId: number, docNameData: any): Observable<ApiResponse<DocNameResponseData>> {
+  updateDocName(courseId: number, topicId: number, docNameData: any): Observable<ApiResponse<DocNameResponseData>> {
     const headers = this.getAuthHeaders();
-    return this.http.patch<ApiResponse<DocNameResponseData>>(`${this.courseApiUrl}/${courseId}/docNames/registerDN`, docNameData, { headers })
+    return this.http.patch<ApiResponse<DocNameResponseData>>(`${this.courseApiUrl}/${courseId}/docNames/${topicId}/update`, docNameData, { headers })
   }
 
   // 학습 자료 주제 삭제(DELETE)
   deleteDocName(courseId: number, topicId: number): Observable<ApiResponse<DocNameResponseData>> {
     const headers = this.getAuthHeaders();
-    return this.http.delete<ApiResponse<DocNameResponseData>>(`${this.courseApiUrl}/${courseId}/docNames/${topicId}`, { headers })
+    return this.http.delete<ApiResponse<DocNameResponseData>>(`${this.courseApiUrl}/${courseId}/docNames/${topicId}/delete`, { headers })
   }
 
   // 학습 자료 생성(POST | 파일 업로드)
@@ -132,13 +132,13 @@ export class CourseService {
   // 영상 주제 수정(PATCH)
   updateVideoTopic(courseId: number, videoTopicId: number, VideoTopicData: any): Observable<ApiResponse<VideoTopicResponseData>> {
     const headers = this.getAuthHeaders();
-    return this.http.patch<ApiResponse<VideoTopicResponseData>>(`${this.courseApiUrl}/${courseId}/videoTopics/${videoTopicId}`, VideoTopicData, { headers })
+    return this.http.patch<ApiResponse<VideoTopicResponseData>>(`${this.courseApiUrl}/${courseId}/videoTopics/${videoTopicId}/update`, VideoTopicData, { headers })
   }
 
   // 영상 주제 삭제(DELETE)
   deleteVideoTopic(courseId: number, videoTopicId: number): Observable<ApiResponse<VideoTopicResponseData>> {
     const headers = this.getAuthHeaders();
-    return this.http.delete<ApiResponse<VideoTopicResponseData>>(`${this.courseApiUrl}/${courseId}/videoTopics/${videoTopicId}`, { headers })
+    return this.http.delete<ApiResponse<VideoTopicResponseData>>(`${this.courseApiUrl}/${courseId}/videoTopics/${videoTopicId}/delete`, { headers })
   }
 
   // 영상 생성(업로드, POST)
@@ -147,7 +147,7 @@ export class CourseService {
     return this.http.post<ApiResponse<VideoResponseData>>(`${this.courseApiUrl}/${courseId}/videoTopics/${videoTopicId}/video/upload`, VideoData, { headers })
   }
 
-  // 영상 조회(스트리밍, GET)
+  // 영상 조회(스트리밍, GET) => 추가적으로 로직 작성 필요
   streamVideo(courseId: number, videoTopicId: number, videoId: number): Observable<ApiResponse<VideoResponseData>> {
     const headers = this.getAuthHeaders();
     return this.http.get<ApiResponse<VideoResponseData>>(`${this.courseApiUrl}/${courseId}/videoTopics/${videoTopicId}/video/${videoId}/stream`, { headers })
