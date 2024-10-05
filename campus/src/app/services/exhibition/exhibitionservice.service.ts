@@ -21,11 +21,11 @@ export class ExhibitionService {
   }
 
   saveMembers(data: FormData): Observable<any> {
-    return this.http.post(`${this.apiUrl}/exhibition-docs/register`, data);
+    return this.http.post(`${this.apiUrl}/exhibition-members/register`, data);
   }
 
   saveOutputs(data: FormData): Observable<any> {
-    return this.http.post(`${this.apiUrl}/exhibition-members/register`, data);
+    return this.http.post(`${this.apiUrl}/exhibition-docs/register`, data);
   }
 
 
@@ -75,14 +75,19 @@ export class ExhibitionService {
     return forkJoin({
       exhibition: this.http.put(`${this.apiUrl}/exhibitions/${id}`, exhibitionData),
       intro: this.http.put(`${this.apiUrl}/exhibition-intro/${id}`, introData),
-      members: this.http.put(`${this.apiUrl}/exhibition-docs/${id}`, membersData),
-      outputs: this.http.put(`${this.apiUrl}/exhibition-members/${id}`, outputsData)
+      members: this.http.put(`${this.apiUrl}/exhibition-members/${id}`, membersData),
+      outputs: this.http.put(`${this.apiUrl}/exhibition-docs/${id}`, outputsData)
     });
   }
 
   // Delete: 전시물 삭제
   deleteExhibition(id: string): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/exhibitions/${id}`);
+    return forkJoin({
+      exhibition: this.http.delete(`${this.apiUrl}/exhibitions/${id}`),
+      intro: this.http.delete(`${this.apiUrl}/exhibition-intro/${id}`),
+      docs: this.http.delete(`${this.apiUrl}/exhibition-docs/${id}`),
+      members: this.http.delete(`${this.apiUrl}/exhibition-members/${id}`)
+    });
   }
 }
 
