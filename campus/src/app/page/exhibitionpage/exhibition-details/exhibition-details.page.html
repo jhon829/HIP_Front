@@ -7,30 +7,70 @@
 </ion-header>
 
 <ion-content *ngIf="exhibitionDetails">
-  <div class="exhibition-details">
-    <h1>{{ exhibitionDetails.projectName }}</h1>
-    <p>팀 이름: {{ exhibitionDetails.teamName }}</p>
-    <p>교육과정: {{ exhibitionDetails.course }}</p>
+  <div class="repcontent">
+    <div class="part1"><img class="title-image" [src]="exhibitionDetails.titleImage || '../../../assets/jpg/1.jpg'"></div>
+    <div class="part2">
+      <br>
+      <div class="project-name">{{ exhibitionDetails.title }}</div>
+      <br>
+      <br>
+      <br>
+      <br>
+      <div class="team-name">{{ exhibitionDetails.teamName }}</div>
+      <div class="class-name">{{ exhibitionDetails.className }}</div>
+    </div>
+  </div>
+  <div class="maincontent shadow-box">
+    <div class="maxmaincontent">
+      <div class="introduce texts">
+        <ion-icon name="bulb-outline" class="icons"></ion-icon> Introduce
+      </div>
+      <ul>
+        <li class="introduce-content" *ngFor="let intro of exhibitionDetails.intro">{{ intro }}</li>
+      </ul>
+      <ion-item class="boundary"></ion-item>
 
-    <img [src]="exhibitionDetails.thumbnailUrl" alt="전시관 썸네일" class="thumbnail">
+      <div class="members texts">
+        <ion-icon name="people-outline" class="icons"></ion-icon> Members
+      </div>
+      <ul class="member-list">
+        <li *ngFor="let member of exhibitionDetails.members" class="member-item">
+          <div class="member-container">
+            <img [src]="member.image" alt="{{ member.name }}" class="member-image" />
+            <p class="member-name">{{ member.name }}</p>
+          </div>
+        </li>
+      </ul>
+      <ion-item class="boundary"></ion-item>
 
-    <h2>소개</h2>
-    <ul>
-      <li *ngFor="let intro of exhibitionDetails.introductions">{{ intro }}</li>
-    </ul>
+      <div class="output texts">
+        <ion-icon name="trophy-outline" class="icons"></ion-icon> Output
+      </div>
+      <div class="output-container">
+        <div *ngFor="let image of exhibitionDetails.outputImages" class="output-item">
+          <img [src]="image" alt="Output Image" class="output-image"/>
+        </div>
+      </div>
+      <div *ngIf="exhibitionDetails.outputVideo" class="video-container">
+        <video controls class="output-video">
+          <source [src]="exhibitionDetails.outputVideo" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <ion-item class="boundary"></ion-item>
 
-    <h2>팀원</h2>
-    <div class="members">
-      <div *ngFor="let member of exhibitionDetails.members" class="member">
-        <img [src]="member.image || '../assets/svg/none-people.svg'" [alt]="member.name">
-        <p>{{ member.name }}</p>
+      <div class="docs texts" *ngIf="exhibitionDetails.docs && exhibitionDetails.docs.length > 0">
+        <ion-icon name="document-outline" class="icons"></ion-icon> Documents
+        <ul class="doc-list">
+          <li *ngFor="let doc of exhibitionDetails.docs" class="doc-item">{{ doc.name }}</li>
+        </ul>
       </div>
     </div>
+  </div>
+</ion-content>
 
-    <h2>결과물</h2>
-    <div class="outputs">
-      <img *ngFor="let image of exhibitionDetails.outputImages" [src]="image" alt="결과물 이미지">
-    </div>
-    <video *ngIf="exhibitionDetails.outputVideo" [src]="exhibitionDetails.outputVideo" controls></video>
+<ion-content *ngIf="!exhibitionDetails">
+  <div class="loading">
+    <ion-spinner>로딩 중...</ion-spinner>
   </div>
 </ion-content>
