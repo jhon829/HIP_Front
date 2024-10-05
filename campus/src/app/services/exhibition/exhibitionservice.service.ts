@@ -71,8 +71,13 @@ export class ExhibitionService {
   }
 
   // Update: 전시물 수정
-  updateExhibition(id: string, formData: FormData): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/exhibitions/${id}`, formData);
+  updateExhibition(id: string, exhibitionData: FormData, introData: FormData, membersData: FormData, outputsData: FormData): Observable<any> {
+    return forkJoin({
+      exhibition: this.http.put(`${this.apiUrl}/exhibitions/${id}`, exhibitionData),
+      intro: this.http.put(`${this.apiUrl}/exhibition-intro/${id}`, introData),
+      members: this.http.put(`${this.apiUrl}/exhibition-docs/${id}`, membersData),
+      outputs: this.http.put(`${this.apiUrl}/exhibition-members/${id}`, outputsData)
+    });
   }
 
   // Delete: 전시물 삭제
