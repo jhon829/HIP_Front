@@ -10,6 +10,7 @@ import { ApiResponse } from 'src/app/models/common/api-response.interface';
 })
 export class CourseService {
   private courseApiUrl = 'http://localhost:3000/courses'; // 강의 관련 API URL
+  private courseRegisApiUrl = 'http://localhost:3000/courses/:course/courseRegistration'; //강의 신청 관련 API URL
 
   constructor(private http: HttpClient) {}
 
@@ -22,7 +23,7 @@ export class CourseService {
       Authorization: `Bearer ${token}`,
     });
   }
-  
+
   createCourse(courseData: any): Observable<ApiResponse<CourseResponseData>> {
     const token = localStorage.getItem('token');
 
@@ -53,9 +54,17 @@ export class CourseService {
   }
 
   // 강의 삭제 메서드 추가
-  deleteCourse(courseId: string): Observable<ApiResponse<void>> {
+  deleteCourse(courseId: number): Observable<ApiResponse<void>> {
     const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
     return this.http.delete<ApiResponse<void>>(`${this.courseApiUrl}/${courseId}`, { headers }); // DELETE 요청
   }
+
+
+  joinCourse(courseId: number): Observable<ApiResponse<void>> {
+    const headers = this.getAuthHeaders();
+    return this.http.post<ApiResponse<void>>(`${this.courseRegisApiUrl}/${courseId}`, null, { headers });
+  }
+
+
 
 }
