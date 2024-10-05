@@ -78,7 +78,11 @@ const routes: Routes = [
   {
     path: 'introduce-metaverse',
     loadChildren: () => import('./page/mainpage/introduce-metaverse/introduce-metaverse.module').then(m => m.IntroduceMetaversePageModule)
+  },  {
+    path: 'exhibition-update',
+    loadChildren: () => import('./page/exhibitionpage/exhibition-update/exhibition-update.module').then( m => m.ExhibitionUpdatePageModule)
   },
+
 
 
 

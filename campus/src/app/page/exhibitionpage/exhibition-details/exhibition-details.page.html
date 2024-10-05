@@ -7,6 +7,9 @@
 </ion-header>
 
 <ion-content *ngIf="exhibitionDetails">
+  <ion-button [routerLink]="['/exhibition-update', exhibitionId]">수정하기</ion-button>
+  <ion-button expand="block" color="danger" (click)="deleteExhibition()">전시물 삭제</ion-button>
+</ion-content>
   <div class="repcontent">
     <div class="part1"><img class="title-image" [src]="exhibitionDetails.titleImage || '../../../assets/jpg/1.jpg'"></div>
     <div class="part2">

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 import { ExhibitionService } from '../../../services/exhibition/exhibitionservice.service';
 
 @Component({
@@ -15,7 +16,9 @@ export class ExhibitionDetailsPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private exhibitionService: ExhibitionService
+    private router: Router,
+    private exhibitionService: ExhibitionService,
+    private alertController: AlertController
   ) {}
 
   ngOnInit() {
@@ -38,5 +41,36 @@ export class ExhibitionDetailsPage implements OnInit {
         }
       );
     }
+  }
+  async deleteExhibition() {
+    const alert = await this.alertController.create({
+      header: '전시물 삭제',
+      message: '정말로 이 전시물을 삭제하시겠습니까?',
+      buttons: [
+        {
+          text: '취소',
+          role: 'cancel'
+        },
+        {
+          text: '삭제',
+          handler: () => {
+            if (this.exhibitionId) {
+              this.exhibitionService.deleteExhibition(this.exhibitionId.toString()).subscribe(
+                () => {
+                  console.log('전시물이 성공적으로 삭제되었습니다.');
+                  this.router.navigate(['/exhibitions']); // 전시물 목록 페이지로 이동
+                },
+                (error) => {
+                  console.error('전시물 삭제 실패:', error);
+                  this.error = '전시물 삭제에 실패했습니다.';
+                }
+              );
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 }
