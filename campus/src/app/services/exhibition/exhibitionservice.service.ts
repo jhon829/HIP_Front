@@ -10,6 +10,7 @@ export class ExhibitionService {
 
   constructor(private http: HttpClient) {}
 
+  // Create: 전시물 생성하기 (생성페이지)
   saveExhibitionData(data: FormData): Observable<any> {
     return this.http.post(`${this.apiUrl}/exhibitions/register`, data);
   }
@@ -27,12 +28,14 @@ export class ExhibitionService {
   }
 
 
-  // Read: 전시물 목록 가져오기 (메인페이지)
+  // Read: 전시물 목록 가져오기 (메인페이지) - 프로젝트이름, 팀이름, 기수, 썸네일
   getExhibitions(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/exhibitions`);
+    return this.http.get<any[]>(`${this.apiUrl}/exhibitions/register`);
   }
 
-  // Read: 특정 전시물 가져오기 (디테일페이지)
+
+
+  // Read: 특정 전시물 가져오기 (상세페이지) - 전체 내용
   getExhibitionDetails(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/exhibitions/${id}/details`);
   }
