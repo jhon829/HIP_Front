@@ -6,61 +6,71 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf="exhibitionDetails">
   <div class="repcontent">
-    <div class = "part1"><img class="title-image" src="../../../assets/jpg/1.jpg"></div>
+    <div class="part1"><img class="title-image" [src]="exhibitionDetails.titleImage || '../../../assets/jpg/1.jpg'"></div>
     <div class="part2">
       <br>
-      <div class="project-name">Metaverse Campus</div>
+      <div class="project-name">{{ exhibitionDetails.title }}</div>
       <br>
       <br>
       <br>
       <br>
-      <div class="team-name">HIP</div>
-      <div class="class-name">3기</div>
+      <div class="team-name">{{ exhibitionDetails.teamName }}</div>
+      <div class="class-name">{{ exhibitionDetails.className }}</div>
     </div>
   </div>
   <div class="maincontent shadow-box">
-
     <div class="maxmaincontent">
       <div class="introduce texts">
-        <ion-icon name="bulb-outline" class="icons">
-        </ion-icon> Introduce
+        <ion-icon name="bulb-outline" class="icons"></ion-icon> Introduce
       </div>
       <ul>
-        <li  class= "introduce-content" *ngFor="let intro of introduce">{{ intro }}</li>
+        <li class="introduce-content" *ngFor="let intro of exhibitionDetails.intro">{{ intro }}</li>
       </ul>
-      <ion-item class="boundary">
-      </ion-item>
+      <ion-item class="boundary"></ion-item>
 
       <div class="members texts">
         <ion-icon name="people-outline" class="icons"></ion-icon> Members
       </div>
       <ul class="member-list">
-        <li *ngFor="let member of members" class="member-item">
+        <li *ngFor="let member of exhibitionDetails.members" class="member-item">
           <div class="member-container">
-            <img [src]="member.image || noneImage" alt="{{ member.name }}" class="member-image" />
+            <img [src]="member.image" alt="{{ member.name }}" class="member-image" />
             <p class="member-name">{{ member.name }}</p>
           </div>
         </li>
       </ul>
-
-      <ion-item class="boundary">
-      </ion-item>
+      <ion-item class="boundary"></ion-item>
 
       <div class="output texts">
         <ion-icon name="trophy-outline" class="icons"></ion-icon> Output
       </div>
-      <div class="member-container">
-        <img [src]="outputImage" alt="Output Image" class="output-image"/>
+      <div class="output-container">
+        <div *ngFor="let image of exhibitionDetails.outputImages" class="output-item">
+          <img [src]="image" alt="Output Image" class="output-image"/>
+        </div>
       </div>
-      <ion-item class="boundary">
-      </ion-item>
+      <div *ngIf="exhibitionDetails.outputVideo" class="video-container">
+        <video controls class="output-video">
+          <source [src]="exhibitionDetails.outputVideo" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <ion-item class="boundary"></ion-item>
 
-      <h2>{{ cardDetails }}</h2>
-
-
-
+      <div class="docs texts" *ngIf="exhibitionDetails.docs && exhibitionDetails.docs.length > 0">
+        <ion-icon name="document-outline" class="icons"></ion-icon> Documents
+        <ul class="doc-list">
+          <li *ngFor="let doc of exhibitionDetails.docs" class="doc-item">{{ doc.name }}</li>
+        </ul>
+      </div>
     </div>
+  </div>
+</ion-content>
+
+<ion-content *ngIf="!exhibitionDetails">
+  <div class="loading">
+    <ion-spinner>로딩 중...</ion-spinner>
   </div>
 </ion-content>

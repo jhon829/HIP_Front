@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ExhibitionService } from '../../../services/exhibition/exhibitionservice.service';
 
 @Component({
   selector: 'app-exhibition-details',
@@ -7,37 +8,35 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./exhibition-details.page.scss'],
 })
 export class ExhibitionDetailsPage implements OnInit {
-  cardId: number | null = null;
-  cardDetails: string | null = null;
+  exhibitionId: number | null = null;
+  exhibitionDetails: any = null;
+  isLoading: boolean = true;
+  error: string | null = null;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private exhibitionService: ExhibitionService
+  ) {}
 
   ngOnInit() {
-    this.cardId = Number(this.route.snapshot.paramMap.get('id'));
-    this.loadCardDetails();
+    this.exhibitionId = Number(this.route.snapshot.paramMap.get('id'));
+    this.loadExhibitionDetails();
   }
 
-  loadCardDetails() {
-    // 실제 카드 데이터를 불러오는 로직을 여기에서 구현합니다.
-    this.cardDetails = `카드 ID: ${this.cardId}의 상세 내용입니다.`;
+  loadExhibitionDetails() {
+    if (this.exhibitionId) {
+      this.isLoading = true;
+      this.exhibitionService.getAllExhibitionDetails(this.exhibitionId).subscribe(
+        (data) => {
+          this.exhibitionDetails = data;
+          this.isLoading = false;
+        },
+        (error) => {
+          console.error('전시관 상세 정보 로딩 실패:', error);
+          this.error = '전시관 정보를 불러오는 데 실패했습니다.';
+          this.isLoading = false;
+        }
+      );
+    }
   }
-
-  introduce: string[] = [
-    'Metaverse Campus 제작',
-    '강의 로그, 출석관리 기능 구현',
-    '기존의 메타버스 창작물 보관'
-  ];
-
-  members: { name: string; image: string }[] = [
-    { name: '김동년', image: '' },
-    { name: '용채영', image: '' },
-    { name: '김재호', image: '' },
-    { name: '박찬진', image: '' },
-    { name: '손정민', image: '' },
-  ];
-
-  noneImage: string = '../assets/svg/none-people.svg';
-
-  outputImage: string = '../assets/jpg/1.jpg'
-
 }
