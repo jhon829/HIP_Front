@@ -33,4 +33,25 @@ import { ProjectResponseData } from "src/app/models/project/projects/projects-re
         return this.http.delete<ApiResponse<ProjectResponseData>>(`${this.projectApiUrl}/${id}/delete`);
     }
 
+    // project_doc
+    createProjectDoc(projectId: number, projectDocData: any): Observable<ApiResponse<ProjectDocResponseData>> {
+        return this.http.post<ApiResponse<ProjectDocResponseData>>(`${this.projectApiUrl}/${projectId}/projectDocs/register`, projectDocData);
+      }
+
+    getAllProjectDoc(projectId: number): Observable<ApiResponse<ProjectDocResponseData>> {
+        return this.http.get<ApiResponse<ProjectDocResponseData>>(`${this.projectApiUrl}/${projectId}/projectDocs`);
+    }
+
+    getOneProjectDoc(projectId: number, projectDocId: number): Observable<ApiResponse<ProjectDocResponseData>> {
+        return this.http.get<ApiResponse<ProjectDocResponseData>>(`${this.projectApiUrl}/${projectId}/projectDocs/${projectDocId}/read`);
+    }
+
+    updateProjectDoc(projectId: number, projectDocId: number, projectDocData: any): Observable<ApiResponse<ProjectDocResponseData>> {
+        return this.http.put<ApiResponse<ProjectDocResponseData>>(`${this.projectApiUrl}/${projectId}/projectDocs/${projectDocId}/update`, projectDocData);
+    }
+      
+    deleteProjectDoc(projectId: number, projectDocId: number): Observable<ApiResponse<ProjectDocResponseData>> {
+        return this.http.delete<ApiResponse<ProjectDocResponseData>>(`${this.projectApiUrl}/${projectId}/projectDocs/${projectDocId}/delete`);
+    }
+
   }
