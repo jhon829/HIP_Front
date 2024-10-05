@@ -14,11 +14,7 @@ import { VideoResponseData } from 'src/app/models/course/video/video-response.in
 })
 export class CourseService {
   private courseApiUrl = 'http://localhost:3000/courses'; // 강의 관련 API URL
-  private docNameApiUrl = this.courseApiUrl + '/${course_id}/docNames'; // 학습 자료 주제 관련 API URL
-  private courseDocApiUrl = this.courseApiUrl + '/${course_id}/docNames/${doc_name_id}/courseDocs'; // 학습 자료 주제 관련 API URL
-  private videoTopicApiUrl = this.courseApiUrl + '/${course_id}/videoTopics'; // 학습 자료 주제 관련 API URL
-  private videoApiUrl = this.courseApiUrl + '/${course_id}/videoTopics/${video_topic_id}/video'; // 학습 자료 주제 관련 API URL
-
+  
   constructor(private http: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders {
@@ -63,7 +59,7 @@ export class CourseService {
   // 강의 삭제 메서드 추가
   deleteCourse(courseId: string): Observable<ApiResponse<void>> {
     const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
-    return this.http.delete<ApiResponse<void>>(`${this.courseApiUrl}/${courseId}`, { headers }); // DELETE 요청
+    return this.http.delete<ApiResponse<void>>(`${this.courseApiUrl}/course/${courseId}`, { headers }); // DELETE 요청
   }
   
   // 2024-10-03
@@ -73,17 +69,17 @@ export class CourseService {
     return this.http.post<ApiResponse<DocNameResponseData>>(`${this.courseApiUrl}/${courseId}/docNames/registerDN`, docNameData, { headers })
   }
 
-  // // 학습 자료 주제 조회(GET | pa_topic_id이 null인 topic 조회)
-  // getFirstDocName(courseId: number): Observable<ApiResponse<DocNameResponseData>> {
-  //   const headers = this.getAuthHeaders();
-  //   return this.http.get<ApiResponse<DocNameResponseData>>(`${this.courseApiUrl}/${courseId}/docNames/first`, { headers })
-  // }
+  // 학습 자료 주제 조회(GET | pa_topic_id이 null인 topic 조회)
+  getFirstDocName(courseId: number): Observable<ApiResponse<DocNameResponseData>> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<ApiResponse<DocNameResponseData>>(`${this.courseApiUrl}/${courseId}/docNames/root`, { headers })
+  }
 
-  // // 학습 자료 주제 조회(GET | 특정 pa_topic_id를 갖는 topic 조회) => topic_id로 특정 pa_topic_id를 갖는 topic들 반환, 즉 파라미터로 받는 topic_id를 pa_topic_id로 하는 모든 topic 조회
-  // getDocName(courseId: number, topicId: number): Observable<ApiResponse<DocNameResponseData>> {
-  //   const headers = this.getAuthHeaders();
-  //   return this.http.get<ApiResponse<DocNameResponseData>>(`${this.courseApiUrl}/${courseId}/docNames/${topicId}`, { headers })
-  // }
+  // 학습 자료 주제 조회(GET | 특정 pa_topic_id를 갖는 topic 조회) => topic_id로 특정 pa_topic_id를 갖는 topic들 반환, 즉 파라미터로 받는 topic_id를 pa_topic_id로 하는 모든 topic 조회
+  getDocName(courseId: number, topicId: number): Observable<ApiResponse<DocNameResponseData>> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<ApiResponse<DocNameResponseData>>(`${this.courseApiUrl}/${courseId}/docNames/${topicId}`, { headers })
+  }
 
   // 학습 자료 주제명 수정(PATCH)
   updateDocName(courseId: number, docNameData: any): Observable<ApiResponse<DocNameResponseData>> {
