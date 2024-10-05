@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -36,8 +37,37 @@ export class ExhibitionService {
 
 
   // Read: 특정 전시물 가져오기 (상세페이지) - 전체 내용
-  getExhibitionDetails(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/exhibitions/${id}/details`);
+
+  // 데이터를 병렬로 효율적으로 가져오기 위함 + 데이터의 구조를 편리한 형태로 바꿈
+  getAllExhibitionDetails(id: number): Observable<any> {
+    return forkJoin({
+      exhibition: this.getExhibitionDetails(id),
+      intro: this.getExhibitionIntroDetails(id),
+      docs: this.getExhibitionDocsDetails(id),
+      members: this.getExhibitionMembersDetails(id)
+    }).pipe(
+      map(results => ({
+        ...results.exhibition,
+        intro: results.intro,
+        docs: results.docs,
+        members: results.members
+      }))
+    );
+  }
+  private getExhibitionDetails(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/exhibitions/${id}`);
+  }
+
+  private getExhibitionIntroDetails(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/exhibition-intro/${id}`);
+  }
+
+  private getExhibitionDocsDetails(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/exhibition-docs/${id}`);
+  }
+
+  private getExhibitionMembersDetails(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/exhibition-members/${id}`);
   }
 
   // Update: 전시물 수정
