@@ -7,13 +7,16 @@ import { IonicModule } from '@ionic/angular';
 import { ExhibitionUpdatePageRoutingModule } from './exhibition-update-routing.module';
 
 import { ExhibitionUpdatePage } from './exhibition-update.page';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ExhibitionUpdatePageRoutingModule
+    ExhibitionUpdatePageRoutingModule,
+    ReactiveFormsModule,
+
   ],
   declarations: [ExhibitionUpdatePage]
 })
