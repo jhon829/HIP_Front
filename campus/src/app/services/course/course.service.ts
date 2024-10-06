@@ -57,7 +57,7 @@ export class CourseService {
 
   updateCourse(courseId: number, courseData: any): Observable<ApiResponse<CourseResponseDto>> {
     const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
-    return this.http.patch<ApiResponse<CourseResponseData>>(`${this.courseApiUrl}/${courseId}/update`, courseData, { headers }); // PUT 요청
+    return this.http.patch<ApiResponse<CourseResponseDto>>(`${this.courseApiUrl}/${courseId}/update`, courseData, { headers }); // PUT 요청
 
   }
 
@@ -73,7 +73,7 @@ export class CourseService {
     return this.http.post<ApiResponse<void>>(`${this.courseApiUrl}/${courseId}/courseRegistration/register`, registrationData, { headers });
   }
 
-  
+
   // 2024-10-03
   // 학습 자료 주제 생성(POST)
   createDocName(courseId: number, docNameData: any): Observable<ApiResponse<DocNameResponseData>> {
