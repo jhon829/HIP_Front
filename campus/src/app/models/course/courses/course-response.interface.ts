@@ -11,4 +11,3 @@ export interface CourseResponseDto {
 //   message: string;            // 응답 메시지
 //   data: Course[];             // 강의 데이터 배열
 // }
-
