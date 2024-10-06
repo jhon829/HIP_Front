@@ -39,6 +39,20 @@
               <ion-icon class="update-icon" name="heart" (click)="updateCourse(course)"></ion-icon>
             </ion-row>
           </ion-grid>
+          <div class="project-box" *ngFor="let courseUser of coursesRegistration">
+            <ion-grid class="class1">
+              <ion-row>
+                <ion-col>1</ion-col>
+                <ion-col size="2">{{ courseUser.course_reporting_date }}</ion-col> <!-- 강사 이름 -->
+                <ion-col size="8" class="class-title"></ion-col>
+                <ion-col class="class-team">{{ courseUser.userId }}</ion-col> <!-- 강의 설명 -->
+                <ion-col >
+                  <ion-icon class="accept">수락</ion-icon>
+                  <ion-icon class="reject">거절</ion-icon>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </div>
         </div>
         <!--<div class="" *ngFor="let user of signUsers">-->
 

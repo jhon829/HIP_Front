@@ -3,16 +3,20 @@ import { ModalController } from '@ionic/angular';
 import { CourseCreateModalComponent } from '../../../component/course-create-modal/course-create-modal.component';
 import { CourseService } from '../../../services/course/course.service'; // CourseService 가져오기
 import { firstValueFrom } from 'rxjs'; // firstValueFrom 가져오기
-import { CourseResponseData } from '../../../models/course/courses/course-response.interface'; // 인터페이스 경로 수정
+import { CourseResponseDto } from '../../../models/course/courses/course-response.interface'; // 인터페이스 경로 수정
 import { ApiResponse } from 'src/app/models/common/api-response.interface';
+import { CreateCourseRegistrationDto } from '../../../models/course/courses/course-registration.interface';
+import { Registration } from '../../../models/enums/role.enums';
 
 @Component({
   selector: 'app-classsignup',
   templateUrl: './classsignup.page.html',
   styleUrls: ['./classsignup.page.scss'],
 })
+
 export class ClasssignupPage implements OnInit {
-  courses: CourseResponseData[] = []; // 가져온 강의 정보를 저장할 배열
+  courses: CourseResponseDto[] = []; // 가져온 강의 정보를 저장할 배열
+  coursesRegistration : CreateCourseRegistrationDto[] = [];
 
 
   constructor(
@@ -26,7 +30,7 @@ export class ClasssignupPage implements OnInit {
 
   async loadCourses() {
     try {
-      const response: ApiResponse<CourseResponseData[]> = await firstValueFrom(this.courseService.getAllCourses());
+      const response: ApiResponse<CourseResponseDto[]> = await firstValueFrom(this.courseService.getAllCourses());
       this.courses = response.data; // response.data에서 배열 추출
     } catch (error) {
       console.error('Error loading courses', error);
@@ -41,7 +45,7 @@ export class ClasssignupPage implements OnInit {
     return await modal.present();
   }
 
-  async updateCourse(course: CourseResponseData) {
+  async updateCourse(course: CourseResponseDto) {
    // 1. 모달을 열어서 기존 강의 데이터를 전달하고 수정할 수 있게 함
     const modal = await this.modalController.create({
       component: CourseCreateModalComponent,
@@ -75,7 +79,7 @@ export class ClasssignupPage implements OnInit {
       return; // 사용자가 삭제를 취소한 경우
     }
     try {
-      const response: ApiResponse<void> = await firstValueFrom(this.courseService.deleteCourse(courseId)); // 숫자를 문자열로 변환하여 삭제 API 호출
+      const response: ApiResponse<void> = await firstValueFrom(this.courseService.deleteCourse(courseId,)); // 숫자를 문자열로 변환하여 삭제 API 호출
       console.log(response.message); // 삭제 성공 메시지 출력
       this.loadCourses(); // 삭제 후 목록 갱신
     } catch (error) {
@@ -91,14 +95,27 @@ export class ClasssignupPage implements OnInit {
       return;
     }
 
+    const registrationData: CreateCourseRegistrationDto = {
+      course_reporting_date: new Date().toISOString(), // 현재 날짜 ISO 형식
+      course_registration_status: Registration.PENDING, // 예: 대기 상태
+      userId: 1, // 로그인한 사용자 ID
+      courseId: courseId, // 전달받은 강의 ID
+    };
+
     try {
-      const response: ApiResponse<void> = await firstValueFrom(this.courseService.joinCourse(courseId)); // joinCourse 메서드 호출
+      const response: ApiResponse<void> = await firstValueFrom(this.courseService.joinCourse(courseId,registrationData)); // joinCourse 메서드 호출
       console.log('강의 신청 성공:', response.message);
       alert('강의 신청이 완료되었습니다.'); // 신청 완료 알림
     } catch (error) {
       console.error('강의 신청 중 오류 발생:', error);
       alert('강의 신청 중 오류가 발생했습니다.'); // 오류 알림
     }
+  }
+
+  async userInquiry(){
+
+
+
   }
 
 
