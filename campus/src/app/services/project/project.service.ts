@@ -33,4 +33,45 @@ import { ProjectResponseData } from "src/app/models/project/projects/projects-re
         return this.http.delete<ApiResponse<ProjectResponseData>>(`${this.projectApiUrl}/${id}/delete`);
     }
 
+    // project_doc
+    createProjectDoc(projectId: number, projectDocData: any): Observable<ApiResponse<ProjectDocResponseData>> {
+        return this.http.post<ApiResponse<ProjectDocResponseData>>(`${this.projectApiUrl}/${projectId}/projectDocs/register`, projectDocData);
+      }
+
+    getAllProjectDoc(projectId: number): Observable<ApiResponse<ProjectDocResponseData>> {
+        return this.http.get<ApiResponse<ProjectDocResponseData>>(`${this.projectApiUrl}/${projectId}/projectDocs`);
+    }
+
+    getOneProjectDoc(projectId: number, projectDocId: number): Observable<ApiResponse<ProjectDocResponseData>> {
+        return this.http.get<ApiResponse<ProjectDocResponseData>>(`${this.projectApiUrl}/${projectId}/projectDocs/${projectDocId}/read`);
+    }
+
+    updateProjectDoc(projectId: number, projectDocId: number, projectDocData: any): Observable<ApiResponse<ProjectDocResponseData>> {
+        return this.http.put<ApiResponse<ProjectDocResponseData>>(`${this.projectApiUrl}/${projectId}/projectDocs/${projectDocId}/update`, projectDocData);
+    }
+      
+    deleteProjectDoc(projectId: number, projectDocId: number): Observable<ApiResponse<ProjectDocResponseData>> {
+        return this.http.delete<ApiResponse<ProjectDocResponseData>>(`${this.projectApiUrl}/${projectId}/projectDocs/${projectDocId}/delete`);
+    }
+
+    // feedback
+    // createFeedback(): Observable<ApiResponse<FeedbackResponseData>> {
+    //     return this.http.post<ApiResponse<FeedbackResponseData>>(`${this.projectApiUrl}`);
+    //   }
+
+    // getAllFeedback(): Observable<ApiResponse<FeedbackResponseData>> {
+    //     return this.http.get<ApiResponse<FeedbackResponseData>>(`${this.projectApiUrl}`);
+    // }
+
+    // getFeedback(): Observable<ApiResponse<FeedbackResponseData>> {
+    //     return this.http.get<ApiResponse<FeedbackResponseData>>(`${this.projectApiUrl}`);
+    // }
+
+    // updateFeedback(): Observable<ApiResponse<FeedbackResponseData>> {
+    //     return this.http.patch<ApiResponse<FeedbackResponseData>>(`${this.projectApiUrl}`);
+    // }
+      
+    // deleteFeedback(): Observable<ApiResponse<FeedbackResponseData>> {
+    //     return this.http.delete<ApiResponse<FeedbackResponseData>>(`${this.projectApiUrl}`);
+    // }
   }
