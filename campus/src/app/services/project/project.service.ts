@@ -54,4 +54,24 @@ import { ProjectResponseData } from "src/app/models/project/projects/projects-re
         return this.http.delete<ApiResponse<ProjectDocResponseData>>(`${this.projectApiUrl}/${projectId}/projectDocs/${projectDocId}/delete`);
     }
 
+    // feedback
+    // createFeedback(): Observable<ApiResponse<FeedbackResponseData>> {
+    //     return this.http.post<ApiResponse<FeedbackResponseData>>(`${this.projectApiUrl}`);
+    //   }
+
+    // getAllFeedback(): Observable<ApiResponse<FeedbackResponseData>> {
+    //     return this.http.get<ApiResponse<FeedbackResponseData>>(`${this.projectApiUrl}`);
+    // }
+
+    // getFeedback(): Observable<ApiResponse<FeedbackResponseData>> {
+    //     return this.http.get<ApiResponse<FeedbackResponseData>>(`${this.projectApiUrl}`);
+    // }
+
+    // updateFeedback(): Observable<ApiResponse<FeedbackResponseData>> {
+    //     return this.http.patch<ApiResponse<FeedbackResponseData>>(`${this.projectApiUrl}`);
+    // }
+      
+    // deleteFeedback(): Observable<ApiResponse<FeedbackResponseData>> {
+    //     return this.http.delete<ApiResponse<FeedbackResponseData>>(`${this.projectApiUrl}`);
+    // }
   }
