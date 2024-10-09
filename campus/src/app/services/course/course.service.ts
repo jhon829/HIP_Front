@@ -86,7 +86,7 @@ export class CourseService {
   }
 
   // 강의 삭제 메서드 추가
-  deletejoinCourse(courseId: number,course_registration_id:number): Observable<ApiResponse<void>> {
+  canceljoinCourse(courseId: number,course_registration_id:number): Observable<ApiResponse<void>> {
     const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
     return this.http.delete<ApiResponse<void>>(`${this.courseApiUrl}/${courseId}/courseRegistration/${course_registration_id}/delete`, { headers }); // DELETE 요청
   }
