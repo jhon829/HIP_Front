@@ -16,19 +16,17 @@ import { VideoResponseData } from 'src/app/models/course/video/video-response.in
 })
 export class CourseService {
   private courseApiUrl = 'http://localhost:3000/courses'; // 강의 관련 API URL
-  private courseRegisApiUrl = 'http://localhost:3000/courses/${courseId}/courseRegistration'; //강의 신청 관련 API URL
+  /*private courseRegisApiUrl = `http://localhost:3000/courses/${courseId}/courseRegistration`; //강의 신청 관련 API URL*/
 
 
   constructor(private http: HttpClient) {}
 
-  private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      throw new Error('No token found in localStorage');
-    }
-    return new HttpHeaders({
+  getAuthHeaders() {
+    const token = localStorage.getItem('token'); // 또는 다른 저장소에서 토큰 가져오기
+    return {
       Authorization: `Bearer ${token}`,
-    });
+      'Content-Type': 'application/json'
+    };
   }
 
   createCourse(courseData: any): Observable<ApiResponse<CourseResponseDto>> {
@@ -67,11 +65,32 @@ export class CourseService {
     return this.http.delete<ApiResponse<void>>(`${this.courseApiUrl}/course/${courseId}/delete`, { headers }); // DELETE 요청
   }
 
+  //course join(Post)
+  joinCourse(courseId: number, registrationData: Omit<CreateCourseRegistrationDto, 'userId'>): Observable<ApiResponse<CreateCourseRegistrationDto>> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`, // 인증 헤더 추가
+    }); // 인증 헤더 가져오기
 
-  joinCourse(courseId: number, registrationData: CreateCourseRegistrationDto): Observable<ApiResponse<void>> {
-    const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
-    return this.http.post<ApiResponse<void>>(`${this.courseApiUrl}/${courseId}/courseRegistration/register`, registrationData, { headers });
+    const url = `http://localhost:3000/courses/${courseId}/courseRegistration/register`; // courseId를 사용해 URL 구성
+    return this.http.post<ApiResponse<CreateCourseRegistrationDto>>(url, registrationData, { headers });
   }
+
+
+
+
+  getAllJoinUsers(): Observable<ApiResponse<CreateCourseRegistrationDto[]>> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<ApiResponse<CreateCourseRegistrationDto[]>>(this.courseApiUrl, { headers });
+  }
+
+  // 강의 삭제 메서드 추가
+  deletejoinCourse(courseId: number,course_registration_id:number): Observable<ApiResponse<void>> {
+    const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
+    return this.http.delete<ApiResponse<void>>(`${this.courseApiUrl}/${courseId}/courseRegistration/${course_registration_id}/delete`, { headers }); // DELETE 요청
+  }
+
 
 
   // 2024-10-03

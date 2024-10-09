@@ -129,6 +129,12 @@ ion-col{
   }
 }
 
+.gray-button {
+  color: gray; /* 텍스트 색상 조정 */
+  pointer-events: none; /* 클릭 이벤트 방지 */
+}
+
+
 .delete-icon{
   cursor:pointer;
 
