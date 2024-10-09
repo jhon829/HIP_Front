@@ -9,11 +9,11 @@ import { CreateCourseRegistrationDto } from '../../../models/course/courses/cour
 import { Registration } from '../../../models/enums/role.enums';
 import { jwtDecode } from "jwt-decode";
 import { HttpErrorResponse } from '@angular/common/http';
-
+/*
 interface DecodedToken {
   user_id: number;
   // 필요한 경우 다른 토큰 필드들을 여기에 추가하세요
-}
+}*/
 
 @Component({
   selector: 'app-classsignup',
@@ -23,6 +23,7 @@ interface DecodedToken {
 
 
 export class ClasssignupPage implements OnInit {
+  registeredCourses: Set<number> = new Set(); // 신청한 강의 ID를 저장할 Set
   courses: CourseResponseDto[] = []; // 가져온 강의 정보를 저장할 배열
   coursesRegistration : CreateCourseRegistrationDto[] = [];
 
@@ -108,20 +109,18 @@ export class ClasssignupPage implements OnInit {
     }
 
     try {
-      // 토큰에서 필요한 정보 디코딩
-      const decodedToken = jwtDecode<DecodedToken>(token);
-      console.log('디코딩된 토큰:', decodedToken);
-
       // 강의 신청 데이터 준비
-      const registrationData: Omit<CreateCourseRegistrationDto, 'userId' | 'courseId'> = {
+      const registrationData: CreateCourseRegistrationDto = {
         course_reporting_date: new Date().toISOString(),
         course_registration_status: Registration.PENDING,
+        //courseId: courseId, // courseId 추가
       };
 
       // 강의 신청 요청 전송
       const response: ApiResponse<CreateCourseRegistrationDto> = await firstValueFrom(this.courseService.joinCourse(courseId, registrationData));
       console.log('강의 신청 성공:', response.message);
       alert('강의 신청이 완료되었습니다.');
+      this.registeredCourses.add(courseId); // 신청한 강의 ID를 Set에 추가
     } catch (error) {
       // 토큰 오류 처리
       if (error instanceof Error && error.name === "InvalidTokenError") {
@@ -132,7 +131,7 @@ export class ClasssignupPage implements OnInit {
       else if (error instanceof HttpErrorResponse) {
         const errorMessage = error.error?.message || '알 수 없는 오류가 발생했습니다.';
         console.error('강의 신청 중 오류 발생:', errorMessage);
-        alert(`강의 신청 중 오류가 발생했습니다: ${errorMessage}`);
+        alert(`${errorMessage}`);
       }
       // 기타 오류 처리
       else {
@@ -140,6 +139,10 @@ export class ClasssignupPage implements OnInit {
         alert('강의 신청 중 예상치 못한 오류가 발생했습니다.');
       }
     }
+  }
+
+  isRegistered(courseId: number): boolean {
+    return this.registeredCourses.has(courseId); // 강의 ID가 Set에 존재하는지 확인
   }
 
 
@@ -156,6 +159,29 @@ export class ClasssignupPage implements OnInit {
       console.error('Error loading courses', error);
     }
   }
+
+  /*
+  //취소하기 메소드
+  async deleteRegistration(courseId: number, registrationId: number) {
+    const confirmed = confirm('수강 신청을 취소하시겠습니까?');
+    if (!confirmed) {
+      return;
+    }
+    try {
+      const response: ApiResponse<void> = await firstValueFrom(this.courseService.deletejoinCourse(courseId, registrationId));
+      console.log(response.message);
+      alert('수강 신청이 취소되었습니다.');
+      this.registeredCourses.delete(courseId); // 취소한 강의 ID 삭제
+      this.courseJoinUser(); // 목록 갱신
+    } catch (error) {
+      console.error('수강 신청 취소 중 오류 발생', error);
+    }
+  }*/
+
+
+
+
+
 
 
 
