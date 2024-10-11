@@ -34,15 +34,7 @@
                 <br />
                 <ion-col class="class-team">{{ course.description }}</ion-col> <!-- 강의 설명 -->
               </ion-col>
-              <ion-col
-                class="join-btn"
-                [ngClass]="{
-                    'registered': isRegistered(course.course_id),  // 이미 신청한 강의에 적용할 클래스
-                    'grey-button': !isRegistered(course.course_id) && registeredCourses.size > 0,  // 다른 강의를 신청한 경우
-                    'black-button': registeredCourses.size === 0  // 신청한 강의가 없을 때 기본 값
-                  }"
-                (click)="isRegistered(course.course_id) ? cancelRegistration(course.course_id) : joinCourse(course.course_id)"
-              >
+              <ion-col class="join-btn" (click)="!isRegistered(course.course_id) ? joinCourse(course.course_id) : null">
                 {{ isRegistered(course.course_id) ? '취소하기' : '신청하기' }}
               </ion-col>
               <ion-icon class="delete-icon" name="trash" (click)="deleteCourse(course.course_id)"></ion-icon>
