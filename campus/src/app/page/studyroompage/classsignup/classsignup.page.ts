@@ -7,7 +7,6 @@ import { CourseResponseDto } from '../../../models/course/courses/course-respons
 import { ApiResponse } from 'src/app/models/common/api-response.interface';
 import { CreateCourseRegistrationDto } from '../../../models/course/courses/course-registration.interface';
 import { Registration } from '../../../models/enums/role.enums';
-import { jwtDecode } from "jwt-decode";
 import { HttpErrorResponse } from '@angular/common/http';
 /*
 interface DecodedToken {
