@@ -140,12 +140,13 @@ export class ClasssignupPage implements OnInit {
     }
   }
 
+  //현재 강의를 신청했는지에 대한 변수
   isRegistered(courseId: number): boolean {
     return this.registeredCourses.has(courseId); // 강의 ID가 Set에 존재하는지 확인
   }
 
 
-
+  //신청하기
   async courseJoinUser() {
     try {
       const response: ApiResponse<any> = await firstValueFrom(this.courseService.getAllJoinUsers());
@@ -159,22 +160,37 @@ export class ClasssignupPage implements OnInit {
     }
   }
 
-  /*
-  //취소하기 메소드
-  async deleteRegistration(courseId: number, registrationId: number) {
+
+  /*//취소하기 기능
+  async cancelRegistration(courseId: number) {
     const confirmed = confirm('수강 신청을 취소하시겠습니까?');
     if (!confirmed) {
       return;
     }
+
+    // courseId에 해당하는 등록 ID 가져오기
+    const registrationId = this.getRegistrationId(courseId);
+    if (!registrationId) {
+      console.error('등록 ID를 찾을 수 없습니다.');
+      return;
+    }
+
     try {
-      const response: ApiResponse<void> = await firstValueFrom(this.courseService.deletejoinCourse(courseId, registrationId));
+      // 강의 취소 요청
+      const response: ApiResponse<void> = await firstValueFrom(this.courseService.canceljoinCourse(courseId, registrationId));
       console.log(response.message);
       alert('수강 신청이 취소되었습니다.');
-      this.registeredCourses.delete(courseId); // 취소한 강의 ID 삭제
+      this.registeredCourses.delete(courseId); // 신청 목록에서 삭제
       this.courseJoinUser(); // 목록 갱신
     } catch (error) {
       console.error('수강 신청 취소 중 오류 발생', error);
     }
+  }*/
+
+
+  /*getRegistrationId(courseId: number): number | null {
+    const registration = this.coursesRegistration.find(reg => reg.course_id === courseId);
+    return registration ? registration.id : null; // 등록된 ID 반환, 없으면 null 반환
   }*/
 
 
