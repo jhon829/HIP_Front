@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth/auth.service';
 import { firstValueFrom } from 'rxjs'; // firstValueFrom 임포트
 import { ActivatedRoute } from '@angular/router'; // courseId를 경로에서 가져옴
+import { CourseResponseDto } from '../../../models/course/courses/course-response.interface';
 import { VideoTopicResponseData } from '../../../models/course/video_topic/video_topic-response.interface';
 import { CourseService } from '../../../services/course/course.service';
+import {ApiResponse} from "../../../models/common/api-response.interface";
 
 @Component({
   selector: 'app-classmy',
@@ -13,20 +15,21 @@ import { CourseService } from '../../../services/course/course.service';
 export class ClassmyPage implements OnInit {
   activeSection: string = 'lecture'; // 기본적으로 강의 목록을 활성화
   newCourseTitle: string = ''; // 새 강의 제목을 저장하는 변수
-  courses: string[] = []; // 생성된 강의 목록을 저장하는 배열
-  courseId: number;  // courseId 저장
+  courses: CourseResponseDto[] = []; // 생성된 강의 목록을 저장하는 배열
+  courseId: number = 1;  // courseId 저장
+  VideoTopics: VideoTopicResponseData[] = [];
 
 
 
-  constructor(
+    constructor(
     private courseService: CourseService,
     private route: ActivatedRoute
   ) {
-    this.courseId = +this.route.snapshot.paramMap.get('courseId'); // courseId를 경로에서 가져오기
+    //this.courseId = +this.route.snapshot.paramMap.get('courseId'); // courseId를 경로에서 가져오기
   }
 
   ngOnInit() {
-    // 초기화 로직이 필요하다면 여기에 작성
+    this.loadCourses();
   }
 
   setActiveSection(section: string) {
@@ -50,6 +53,20 @@ export class ClassmyPage implements OnInit {
       }
     }
   }*/
+
+  //코스에 대한 data 반환 : CourseResponseDto
+  async loadCourses() {
+    try{
+      const response: ApiResponse<CourseResponseDto[]> = await firstValueFrom(this.courseService.getAllCourses());
+      this.courses = response.data;
+
+    } catch (error){
+      console.error('Error loading courses',error)
+
+    }
+
+  }
+
 
   async videotopicRegister() {
     if (!this.newCourseTitle) {
