@@ -12,10 +12,8 @@
 }
 
 .spline-container iframe {
-  width: 100%;
-  height: 100%;
-  max-width: 1200px; /* Adjust this value as needed */
-  max-height: 800px; /* Adjust this value as needed */
+  width: 1200px;
+  height: 800px;
   object-fit: contain;
 }
 
