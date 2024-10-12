@@ -16,7 +16,7 @@ export class ClassmyPage implements OnInit {
   activeSection: string = 'lecture'; // 기본적으로 강의 목록을 활성화
   newCourseTitle: string = ''; // 새 강의 제목을 저장하는 변수
   courses: CourseResponseDto[] = []; // 생성된 강의 목록을 저장하는 배열
-  courseId: number = 1;  // courseId 저장
+  courseId: number = 14;  // courseId 저장
   VideoTopics: VideoTopicResponseData[] = [];
 
 
@@ -29,7 +29,6 @@ export class ClassmyPage implements OnInit {
   }
 
   ngOnInit() {
-    this.loadCourses();
   }
 
   setActiveSection(section: string) {
@@ -54,18 +53,6 @@ export class ClassmyPage implements OnInit {
     }
   }*/
 
-  //코스에 대한 data 반환 : CourseResponseDto
-  async loadCourses() {
-    try{
-      const response: ApiResponse<CourseResponseDto[]> = await firstValueFrom(this.courseService.getAllCourses());
-      this.courses = response.data;
-
-    } catch (error){
-      console.error('Error loading courses',error)
-
-    }
-
-  }
 
 
   async videotopicRegister() {
