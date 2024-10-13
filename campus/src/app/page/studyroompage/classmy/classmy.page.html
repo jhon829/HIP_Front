@@ -24,7 +24,10 @@
       <div *ngIf="activeSection === 'lecture'"  [ngClass]="{ active: activeSection === 'lecture' }" class="active-section">
         <div class="lecture-entire-inner">
           <div class="lecture-inner">
-            <span class="lecture-title-des">지난 날의 강의를 다시 복습할 수 있어요</span>
+            <div>
+              <img src="assets/svg/Video_Player.svg"/>
+              <span class="lecture-title-des">지난 날의 강의를 다시 복습할 수 있어요</span>
+            </div>
 
             <div>총 {{ VideoTopics.length }}강의</div>
             <ul id="lecture-item-list">
