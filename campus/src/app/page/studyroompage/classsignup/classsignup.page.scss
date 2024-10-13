@@ -139,3 +139,22 @@ ion-col{
   cursor:pointer;
 
 }
+
+/* 이미 신청한 강의일 경우 */
+.registered {
+  background-color: green; /* 이미 신청한 강의는 초록색 */
+  color: white;
+}
+
+/* 신청하지 않은 강의일 경우 회색 */
+.grey-button {
+  background-color: grey;
+  color: white;
+}
+
+/* 기본값으로 검정색 */
+.black-button {
+  background-color: black;
+  color: white;
+}
+
