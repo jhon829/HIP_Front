@@ -147,6 +147,8 @@ hr{
 .lecture-page #lecture-menu > li  {
   cursor:pointer;
   transition:color 0.3s;
+  font-size: 20px;
+  font-family: pretendard-B,sans-serif;
 
 }
 
@@ -165,8 +167,20 @@ hr{
   width: 70%;
   margin: 0 auto;
   display: flex;
-  flex-direction: column;
   align-items: center;
+}
+
+.course-doc-inner{
+  flex-direction: row;
+  display: flex;
+  gap:30px;
+
+
+}
+
+.active-section  .lecture-entire-inner{
+  width:100%;
+  flex-direction: column;
 }
 .active-section .lecture-inner{
   display:flex;
@@ -184,16 +198,28 @@ hr{
   cursor:pointer;
 }
 
+.active-section .folder-add{
+
+}
+
 .active-section .folder-icon{
+  border: 1px solid #DEDEDE;
+  align-items: center;
+  border-radius: 20px;
+  box-shadow: 0px 1px 4px 2px #DEDEDE;
+}
+
+.active-section .folder {
   background-color: #ffffff;
   width: 196px;
   height: 142px;
   display: flex;
   justify-content: center;
-  border: 1px solid #DEDEDE;
-  align-items: center;
+}
+
+.active-section .folder-add {
+  border: 1.5px dotted #DEDEDE;
   border-radius: 20px;
-  box-shadow: 0px 1px 4px 2px #DEDEDE;
 }
 
 .active-section .folder-icon ion-icon{
@@ -226,6 +252,7 @@ hr{
 .active-section .folder-one .folder-title .ellipsis-icon{
   cursor: pointer;
 }
+
 
 
 #lecture-item-list{padding:0;}
