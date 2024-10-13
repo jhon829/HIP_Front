@@ -4,6 +4,11 @@
   <div class="layout">
     <app-sidemenu class="sidemenu"></app-sidemenu>
     <div class="content-wrapper">
+      <ion-header class="ion-no-border">
+        <ion-toolbar>
+          <ion-title></ion-title>
+        </ion-toolbar>
+      </ion-header>
 
       <app-course-title></app-course-title>
 
@@ -17,46 +22,64 @@
       </section>
 
       <div *ngIf="activeSection === 'lecture'"  [ngClass]="{ active: activeSection === 'lecture' }" class="active-section">
-        <span class="lecture-title-des">지난 날의 강의를 다시 복습할 수 있어요</span>
+        <div class="lecture-inner">
+          <span class="lecture-title-des">지난 날의 강의를 다시 복습할 수 있어요</span>
 
-        <div>총 {{ courses.length }}강의</div>
-        <ul id="lecture-item-list">
-          <li class="lecture-item-entire" >
-            <div (click)="videotopicRegister" class="create-btn" > + </div>
-            <div class="lecture-item">
-              <span class="lecture-order">1</span>
-              <div>Spring</div>
-            </div>
+          <div>총 {{ VideoTopics.length }}강의</div>
+          <ul id="lecture-item-list">
+            <li class="lecture-item-entire" >
+              <div (click)="videotopicRegister" class="create-btn" > + </div>
+              <div class="lecture-item">
+                <span class="lecture-order">1</span>
+                <div>Spring</div>
+              </div>
 
-          </li>
-        </ul>
+            </li>
+          </ul>
+
+
+        </div>
 
         <ul id="lecture-item-list-1">
           <li class="lecture-item-entire" *ngFor="let VT of VideoTopics; let i = index">
             <div class="create-btn">+</div>
             <div class="lecture-item">
               <span class="lecture-order">{{ i + 1 }}</span>
-              <div>{{ VT.video_pa_topic_title }}</div>
+              <div>{{ VT }}</div> <!-- 대단원만 표시 -->
             </div>
-
           </li>
         </ul>
+
 
         <!-- 새 강의 제목을 입력받는 입력 필드 -->
         <form (ngSubmit)="videotopicRegister()">
           <div class="lecture-item-entire">
-            <input type="text" placeholder="새 강의 제목을 입력하세요" />
-            <button>확인</button> <!-- 확인 버튼 추가 -->
+            <input type="text" placeholder="새 강의 제목을 입력하세요" [(ngModel)]="newCourseTitle" name="courseTitle" required />
+            <button type="submit">확인</button>
           </div>
-
-
         </form>
+
       </div>
 
 
       <div *ngIf="activeSection === 'material'" class="active-section">
-        <h4>학습자료 내용</h4>
-        <!-- 학습 자료의 내용을 여기에 추가하세요 -->
+        <div class="folder-one">
+          <div class="folder-icon">
+            <ion-icon name="folder"></ion-icon>
+          </div>
+          <div class="folder-title">
+            <div class="doc-txt">커리큘럼</div>
+            <div class="ellipsis-icon">
+              <ion-icon name="ellipsis-horizontal"></ion-icon>
+            </div>
+          </div>
+          <div class="doc-txt-desc">10주차</div>
+        </div>
+
+        <div>
+          <div></div>
+        </div>
+
       </div>
     </div>
   </div>
