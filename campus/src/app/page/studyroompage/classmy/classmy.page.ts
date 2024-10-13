@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth/auth.service';
-import { firstValueFrom } from 'rxjs'; // firstValueFrom 임포트
-import { ActivatedRoute } from '@angular/router'; // courseId를 경로에서 가져옴
+import { firstValueFrom } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 import { CourseResponseDto } from '../../../models/course/courses/course-response.interface';
 import { VideoTopicResponseData } from '../../../models/course/video_topic/video_topic-response.interface';
 import { CourseService } from '../../../services/course/course.service';
-import {ApiResponse} from "../../../models/common/api-response.interface";
+import { ApiResponse } from '../../../models/common/api-response.interface';
 
 @Component({
   selector: 'app-classmy',
@@ -15,20 +15,18 @@ import {ApiResponse} from "../../../models/common/api-response.interface";
 export class ClassmyPage implements OnInit {
   activeSection: string = 'lecture'; // 기본적으로 강의 목록을 활성화
   newCourseTitle: string = ''; // 새 강의 제목을 저장하는 변수
-  courses: CourseResponseDto[] = []; // 생성된 강의 목록을 저장하는 배열
-  courseId: number = 1;  // courseId 저장
-  VideoTopics: VideoTopicResponseData[] = [];
+  VideoTopics: string[] = []; // 배열 타입으로 변경 (string[]로 대단원 제목을 담음)
+  course_id: number = 14; // courseId 저장
 
-
-
-    constructor(
+  constructor(
     private courseService: CourseService,
     private route: ActivatedRoute
   ) {
-    //this.courseId = +this.route.snapshot.paramMap.get('courseId'); // courseId를 경로에서 가져오기
+    // this.courseId = +this.route.snapshot.paramMap.get('courseId'); // courseId를 경로에서 가져오기
   }
 
   ngOnInit() {
+    // 페이지가 로드될 때 강의 주제 로드
     this.loadCourses();
   }
 
@@ -36,37 +34,19 @@ export class ClassmyPage implements OnInit {
     this.activeSection = section; // 클릭한 섹션으로 활성화 변경
   }
 
-  /*async confirmCourse() {
-    if (this.newCourseTitle) {
-      try {
-        // 강의 생성 요청
-        const courseData = { course_title: this.newCourseTitle }; // 필드 이름에 맞추어 객체 생성
-        const response = await firstValueFrom(this.authService.createCourse(courseData)); // 수정된 부분
-        // 서버 응답 처리
-        console.log(response);
-
-        // 강의 목록에 추가
-        this.courses.push(this.newCourseTitle);
-        this.newCourseTitle = ''; // 입력 필드 초기화
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    }
-  }*/
-
-  //코스에 대한 data 반환 : CourseResponseDto
   async loadCourses() {
-    try{
-      const response: ApiResponse<CourseResponseDto[]> = await firstValueFrom(this.courseService.getAllCourses());
-      this.courses = response.data;
+    try {
+      // ApiResponse에서 배열을 받도록 변경
+      const response: ApiResponse<VideoTopicResponseData[]> = await firstValueFrom(
+        this.courseService.getAllVideoTopic(this.course_id)
+      );
 
-    } catch (error){
-      console.error('Error loading courses',error)
-
+      // video_pa_topic_title만 추출해서 배열에 저장
+      this.VideoTopics = response.data.map(VT => VT.video_pa_topic_title);
+    } catch (error) {
+      console.error('Error loading courses', error);
     }
-
   }
-
 
   async videotopicRegister() {
     if (!this.newCourseTitle) {
@@ -76,20 +56,14 @@ export class ClassmyPage implements OnInit {
     const videoTopicData = { title: this.newCourseTitle };
 
     try {
-      // firstValueFrom을 사용하여 Observable 처리
       const response = await firstValueFrom(
-        this.courseService.createVideoTopic(this.courseId, videoTopicData)
+        this.courseService.createVideoTopic(this.course_id, videoTopicData)
       );
       console.log('Video topic created successfully:', response);
-
-      // 성공 시 Alert 띄우기
       await this.showAlert('성공', '비디오 주제가 성공적으로 생성되었습니다.');
-
-      // 성공 후 입력 필드 초기화
-      this.newCourseTitle = '';
+      this.newCourseTitle = ''; // 성공적으로 제출 후 입력 초기화
     } catch (error) {
       console.error('Error creating video topic:', error);
-      // 오류 발생 시 Alert 띄우기
       await this.showAlert('실패', '비디오 주제 생성에 실패했습니다.');
     }
   }
@@ -98,5 +72,4 @@ export class ClassmyPage implements OnInit {
   async showAlert(title: string, message: string) {
     alert(`${title}: ${message}`);
   }
-
 }

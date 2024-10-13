@@ -3,12 +3,16 @@
   min-width: 250px;
   max-width: 400px;
   width: 20vw;
-  border-right: #9e65ff solid 2px;
 }
 
 .layout {
   display: flex;
   height: 100%;
+}
+
+ion-content .content-wrapper{
+  width:100%;
+
 }
 
 
@@ -44,7 +48,7 @@
   width: 10%;
 }
 
-
+/*
 section.BG-color{
   //color: #b0b8ff;
   //background-color: #E9EEFF;
@@ -93,7 +97,7 @@ span.lecture-rule{
   padding: 10px;
   place-items: center;
 }
-
+*/
 
 ul{
   list-style: none;
@@ -120,6 +124,15 @@ hr{
 
 .lecture-page .detail-menu{
   display: flex;
+  font-size: 25px;
+  /* font-weight: 900; */
+  margin: 40px 0 0 0;
+  font-family: 'pretendard-B',Serif;
+}
+
+.lecture-page h3{
+  font-weight: bold;
+
 }
 
 .lecture-page #lecture-menu{
@@ -134,6 +147,8 @@ hr{
 .lecture-page #lecture-menu > li  {
   cursor:pointer;
   transition:color 0.3s;
+  font-size: 20px;
+  font-family: pretendard-B,sans-serif;
 
 }
 
@@ -149,18 +164,96 @@ hr{
 
 /*강의목록 안에 있는 section*/
 .active-section{
+  width: 70%;
+  margin: 0 auto;
   display: flex;
-  flex-direction: column;
   align-items: center;
 }
-.active-section > *{
+
+.course-doc-inner{
+  flex-direction: row;
+  display: flex;
+  gap:30px;
+
+
+}
+
+.active-section  .lecture-entire-inner{
+  width:100%;
+  flex-direction: column;
+}
+.active-section .lecture-inner{
   display:flex;
-  width:70%;
+  width:100%;
   justify-content: flex-start;
+  flex-direction: column;
 }
 
 .active-section .lecture-title-des{
 }
+
+.active-section .folder-one{
+  display: flex;
+  flex-direction: column;
+  cursor:pointer;
+}
+
+.active-section .folder-add{
+
+}
+
+.active-section .folder-icon{
+  border: 1px solid #DEDEDE;
+  align-items: center;
+  border-radius: 20px;
+  box-shadow: 0px 1px 4px 2px #DEDEDE;
+}
+
+.active-section .folder {
+  background-color: #ffffff;
+  width: 196px;
+  height: 142px;
+  display: flex;
+  justify-content: center;
+}
+
+.active-section .folder-add {
+  border: 1.5px dotted #DEDEDE;
+  border-radius: 20px;
+}
+
+.active-section .folder-icon ion-icon{
+  color:#E3B6B6;
+  width: 50px;
+  height: 50px;
+
+}
+
+.active-section .folder-one .folder-title{
+  display: flex;
+  margin: 10px 0 0 0;
+  justify-content: space-between;
+  align-items: center;
+
+
+}
+
+.active-section .folder-one > *{
+  color:#4C4C4C;
+
+}
+
+.active-section .folder-one .folder-title .doc-txt{
+  font-size:20px;
+  font-family: pretendard-B,sans-serif;
+  color:#4C4C4C;
+}
+
+.active-section .folder-one .folder-title .ellipsis-icon{
+  cursor: pointer;
+}
+
+
 
 #lecture-item-list{padding:0;}
 #lecture-item-list .lecture-item-entire{

@@ -8,6 +8,7 @@ import { ClassmyPageRoutingModule } from './classmy-routing.module';
 
 import { ClassmyPage } from './classmy.page';
 import {SidemenuComponent} from "../../../component/sidemenucomponent/sidemenu.component";
+import {CourseTitleComponent} from "../../../component/course-title/course-title.component";
 
 @NgModule({
   imports: [
@@ -17,6 +18,6 @@ import {SidemenuComponent} from "../../../component/sidemenucomponent/sidemenu.c
     ClassmyPageRoutingModule,
     SidemenuComponent
   ],
-  declarations: [ClassmyPage]
+  declarations: [ClassmyPage, CourseTitleComponent]
 })
 export class ClassmyPageModule {}

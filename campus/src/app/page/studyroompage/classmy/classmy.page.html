@@ -4,18 +4,13 @@
   <div class="layout">
     <app-sidemenu class="sidemenu"></app-sidemenu>
     <div class="content-wrapper">
+      <ion-header class="ion-no-border">
+        <ion-toolbar>
+          <ion-title></ion-title>
+        </ion-toolbar>
+      </ion-header>
 
-      <section class="BG-color">
-        <div class="box-title">
-          <div style="flex-direction: row; margin: 10px">
-            <span class="lecture-spot">강의실 | 117-1</span>
-          </div>
-          <span class="lecture-title">프론트엔드/백엔드 프로그래밍</span>
-          <span class="lecture-spot">강사</span>
-
-          <h6>본 강좌는 JavaScript와 TypeScript를 중심으로 프론트엔드에서 필요한 개발 언어를 학습하며, next.js와 Angular를 이용한 백엔드 개발을 배웁니다.</h6>
-        </div>
-      </section>
+      <app-course-title></app-course-title>
 
       <section class="lecture-page">
         <h3 class="detail-menu">상세메뉴</h3>
@@ -27,46 +22,70 @@
       </section>
 
       <div *ngIf="activeSection === 'lecture'"  [ngClass]="{ active: activeSection === 'lecture' }" class="active-section">
-        <span class="lecture-title-des">지난 날의 강의를 다시 복습할 수 있어요</span>
-
-        <div>총 {{ courses.length }}강의</div>
-        <ul id="lecture-item-list">
-          <li class="lecture-item-entire" >
-            <div (click)="videotopicRegister" class="create-btn" > + </div>
-            <div class="lecture-item">
-              <span class="lecture-order">1</span>
-              <div>Spring</div>
+        <div class="lecture-entire-inner">
+          <div class="lecture-inner">
+            <div>
+              <img src="assets/svg/Video_Player.svg"/>
+              <span class="lecture-title-des">지난 날의 강의를 다시 복습할 수 있어요</span>
             </div>
 
-          </li>
-        </ul>
+            <div>총 {{ VideoTopics.length }}강의</div>
+            <ul id="lecture-item-list">
+              <li class="lecture-item-entire" >
+                <div (click)="videotopicRegister" class="create-btn" > + </div>
+                <div class="lecture-item">
+                  <span class="lecture-order">1</span>
+                  <div>Spring</div>
+                </div>
 
-        <ul id="lecture-item-list-1">
-          <li class="lecture-item-entire" *ngFor="let VT of VideoTopics; let i = index">
-            <div class="create-btn">+</div>
-            <div class="lecture-item">
-              <span class="lecture-order">{{ i + 1 }}</span>
-              <div>{{ VT.video_pa_topic_title }}</div>
-            </div>
+              </li>
+            </ul>
 
-          </li>
-        </ul>
 
-        <!-- 새 강의 제목을 입력받는 입력 필드 -->
-        <form (ngSubmit)="videotopicRegister()">
-          <div class="lecture-item-entire">
-            <input type="text" placeholder="새 강의 제목을 입력하세요" />
-            <button>확인</button> <!-- 확인 버튼 추가 -->
           </div>
 
+          <ul id="lecture-item-list-1">
+            <li class="lecture-item-entire" *ngFor="let VT of VideoTopics; let i = index">
+              <div class="create-btn">+</div>
+              <div class="lecture-item">
+                <span class="lecture-order">{{ i + 1 }}</span>
+                <div>{{ VT }}</div> <!-- 대단원만 표시 -->
+              </div>
+            </li>
+          </ul>
 
-        </form>
+        <!-- 새 강의 제목을 입력받는 입력 필드 -->
+          <form (ngSubmit)="videotopicRegister()">
+            <div class="lecture-item-entire">
+              <input type="text" placeholder="새 강의 제목을 입력하세요" [(ngModel)]="newCourseTitle" name="courseTitle" required />
+              <button type="submit">확인</button>
+            </div>
+          </form>
+
+        </div>
+
       </div>
-
-
       <div *ngIf="activeSection === 'material'" class="active-section">
-        <h4>학습자료 내용</h4>
-        <!-- 학습 자료의 내용을 여기에 추가하세요 -->
+        <div class="course-doc-inner">
+          <div class="folder-one">
+            <div class="folder folder-icon">
+              <ion-icon name="folder"></ion-icon>
+            </div>
+            <div class="folder-title">
+              <div class="doc-txt">커리큘럼</div>
+              <div class="ellipsis-icon">
+                <ion-icon name="ellipsis-horizontal"></ion-icon>
+              </div>
+            </div>
+            <div class="doc-txt-desc">10주차</div>
+          </div>
+
+          <div class="folder-one">
+            <div class="folder folder-add">
+              <img style="width:65px;" src="assets/svg/Folder_add.svg">
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
