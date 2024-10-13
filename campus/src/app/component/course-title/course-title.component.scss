@@ -23,15 +23,13 @@ div.box-title{
   padding: 50px;
   background-color: #ffffff;
   display: flex;
-  //border: 1px solid #353B77;
   border-radius: 10px;
   box-shadow: 0 0 10px #c5c5c5;
-  width: 100%;
-  margin:100px 200px;
-  margin-bottom:10px;
+  width: 70%;
+  margin: 100px 0 10px 0;
   flex-direction: column;
   text-align: left;
-  min-width:500px;
+  min-width: 300px;
   position: relative;
 
 }
