@@ -139,15 +139,16 @@ hr{
   display: flex;
   flex-direction: row;
   list-style: none;
-  gap:10px;
+  gap:20px;
   padding-left: 0;
+  margin: 10px 0;
 
 }
 
 .lecture-page #lecture-menu > li  {
   cursor:pointer;
   transition:color 0.3s;
-  font-size: 20px;
+  font-size: 18px;
   font-family: pretendard-B,sans-serif;
 
 }
@@ -159,6 +160,10 @@ hr{
 
 .lecture-page #lecture-menu > li:not(.active){
   color: gray;
+}
+
+.lecture-page hr {
+  margin:0;
 }
 
 
@@ -174,6 +179,7 @@ hr{
   flex-direction: row;
   display: flex;
   gap:30px;
+  margin: 10px 0;
 
 
 }
@@ -189,7 +195,24 @@ hr{
   flex-direction: column;
 }
 
-.active-section .lecture-title-des{
+.active-section .lecture-inner .VideoTopics-length{
+  margin: 10px 0;
+  font-family: 'pretendard-B',sans-serif;
+}
+
+.active-section .lecture-inner .lecture-title-icon{
+  display: flex;
+  align-items: center;
+
+}
+
+.active-section .lecture-inner .lecture-title-icon img {
+  width:35px;
+}
+
+.active-section .lecture-title-des {
+  font-family: 'pretendard-B',sans-serif;
+  color: #5A5A5A;
 }
 
 .active-section .folder-one{
