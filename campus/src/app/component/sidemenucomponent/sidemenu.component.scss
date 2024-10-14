@@ -1,8 +1,8 @@
 aside {
   height: 100vh; /* 높이를 100vh로 설정 */
   background-color: #fff; /* 배경색 설정 */
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
   transition: width 0.3s; /* 너비 변화에 애니메이션 추가 */
+  border-right:1px solid #B1B1B1;
 }
 
 .item-native .item-inner {
