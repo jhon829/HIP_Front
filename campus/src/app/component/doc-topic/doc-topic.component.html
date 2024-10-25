@@ -1,5 +1,6 @@
 <div class="course-doc-inner">
   <div class="folder-container">
+    <!-- 상위 폴더들 -->
     <div *ngIf="!currentFolder" class="folder-container-inner">
       <div *ngFor="let topic of topLevelFolders" class="folder-one" (click)="openFolder(topic)">
         <div class="folder folder-icon">
@@ -9,52 +10,54 @@
           <div class="doc-txt">{{ topic.topic_title }}</div>
           <div class="ellipsis-icon">
             <ion-icon name="trash" style="cursor: pointer"
-                      (click)="deleteDoc(course_id, topic.topic_id); $event.stopPropagation()">
+                      (click)="deleteDoc(topic.topic_id); $event.stopPropagation()">
             </ion-icon>
           </div>
         </div>
-        <div class="doc-txt-desc">{{ topic.pa_topic_id }}</div>
       </div>
     </div>
 
-    <!-- 새 폴더 추가 입력 폼 (초기에는 숨김) -->
-    <div *ngIf="showNewTopicForm" class="folder-one">
-      <div class="folder folder-icon">
-        <ion-icon name="folder"></ion-icon>
-      </div>
-      <div class="folder-title">
-        <input [(ngModel)]="newDocTopicTitle" placeholder="커리큘럼 제목" (input)="validateInputs()">
-      </div>
-      <input [(ngModel)]="newDocTopicDesc" placeholder="설명 (예: 10주차)" (input)="validateInputs()">
-      <button style="cursor: pointer" [disabled]="!isInputValid" (click)="createDocTopic()">확인</button>
-    </div>
-
-    <!-- 항상 마지막에 위치하는 폴더 추가 버튼 -->
-    <div class="folder-one" *ngIf="!currentFolder">
-      <div class="folder folder-add" (click)="showAddTopicForm()">
-        <img style="width:65px;" src="assets/svg/Folder_add.svg">
-      </div>
-    </div>
-
-    <!-- 현재 열린 폴더의 하위 폴더들 -->
+    <!-- 하위 폴더들 -->
     <div *ngIf="currentFolder">
       <div class="folder-header">
         <img src="assets/svg/arrow-back.svg" style="cursor: pointer; width:12px;" (click)="closeFolder()"/>
         <div class="currentFolder-Name">{{ currentFolder.topic_title }}</div>
       </div>
-      <div *ngFor="let subTopic of subFolders" class="folder-one sub-folder">
+      <div class="folder-container-inner">
+        <div *ngFor="let subTopic of subFolders" class="folder-one sub-folder">
+          <div class="folder folder-icon">
+            <ion-icon name="folder"></ion-icon>
+          </div>
+          <div class="folder-title">
+            <div class="doc-txt">{{ subTopic.topic_title }}</div>
+            <div class="ellipsis-icon">
+              <ion-icon name="trash" style="cursor: pointer"
+                        (click)="deleteDoc(subTopic.topic_id)">
+              </ion-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 새 폴더 추가 입력 폼 -->
+    <div *ngIf="showNewTopicForm" class="folder-one">
+      <div class="folder-container-inner">
         <div class="folder folder-icon">
           <ion-icon name="folder"></ion-icon>
         </div>
         <div class="folder-title">
-          <div class="doc-txt">{{ subTopic.topic_title }}</div>
-          <div class="ellipsis-icon">
-            <ion-icon name="trash" style="cursor: pointer"
-                      (click)="deleteDoc(course_id, subTopic.topic_id)">
-            </ion-icon>
-          </div>
+          <input [(ngModel)]="newTopicTitle" placeholder="폴더 제목" (input)="validateInput()">
         </div>
-        <div class="doc-txt-desc">{{ subTopic.pa_topic_id }}</div>
+        <button style="cursor: pointer" [disabled]="!isInputValid" (click)="createTopic()">확인</button>
+
+      </div>
+    </div>
+
+    <!-- 폴더 추가 버튼 -->
+    <div class="folder-one">
+      <div class="folder folder-add" (click)="showAddTopicForm()">
+        <img style="width:65px;" src="assets/svg/Folder_add.svg">
       </div>
     </div>
   </div>

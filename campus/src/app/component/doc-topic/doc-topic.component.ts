@@ -10,110 +10,103 @@ import { ApiResponse } from '../../models/common/api-response.interface';
   styleUrls: ['./doc-topic.component.scss'],
 })
 export class DocTopicComponent implements OnInit {
-  topLevelFolders: any[] = [];
-  subFolders: any[] = [];
-  currentFolder: any = null;
+  topLevelFolders: DocNameResponseData[] = [];
+  subFolders: DocNameResponseData[] = [];
+  currentFolder: DocNameResponseData | null = null;
   showNewTopicForm: boolean = false;
-  newDocTopicTitle: string = '';
-  newDocTopicDesc: string = '';
+  newTopicTitle: string = '';
   course_id = 14;
   isInputValid: boolean = false;
-  showNewTopicInput: boolean = false;
 
   constructor(private courseService: CourseService) {}
 
   ngOnInit() {
-    this.loadDocTopic();
+    this.loadTopLevelFolders();
   }
 
-  showAddTopicForm() {
-    this.showNewTopicForm = true;
-    this.newDocTopicTitle = '';
-    this.newDocTopicDesc = '';
-    this.isInputValid = false;
-  }
-
-  validateInputs() {
-    this.isInputValid = this.newDocTopicTitle.trim() !== '' && this.newDocTopicDesc.trim() !== '';
-  }
-
-  async loadDocTopic() {
+  async loadTopLevelFolders() {
     try {
       const response: ApiResponse<DocNameResponseData[]> = await firstValueFrom(
         this.courseService.getAllDocName(this.course_id)
       );
-
-      console.log('응답 데이터:', response.data);
-
-      if (Array.isArray(response.data)) {
-        this.topLevelFolders = response.data.map(docTopic => ({
-          topic_id: docTopic.topic_id,
-          topic_title: docTopic.topic_title,
-          pa_topic_id: docTopic.pa_topic_id,
-        }));
-      } else {
-        console.error('응답 데이터가 배열이 아닙니다:', response.data);
-      }
+      this.topLevelFolders = response.data.filter(folder => !folder.pa_topic_id);
     } catch (error) {
-      console.error('문서 주제 로드 중 오류 발생:', error);
+      console.error('상위 폴더 로드 중 오류 발생:', error);
     }
   }
 
-  async createDocTopic() {
-    if (!this.isInputValid) {
-      return;
-    }
-
-    const docTopicData = {
-      topic_title: this.newDocTopicTitle,
-      pa_topic_id: parseInt(this.newDocTopicDesc, 10)
-    };
-
-    console.log('전송할 문서 주제 데이터:', docTopicData);
-
+  async loadSubFolders(parentId: number) {
     try {
-      const response: ApiResponse<DocNameResponseData> = await firstValueFrom(
-        this.courseService.createDocName(this.course_id, docTopicData)
+      const response: ApiResponse<DocNameResponseData[]> = await firstValueFrom(
+        this.courseService.getAllDocName(this.course_id)
       );
-      console.log('문서 주제가 성공적으로 생성되었습니다:', response);
-
-      this.topLevelFolders.push({
-        topic_id: response.data.topic_id,
-        topic_title: response.data.topic_title,
-        pa_topic_id: response.data.pa_topic_id,
-      });
-
-      this.newDocTopicTitle = '';
-      this.newDocTopicDesc = '';
-      this.showNewTopicForm = false;
-
+      this.subFolders = response.data.filter(folder => folder.pa_topic_id === parentId);
     } catch (error) {
-      console.error('문서 주제 생성 중 오류 발생:', error);
+      console.error('하위 폴더 로드 중 오류 발생:', error);
     }
   }
 
-  async deleteDoc(courseId: number, topicId: number) {
-    const confirmed = confirm('이 비디오 주제를 삭제하시겠습니까?');
-    if (!confirmed) {
-      return;
-    }
-    try {
-      const [response] = await Promise.all([firstValueFrom(this.courseService.deleteDocName(courseId, topicId))]);
-      console.log(response.message);
-      this.loadDocTopic();
-    } catch (error) {
-      console.error('비디오 주제 삭제 중 오류 발생', error);
-    }
-  }
-
-  openFolder(folder: any) {
+  openFolder(folder: DocNameResponseData) {
     this.currentFolder = folder;
-    // 여기에 서브폴더를 로드하는 로직을 추가해야 합니다.
-    // 예: this.loadSubFolders(folder.topic_id);
+    this.loadSubFolders(folder.topic_id);
   }
 
   closeFolder() {
     this.currentFolder = null;
     this.subFolders = [];
+    this.loadTopLevelFolders();
+  }
+
+  showAddTopicForm() {
+    this.showNewTopicForm = true;
+    this.newTopicTitle = '';
+    this.isInputValid = false;
+  }
+
+  validateInput() {
+    this.isInputValid = this.newTopicTitle.trim() !== '';
+  }
+
+  async createTopic() {
+    if (!this.isInputValid) return;
+
+    const docTopicData = {
+      topic_title: this.newTopicTitle,
+      pa_topic_id: this.currentFolder ? this.currentFolder.topic_id : null
+    };
+
+    try {
+      const response: ApiResponse<DocNameResponseData> = await firstValueFrom(
+        this.courseService.createDocName(this.course_id, docTopicData)
+      );
+      console.log('폴더가 성공적으로 생성되었습니다:', response);
+
+      if (this.currentFolder) {
+        this.subFolders.push(response.data);
+      } else {
+        this.topLevelFolders.push(response.data);
+      }
+
+      this.newTopicTitle = '';
+      this.showNewTopicForm = false;
+    } catch (error) {
+      console.error('폴더 생성 중 오류 발생:', error);
+    }
+  }
+
+  async deleteDoc(topicId: number) {
+    const confirmed = confirm('이 폴더를 삭제하시겠습니까?');
+    if (!confirmed) return;
+
+    try {
+      await firstValueFrom(this.courseService.deleteDocName(this.course_id, topicId));
+      if (this.currentFolder) {
+        this.subFolders = this.subFolders.filter(folder => folder.topic_id !== topicId);
+      } else {
+        this.topLevelFolders = this.topLevelFolders.filter(folder => folder.topic_id !== topicId);
+      }
+    } catch (error) {
+      console.error('폴더 삭제 중 오류 발생:', error);
+    }
   }
 }
