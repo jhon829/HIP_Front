@@ -59,11 +59,18 @@
             <li class="lecture-item-entire" *ngFor="let VT of VideoTopics; let i = index">
               <div class="create-btn">+</div>
               <div class="lecture-item">
-                <span class="lecture-order">{{ i + 1 }}</span>
-                <div>{{ VT.video_topic_title }}</div>
+                <div class="lecture-order-name">
+                  <span class="lecture-order">{{ i + 1 }}</span>
+                  <div>{{ VT.video_topic_title }}</div>
+                </div>
+                <ion-icon name="trash" style="cursor: pointer"
+                          (click)="deleteVideo(course_id, VT.video_topic_id)">
+                </ion-icon>
               </div>
             </li>
           </ul>
+
+
 
 
         </div>

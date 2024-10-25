@@ -322,6 +322,17 @@ hr{
 
 }
 
+.lecture-item-list .lecture-item .lecture-order-name{
+  display: flex;
+
+}
+
+.lecture-item-list .lecture-item{
+  display: flex;
+  justify-content: space-between;
+
+}
+
 .lecture-item-list .lecture-item .lecture-order{
   background-color: #535353;
   color: white;

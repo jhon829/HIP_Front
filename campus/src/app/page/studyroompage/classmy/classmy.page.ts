@@ -15,7 +15,9 @@ import { ApiResponse } from '../../../models/common/api-response.interface';
 export class ClassmyPage implements OnInit {
   activeSection: string = 'lecture'; // 기본적으로 강의 목록을 활성화
   newCourseTitle: string = ''; // 새 강의 제목을 저장하는 변수
-  VideoTopics: { video_pa_topic_title: string; video_topic_title: string }[] = []; // 객체 배열로 변경
+  VideoTopics: {
+    video_topic_id: number;
+    video_pa_topic_title: string; video_topic_title: string }[] = []; // 객체 배열로 변경
   course_id: number = 14; // courseId 저장
   lectureItems: Array<{ title: string; newCourseTitle: string }> = [];
   isEmptyState = true;  // 비어있는 상태인지 확인
@@ -48,6 +50,8 @@ export class ClassmyPage implements OnInit {
     this.lectureItems.push({ title: '', newCourseTitle: '' }); // 첫 항목 추가
   }
 
+
+
   async loadCourses() {
     try {
       // ApiResponse에서 배열을 받도록 변경
@@ -56,6 +60,7 @@ export class ClassmyPage implements OnInit {
       );
 
       this.VideoTopics = response.data.map(videoTopic => ({
+        video_topic_id: videoTopic.video_topic_id,
         video_topic_title: videoTopic.video_topic_title,
         video_pa_topic_title: videoTopic.video_pa_topic_title,
       }));
@@ -70,6 +75,22 @@ export class ClassmyPage implements OnInit {
       console.error('Error loading courses', error);
     }
   }
+
+  async deleteVideo(courseId: number, videoTopicId: number) {
+    const confirmed = confirm('이 비디오 주제를 삭제하시겠습니까?'); // 삭제 확인 다이얼로그
+    if (!confirmed) {
+      return; // 사용자가 삭제를 취소한 경우
+    }
+    try {
+      const response: ApiResponse<void> = await firstValueFrom(this.courseService.deleteVideoTopic(courseId, videoTopicId)); // 비디오 주제 삭제 API 호출
+      console.log(response.message); // 삭제 성공 메시지 출력
+      this.loadCourses(); // 삭제 후 목록 갱신
+    } catch (error) {
+      console.error('비디오 주제 삭제 중 오류 발생', error);
+    }
+  }
+
+
 
 
   // 비디오 주제를 생성하는 메서드
