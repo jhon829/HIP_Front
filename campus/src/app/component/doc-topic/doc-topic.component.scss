@@ -1,11 +1,14 @@
-.course-doc-inner{
+.course-doc-inner .folder-container{
+
+
+}
+
+.course-doc-inner .folder-container .folder-container-inner{
   flex-direction: row;
   display: flex;
   gap:30px;
   margin: 10px 0;
   flex-wrap:wrap;
-
-
 }
 
 
@@ -83,4 +86,25 @@
 
 .folder-one .folder-title .ellipsis-icon{
   cursor: pointer;
+}
+
+
+
+/*하위폴더 명*/
+
+.folder-header{
+  display: flex;
+  background-color: #F8F8FE;
+  justify-content: flex-start;
+  align-items: center;
+  border-radius: 16px;
+  border: 1px solid #D0D0FF;
+  margin: 10px 0;
+  padding: 16px 34px;
+  gap: 10px;
+}
+
+.folder-header .currentFolder-Name{
+  font-family: pretendard-B,sans-serif;
+  font-size:24px;
 }
