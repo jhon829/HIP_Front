@@ -15,7 +15,7 @@ import { ApiResponse } from '../../../models/common/api-response.interface';
 export class ClassmyPage implements OnInit {
   activeSection: string = 'lecture'; // 기본적으로 강의 목록을 활성화
   newCourseTitle: string = ''; // 새 강의 제목을 저장하는 변수
-  VideoTopics: string[] = []; // 배열 타입으로 변경 (string[]로 대단원 제목을 담음)
+  VideoTopics: { video_pa_topic_title: string; video_topic_title: string }[] = []; // 객체 배열로 변경
   course_id: number = 14; // courseId 저장
   lectureItems: Array<{ title: string; newCourseTitle: string }> = [];
   isEmptyState = true;  // 비어있는 상태인지 확인
@@ -55,14 +55,23 @@ export class ClassmyPage implements OnInit {
         this.courseService.getAllVideoTopic(this.course_id)
       );
 
-      // video_pa_topic_title만 추출해서 배열에 저장
-      this.VideoTopics = response.data.map(VT => VT.video_pa_topic_title);
+      this.VideoTopics = response.data.map(videoTopic => ({
+        video_topic_title: videoTopic.video_topic_title,
+        video_pa_topic_title: videoTopic.video_pa_topic_title,
+      }));
+
+      // 로드 후 빈 배열 여부 확인 (필요할 경우)
+      if (this.VideoTopics.length === 0) {
+        console.log('비디오 주제가 없습니다.');
+      } else {
+        console.log('로드된 비디오 주제:', this.VideoTopics);
+      }
     } catch (error) {
       console.error('Error loading courses', error);
     }
   }
 
-  // 비디오 주제를 생성하는 메서드
+
   // 비디오 주제를 생성하는 메서드
   async videotopicRegister(i: number) {
     const lectureItem = this.lectureItems[i]; // 현재 항목 가져오기

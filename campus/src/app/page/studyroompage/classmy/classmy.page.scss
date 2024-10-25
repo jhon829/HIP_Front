@@ -278,13 +278,13 @@ hr{
 
 
 
-#lecture-item-list{padding:0;}
-#lecture-item-list .lecture-item-entire{
+.lecture-item-list{padding:0;}
+.lecture-item-list .lecture-item-entire{
   width: 100%;
   position: relative;
 }
 
-#lecture-item-list .lecture-item-entire .create-btn{
+.lecture-item-list .lecture-item-entire .create-btn{
   display: flex;
   position: absolute;
   top:25px;
@@ -304,13 +304,13 @@ hr{
 
 }
 
-#lecture-item-list .lecture-item-entire:hover .create-btn{
+.lecture-item-list .lecture-item-entire:hover .create-btn{
   display:flex;
   opacity:1
 
 }
 
-#lecture-item-list .lecture-item{
+.lecture-item-list .lecture-item{
   display: flex;
   flex-direction: row;
   background: #f4f6ff;
@@ -322,7 +322,7 @@ hr{
 
 }
 
-#lecture-item-list .lecture-item .lecture-order{
+.lecture-item-list .lecture-item .lecture-order{
   background-color: #535353;
   color: white;
   border-radius: 5px;

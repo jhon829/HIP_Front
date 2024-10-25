@@ -30,8 +30,7 @@
             </div>
 
             <div class="VideoTopics-length">총 {{ VideoTopics.length }}강의</div>
-            <ul id="lecture-item-list">
-              <!-- lectureItems 배열이 비어 있을 경우 기본 메시지 표시 -->
+            <ul class="lecture-item-list">
               <li *ngIf="isEmptyState" class="lecture-item-empty">
                 <div class="lecture-item">
                   <span>아직 영상이 없습니다</span>
@@ -39,8 +38,6 @@
                 </div>
               </li>
 
-              <!-- lectureItems 배열에 항목이 있을 경우 항목 리스트 표시 -->
-              <!-- lectureItems 배열에 항목이 있을 경우 항목 리스트 표시 -->
               <li *ngFor="let item of lectureItems; let i = index" class="lecture-item-entire">
                 <div class="lecture-item">
                   <span class="lecture-order">{{ i + 1 }}</span>
@@ -49,10 +46,8 @@
                   <button (click)="videotopicRegister(i)">생성</button>
                 </div>
 
-                <!-- 항목 내부의 추가 버튼 -->
                 <div (click)="addLectureItem(i)" class="create-btn"> + </div>
               </li>
-
             </ul>
 
 
@@ -60,15 +55,16 @@
 
           </div>
 
-          <ul id="lecture-item-list-1">
+          <ul class="lecture-item-list">
             <li class="lecture-item-entire" *ngFor="let VT of VideoTopics; let i = index">
               <div class="create-btn">+</div>
               <div class="lecture-item">
                 <span class="lecture-order">{{ i + 1 }}</span>
-                <div>{{ VT }}</div> <!-- 대단원만 표시 -->
+                <div>{{ VT.video_topic_title }}</div>
               </div>
             </li>
           </ul>
+
 
         </div>
 
