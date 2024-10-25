@@ -278,13 +278,17 @@ hr{
 
 
 
-#lecture-item-list{padding:0;}
-#lecture-item-list .lecture-item-entire{
+.lecture-item-list{
+  padding: 0;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;}
+.lecture-item-list .lecture-item-entire{
   width: 100%;
   position: relative;
 }
 
-#lecture-item-list .lecture-item-entire .create-btn{
+.lecture-item-list .lecture-item-entire .create-btn{
   display: flex;
   position: absolute;
   top:25px;
@@ -304,13 +308,14 @@ hr{
 
 }
 
-#lecture-item-list .lecture-item-entire:hover .create-btn{
-  display:flex;
+.lecture-item-list .lecture-item-entire:hover .create-btn{
+  display:none;
   opacity:1
+
 
 }
 
-#lecture-item-list .lecture-item{
+.lecture-item-list .lecture-item{
   display: flex;
   flex-direction: row;
   background: #f4f6ff;
@@ -319,10 +324,43 @@ hr{
   width: 100%;
   padding:25px;
   gap:20px;
+  justify-content: space-between;
 
 }
 
-#lecture-item-list .lecture-item .lecture-order{
+.lecture-item-add{
+  background-color: #f6f3ff !important;
+  border: 1px solid #7d31ff !important;
+  padding:18px 25px !important;
+}
+
+.lecture-item-list .lecture-item .lecture-menu{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.lecture-item-list .lecture-item .video-upload{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding:4px 10px;
+  border:1px solid #757575;
+  color:#757575;
+  border-radius: 10px;
+  cursor: pointer;
+
+}
+
+.lecture-item-list .lecture-item .lecture-order-name{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+}
+
+
+.lecture-item-list .lecture-item .lecture-order{
   background-color: #535353;
   color: white;
   border-radius: 5px;
