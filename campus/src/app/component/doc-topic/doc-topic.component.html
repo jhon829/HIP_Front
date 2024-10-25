@@ -1,18 +1,44 @@
 <div class="course-doc-inner">
-  <!-- 기존 폴더들 -->
-  <div *ngFor="let topic of DocTopics" class="folder-one">
-    <div class="folder folder-icon">
-      <ion-icon name="folder"></ion-icon>
-    </div>
-    <div class="folder-title">
-      <div class="doc-txt">{{ topic.topic_title }}</div>
-      <div class="ellipsis-icon">
-        <ion-icon name="trash" style="cursor: pointer"
-                  (click)="deleteDoc(course_id,topic.topic_id)">
-        </ion-icon>
+  <div class="folder-container">
+    <!-- 상위 폴더들 (현재 폴더가 없을 때만 표시) -->
+    <div *ngIf="!currentFolder">
+      <div *ngFor="let topic of topLevelFolders" class="folder-one" (click)="openFolder(topic)">
+        <div class="folder folder-icon">
+          <ion-icon name="folder"></ion-icon>
+        </div>
+        <div class="folder-title">
+          <div class="doc-txt">{{ topic.topic_title }}</div>
+          <div class="ellipsis-icon">
+            <ion-icon name="trash" style="cursor: pointer"
+                      (click)="deleteDoc(course_id, topic.topic_id); $event.stopPropagation()">
+            </ion-icon>
+          </div>
+        </div>
+        <div class="doc-txt-desc">{{ topic.pa_topic_id }}</div>
       </div>
     </div>
-    <div class="doc-txt-desc">{{ topic.pa_topic_id }}</div>
+
+    <!-- 현재 열린 폴더의 하위 폴더들 -->
+    <div *ngIf="currentFolder">
+      <div class="folder-header">
+        <h3>{{ currentFolder.topic_title }} 내부</h3>
+        <ion-icon name="arrow-back" style="cursor: pointer" (click)="closeFolder()"></ion-icon>
+      </div>
+      <div *ngFor="let subTopic of subFolders" class="folder-one sub-folder">
+        <div class="folder folder-icon">
+          <ion-icon name="folder"></ion-icon>
+        </div>
+        <div class="folder-title">
+          <div class="doc-txt">{{ subTopic.topic_title }}</div>
+          <div class="ellipsis-icon">
+            <ion-icon name="trash" style="cursor: pointer"
+                      (click)="deleteDoc(course_id, subTopic.topic_id)">
+            </ion-icon>
+          </div>
+        </div>
+        <div class="doc-txt-desc">{{ subTopic.pa_topic_id }}</div>
+      </div>
+    </div>
   </div>
 
   <!-- 새 폴더 추가 입력 폼 (초기에는 숨김) -->
@@ -28,7 +54,7 @@
   </div>
 
   <!-- 항상 마지막에 위치하는 폴더 추가 버튼 -->
-  <div class="folder-one">
+  <div class="folder-one" *ngIf="!currentFolder">
     <div class="folder folder-add" (click)="showAddTopicForm()">
       <img style="width:65px;" src="assets/svg/Folder_add.svg">
     </div>
