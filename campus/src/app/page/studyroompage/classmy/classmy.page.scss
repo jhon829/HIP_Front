@@ -175,11 +175,11 @@ hr{
   align-items: center;
 }
 
+.active-section > *{
+  width: 100%;
+}
+
 .course-doc-inner{
-  flex-direction: row;
-  display: flex;
-  gap:30px;
-  margin: 10px 0;
 
 
 }
