@@ -31,15 +31,31 @@
 
             <div class="VideoTopics-length">총 {{ VideoTopics.length }}강의</div>
             <ul id="lecture-item-list">
-              <li class="lecture-item-entire" >
-                <div (click)="videotopicRegister" class="create-btn" > + </div>
+              <!-- lectureItems 배열이 비어 있을 경우 기본 메시지 표시 -->
+              <li *ngIf="isEmptyState" class="lecture-item-empty">
                 <div class="lecture-item">
-                  <span class="lecture-order">1</span>
-                  <div>Spring</div>
+                  <span>아직 영상이 없습니다</span>
+                  <div (click)="addFirstLectureItem()" class="create-btn"> + </div>
+                </div>
+              </li>
+
+              <!-- lectureItems 배열에 항목이 있을 경우 항목 리스트 표시 -->
+              <!-- lectureItems 배열에 항목이 있을 경우 항목 리스트 표시 -->
+              <li *ngFor="let item of lectureItems; let i = index" class="lecture-item-entire">
+                <div class="lecture-item">
+                  <span class="lecture-order">{{ i + 1 }}</span>
+                  <div>{{ item.title }}</div>
+                  <input [(ngModel)]="item.newCourseTitle" placeholder="비디오 주제 입력" />
+                  <button (click)="videotopicRegister(i)">생성</button>
                 </div>
 
+                <!-- 항목 내부의 추가 버튼 -->
+                <div (click)="addLectureItem(i)" class="create-btn"> + </div>
               </li>
+
             </ul>
+
+
 
 
           </div>
@@ -53,14 +69,6 @@
               </div>
             </li>
           </ul>
-
-        <!-- 새 강의 제목을 입력받는 입력 필드 -->
-          <form (ngSubmit)="videotopicRegister()">
-            <div class="lecture-item-entire">
-              <input type="text" placeholder="새 강의 제목을 입력하세요" [(ngModel)]="newCourseTitle" name="courseTitle" required />
-              <button type="submit">확인</button>
-            </div>
-          </form>
 
         </div>
 
