@@ -33,10 +33,13 @@ export class DocTopicComponent implements OnInit {
   validateInputs() {
     this.isInputValid = this.newDocTopicTitle.trim() !== '' && this.newDocTopicDesc.trim() !== '';
   }
+  async loadDocTopic(){
+
+  }
 
   async createDocTopic() {
     if (!this.isInputValid) {
-      return;
+      return; // 입력 유효성 검사
     }
 
     const docTopicData = {
@@ -52,14 +55,13 @@ export class DocTopicComponent implements OnInit {
       );
       console.log('문서 주제가 성공적으로 생성되었습니다:', response);
 
-      // 새 문서 주제 정보를 DocTopics에 추가
-      this.DocTopics.push(response.data);
-      this.showNewTopicForm = false; // 폼 숨기기
-      this.newDocTopicTitle = '';
-      this.newDocTopicDesc = '';
+      // 데이터베이스에만 저장하고, UI에서는 새 항목을 추가하지 않음
+      this.newDocTopicTitle = ''; // 입력 초기화
+      this.newDocTopicDesc = ''; // 입력 초기화
     } catch (error) {
       console.error('문서 주제 생성 중 오류 발생:', error);
-
+      // 오류 처리 로직 추가 가능
     }
   }
+
 }
