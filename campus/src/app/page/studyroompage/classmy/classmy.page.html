@@ -32,18 +32,22 @@
             <div class="VideoTopics-length">총 {{ VideoTopics.length }}강의</div>
             <ul class="lecture-item-list">
               <li *ngIf="isEmptyState" class="lecture-item-empty">
-                <div class="lecture-item">
-                  <span>아직 영상이 없습니다</span>
+                <div class="lecture-item lecture-item-add">
+                  <span>영상 주제를 추가해볼까요?</span>
                   <div (click)="addFirstLectureItem()" class="create-btn"> + </div>
                 </div>
               </li>
 
               <li *ngFor="let item of lectureItems; let i = index" class="lecture-item-entire">
-                <div class="lecture-item">
-                  <span class="lecture-order">{{ i + 1 }}</span>
-                  <div>{{ item.title }}</div>
-                  <input [(ngModel)]="item.newCourseTitle" placeholder="비디오 주제 입력" />
-                  <button (click)="videotopicRegister(i)">생성</button>
+                <div class="lecture-item lecture-item-add">
+                  <div class="lecture-order-name">
+                    <span class="lecture-order"></span>
+                    <div>{{ item.title }}</div>
+                    <input [(ngModel)]="item.newCourseTitle" placeholder="비디오 주제 입력" />
+                  </div>
+                  <div class="lecture-menu">
+                    <button (click)="videotopicRegister(i)">생성</button>
+                  </div>
                 </div>
 
                 <div (click)="addLectureItem(i)" class="create-btn"> + </div>
@@ -63,9 +67,12 @@
                   <span class="lecture-order">{{ i + 1 }}</span>
                   <div>{{ VT.video_topic_title }}</div>
                 </div>
-                <ion-icon name="trash" style="cursor: pointer"
-                          (click)="deleteVideo(course_id, VT.video_topic_id)">
-                </ion-icon>
+                <div class="lecture-menu">
+                  <div class="video-upload">영상파일 올리기</div>
+                  <ion-icon name="trash" style="cursor: pointer"
+                            (click)="deleteVideo(course_id, VT.video_topic_id)">
+                  </ion-icon>
+                </div>
               </div>
             </li>
           </ul>
