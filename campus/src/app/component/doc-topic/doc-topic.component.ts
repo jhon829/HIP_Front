@@ -79,12 +79,35 @@ export class DocTopicComponent implements OnInit {
       );
       console.log('문서 주제가 성공적으로 생성되었습니다:', response);
 
-      // 데이터베이스에만 저장하고, UI에서는 새 항목을 추가하지 않음
-      this.newDocTopicTitle = ''; // 입력 초기화
-      this.newDocTopicDesc = ''; // 입력 초기화
+      // 새로 생성된 주제를 즉시 DocTopics 배열에 추가
+      this.DocTopics.push({
+        topic_id: response.data.topic_id,
+        topic_title: response.data.topic_title,
+        pa_topic_id: response.data.pa_topic_id,
+      });
+
+      // 입력 필드 초기화
+      this.newDocTopicTitle = '';
+      this.newDocTopicDesc = '';
+
     } catch (error) {
       console.error('문서 주제 생성 중 오류 발생:', error);
-      // 오류 처리 로직 추가 가능
+    }
+  }
+
+
+
+  async deleteDoc(courseId: number, topicId: number) {
+    const confirmed = confirm('이 비디오 주제를 삭제하시겠습니까?'); // 삭제 확인 다이얼로그
+    if (!confirmed) {
+      return; // 사용자가 삭제를 취소한 경우
+    }
+    try {
+      const [response] = await Promise.all([firstValueFrom(this.courseService.deleteDocName(courseId, topicId))]); // 비디오 주제 삭제 API 호출
+      console.log(response.message); // 삭제 성공 메시지 출력
+      this.loadDocTopic(); // 삭제 후 목록 갱신
+    } catch (error) {
+      console.error('비디오 주제 삭제 중 오류 발생', error);
     }
   }
 

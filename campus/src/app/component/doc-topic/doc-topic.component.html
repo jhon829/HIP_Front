@@ -7,7 +7,9 @@
     <div class="folder-title">
       <div class="doc-txt">{{ topic.topic_title }}</div>
       <div class="ellipsis-icon">
-        <ion-icon name="ellipsis-horizontal"></ion-icon>
+        <ion-icon name="trash" style="cursor: pointer"
+                  (click)="deleteDoc(course_id,topic.topic_id)">
+        </ion-icon>
       </div>
     </div>
     <div class="doc-txt-desc">{{ topic.pa_topic_id }}</div>
