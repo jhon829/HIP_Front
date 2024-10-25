@@ -111,10 +111,17 @@ export class CourseService {
   }
 
   // 학습 자료 주제 조회(GET | pa_topic_id이 null인 topic 조회)
-  getFirstDocName(courseId: number): Observable<ApiResponse<DocNameResponseData>> {
+  getFirstDocName(courseId: number): Observable<ApiResponse<DocNameResponseData[]>> {
     const headers = this.getAuthHeaders();
-    return this.http.get<ApiResponse<DocNameResponseData>>(`${this.courseApiUrl}/${courseId}/docNames/root`, { headers })
+    return this.http.get<ApiResponse<DocNameResponseData[]>>(`${this.courseApiUrl}/${courseId}/docNames/root`, { headers })
   }
+
+  //학습 주제 전체 조회
+  getAllDocName(courseId: number): Observable<ApiResponse<DocNameResponseData[]>> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<ApiResponse<DocNameResponseData[]>>(`${this.courseApiUrl}/${courseId}/docNames/allDN`, { headers })
+  }
+
 
   // 학습 자료 주제 조회(GET | 특정 pa_topic_id를 갖는 topic 조회) => topic_id로 특정 pa_topic_id를 갖는 topic들 반환, 즉 파라미터로 받는 topic_id를 pa_topic_id로 하는 모든 topic 조회
   getDocName(courseId: number, topicId: number): Observable<ApiResponse<DocNameResponseData>> {

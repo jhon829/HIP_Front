@@ -127,10 +127,6 @@ export class ClassmyPage implements OnInit {
 
 
 
-
-
-
-
   // Alert 메시지 표시를 위한 메서드
   async showAlert(title: string, message: string) {
     alert(`${title}: ${message}`);
