@@ -84,26 +84,7 @@
 
       </div>
       <div *ngIf="activeSection === 'material'" class="active-section">
-        <div class="course-doc-inner">
-          <div class="folder-one">
-            <div class="folder folder-icon">
-              <ion-icon name="folder"></ion-icon>
-            </div>
-            <div class="folder-title">
-              <div class="doc-txt">커리큘럼</div>
-              <div class="ellipsis-icon">
-                <ion-icon name="ellipsis-horizontal"></ion-icon>
-              </div>
-            </div>
-            <div class="doc-txt-desc">10주차</div>
-          </div>
-
-          <div class="folder-one">
-            <div class="folder folder-add">
-              <img style="width:65px;" src="assets/svg/Folder_add.svg">
-            </div>
-          </div>
-        </div>
+        <app-doc-topic></app-doc-topic>
       </div>
     </div>
   </div>

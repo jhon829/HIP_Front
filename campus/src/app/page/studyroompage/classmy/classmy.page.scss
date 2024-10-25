@@ -215,67 +215,6 @@ hr{
   color: #5A5A5A;
 }
 
-.active-section .folder-one{
-  display: flex;
-  flex-direction: column;
-  cursor:pointer;
-}
-
-.active-section .folder-add{
-
-}
-
-.active-section .folder-icon{
-  border: 1px solid #DEDEDE;
-  align-items: center;
-  border-radius: 20px;
-  box-shadow: 0px 1px 4px 2px #DEDEDE;
-}
-
-.active-section .folder {
-  background-color: #ffffff;
-  width: 196px;
-  height: 142px;
-  display: flex;
-  justify-content: center;
-}
-
-.active-section .folder-add {
-  border: 1.5px dotted #DEDEDE;
-  border-radius: 20px;
-}
-
-.active-section .folder-icon ion-icon{
-  color:#E3B6B6;
-  width: 50px;
-  height: 50px;
-
-}
-
-.active-section .folder-one .folder-title{
-  display: flex;
-  margin: 10px 0 0 0;
-  justify-content: space-between;
-  align-items: center;
-
-
-}
-
-.active-section .folder-one > *{
-  color:#4C4C4C;
-
-}
-
-.active-section .folder-one .folder-title .doc-txt{
-  font-size:20px;
-  font-family: pretendard-B,sans-serif;
-  color:#4C4C4C;
-}
-
-.active-section .folder-one .folder-title .ellipsis-icon{
-  cursor: pointer;
-}
-
 
 
 .lecture-item-list{
