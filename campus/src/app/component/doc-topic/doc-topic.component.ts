@@ -21,6 +21,7 @@ export class DocTopicComponent implements OnInit {
   constructor(private courseService: CourseService) {}
 
   ngOnInit() {
+    this.loadDocTopic();
   }
 
   showAddTopicForm() {
@@ -33,9 +34,32 @@ export class DocTopicComponent implements OnInit {
   validateInputs() {
     this.isInputValid = this.newDocTopicTitle.trim() !== '' && this.newDocTopicDesc.trim() !== '';
   }
-  async loadDocTopic(){
+
+
+  async loadDocTopic() {
+    try {
+      const response: ApiResponse<DocNameResponseData[]> = await firstValueFrom(
+        this.courseService.getAllDocName(this.course_id)
+      );
+
+      console.log('응답 데이터:', response.data); // 응답 데이터 로그
+
+      if (Array.isArray(response.data)) {
+        // response.data가 배열일 경우에만 map을 사용합니다.
+        this.DocTopics = response.data.map(docTopic => ({
+          topic_id: docTopic.topic_id,
+          topic_title: docTopic.topic_title,
+          pa_topic_id: docTopic.pa_topic_id,
+        }));
+      } else {
+        console.error('응답 데이터가 배열이 아닙니다:', response.data);
+      }
+    } catch (error) {
+      console.error('문서 주제 로드 중 오류 발생:', error);
+    }
 
   }
+
 
   async createDocTopic() {
     if (!this.isInputValid) {
