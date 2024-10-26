@@ -4,18 +4,13 @@
   <div class="layout">
     <app-sidemenu class="sidemenu"></app-sidemenu>
     <div class="content-wrapper">
+      <ion-header class="ion-no-border">
+        <ion-toolbar>
+          <ion-title></ion-title>
+        </ion-toolbar>
+      </ion-header>
 
-      <section class="BG-color">
-        <div class="box-title">
-          <div style="flex-direction: row; margin: 10px">
-            <span class="lecture-spot">강의실 | 117-1</span>
-          </div>
-          <span class="lecture-title">프론트엔드/백엔드 프로그래밍</span>
-          <span class="lecture-spot">강사</span>
-
-          <h6>본 강좌는 JavaScript와 TypeScript를 중심으로 프론트엔드에서 필요한 개발 언어를 학습하며, next.js와 Angular를 이용한 백엔드 개발을 배웁니다.</h6>
-        </div>
-      </section>
+      <app-course-title></app-course-title>
 
       <section class="lecture-page">
         <h3 class="detail-menu">상세메뉴</h3>
@@ -27,46 +22,70 @@
       </section>
 
       <div *ngIf="activeSection === 'lecture'"  [ngClass]="{ active: activeSection === 'lecture' }" class="active-section">
-        <span class="lecture-title-des">지난 날의 강의를 다시 복습할 수 있어요</span>
 
-        <div>총 {{ courses.length }}강의</div>
-        <ul id="lecture-item-list">
-          <li class="lecture-item-entire" >
-            <div (click)="videotopicRegister()" class="create-btn"> + </div>
-            <div class="lecture-item">
-              <span class="lecture-order">1</span>
-              <div>Spring</div>
+        <div class="lecture-entire-inner">
+          <div class="lecture-inner">
+            <div class="lecture-title-icon">
+              <img src="assets/svg/Video_Player.svg"/>
+              <span class="lecture-title-des">지난 날의 강의를 다시 복습할 수 있어요</span>
             </div>
 
-          </li>
-        </ul>
+            <div class="VideoTopics-length">총 {{ VideoTopics.length }}강의</div>
+            <ul class="lecture-item-list">
+              <li *ngIf="isEmptyState" class="lecture-item-empty">
+                <div class="lecture-item lecture-item-add">
+                  <span>영상 주제를 추가해볼까요?</span>
+                  <div (click)="addFirstLectureItem()" class="create-btn"> + </div>
+                </div>
+              </li>
 
-        <ul id="lecture-item-list-1">
-          <li class="lecture-item-entire" *ngFor="let VT of VideoTopics; let i = index">
-            <div class="create-btn">+</div>
-            <div class="lecture-item">
-              <span class="lecture-order">{{ i + 1 }}</span>
-              <div>{{ VT.video_pa_topic_title }}</div>
-            </div>
+              <li *ngFor="let item of lectureItems; let i = index" class="lecture-item-entire">
+                <div class="lecture-item lecture-item-add">
+                  <div class="lecture-order-name">
+                    <span class="lecture-order"></span>
+                    <div>{{ item.title }}</div>
+                    <input [(ngModel)]="item.newCourseTitle" placeholder="비디오 주제 입력" />
+                  </div>
+                  <div class="lecture-menu">
+                    <button (click)="videotopicRegister(i)">생성</button>
+                  </div>
+                </div>
 
-          </li>
-        </ul>
+                <div (click)="addLectureItem(i)" class="create-btn"> + </div>
+              </li>
+            </ul>
 
-        <!-- 새 강의 제목을 입력받는 입력 필드 -->
-        <form (ngSubmit)="videotopicRegister()">
-          <div class="lecture-item-entire">
-            <input type="text" placeholder="새 강의 제목을 입력하세요" />
-            <button>확인</button> <!-- 확인 버튼 추가 -->
+
+
+
           </div>
 
+          <ul class="lecture-item-list">
+            <li class="lecture-item-entire" *ngFor="let VT of VideoTopics; let i = index">
+              <div class="create-btn">+</div>
+              <div class="lecture-item">
+                <div class="lecture-order-name">
+                  <span class="lecture-order">{{ i + 1 }}</span>
+                  <div>{{ VT.video_topic_title }}</div>
+                </div>
+                <div class="lecture-menu">
+                  <div class="video-upload">영상파일 올리기</div>
+                  <ion-icon name="trash" style="cursor: pointer"
+                            (click)="deleteVideo(course_id, VT.video_topic_id)">
+                  </ion-icon>
+                </div>
+              </div>
+            </li>
+          </ul>
 
-        </form>
+
+
+
+        </div>
+
       </div>
-
-
       <div *ngIf="activeSection === 'material'" class="active-section">
-        <h4>학습자료 내용</h4>
-        <!-- 학습 자료의 내용을 여기에 추가하세요 -->
+        <app-doc-topic></app-doc-topic>
       </div>
     </div>
   </div>

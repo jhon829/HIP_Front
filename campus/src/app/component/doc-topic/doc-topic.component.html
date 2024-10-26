@@ -1,0 +1,64 @@
+<div class="course-doc-inner">
+  <div class="folder-container">
+    <!-- 상위 폴더들 -->
+    <div *ngIf="!currentFolder" class="folder-container-inner">
+      <div *ngFor="let topic of topLevelFolders" class="folder-one" (click)="openFolder(topic)">
+        <div class="folder folder-icon">
+          <ion-icon name="folder"></ion-icon>
+        </div>
+        <div class="folder-title">
+          <div class="doc-txt">{{ topic.topic_title }}</div>
+          <div class="ellipsis-icon">
+            <ion-icon name="trash" style="cursor: pointer"
+                      (click)="deleteDoc(topic.topic_id); $event.stopPropagation()">
+            </ion-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 하위 폴더들 -->
+    <div *ngIf="currentFolder">
+      <div class="folder-header">
+        <img src="assets/svg/arrow-back.svg" style="cursor: pointer; width:12px;" (click)="closeFolder()"/>
+        <div class="currentFolder-Name">{{ currentFolder.topic_title }}</div>
+      </div>
+      <div class="folder-container-inner">
+        <div *ngFor="let subTopic of subFolders" class="folder-one sub-folder">
+          <div class="folder folder-icon">
+            <ion-icon name="folder"></ion-icon>
+          </div>
+          <div class="folder-title">
+            <div class="doc-txt">{{ subTopic.topic_title }}</div>
+            <div class="ellipsis-icon">
+              <ion-icon name="trash" style="cursor: pointer"
+                        (click)="deleteDoc(subTopic.topic_id)">
+              </ion-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 새 폴더 추가 입력 폼 -->
+    <div *ngIf="showNewTopicForm" class="folder-one">
+      <div class="folder-container-inner">
+        <div class="folder folder-icon">
+          <ion-icon name="folder"></ion-icon>
+        </div>
+        <div class="folder-title">
+          <input [(ngModel)]="newTopicTitle" placeholder="폴더 제목" (input)="validateInput()">
+        </div>
+        <button style="cursor: pointer" [disabled]="!isInputValid" (click)="createTopic()">확인</button>
+
+      </div>
+    </div>
+
+    <!-- 폴더 추가 버튼 -->
+    <div class="folder-one">
+      <div class="folder folder-add" (click)="showAddTopicForm()">
+        <img style="width:65px;" src="assets/svg/Folder_add.svg">
+      </div>
+    </div>
+  </div>
+</div>

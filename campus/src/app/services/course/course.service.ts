@@ -47,15 +47,25 @@ export class CourseService {
     return this.http.post<ApiResponse<CourseResponseDto>>(`${this.courseApiUrl}/register`, courseData, { headers });
   }
 
+
+  /*course CRUD*/
+
   // 모든 강의 정보를 불러오는 메서드
   getAllCourses(): Observable<ApiResponse<CourseResponseDto[]>> {
     const headers = this.getAuthHeaders();
     return this.http.get<ApiResponse<CourseResponseDto[]>>(this.courseApiUrl, { headers });
   }
 
+  // 특정 강의 정보를 불러오는 메서드
+  getOneCourses(courseId: number): Observable<ApiResponse<CourseResponseDto[]>> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<ApiResponse<CourseResponseDto[]>>(`${this.courseApiUrl}/${courseId}/read`, { headers });
+  }
+
+  // 강의 정보 수정
   updateCourse(courseId: number, courseData: any): Observable<ApiResponse<CourseResponseDto>> {
     const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
-    return this.http.patch<ApiResponse<CourseResponseDto>>(`${this.courseApiUrl}/${courseId}/update`, courseData, { headers }); // PUT 요청
+    return this.http.patch<ApiResponse<CourseResponseDto>>(`${this.courseApiUrl}/course/${courseId}/update`, courseData, { headers }); // PUT 요청
 
   }
 
@@ -101,10 +111,17 @@ export class CourseService {
   }
 
   // 학습 자료 주제 조회(GET | pa_topic_id이 null인 topic 조회)
-  getFirstDocName(courseId: number): Observable<ApiResponse<DocNameResponseData>> {
+  getFirstDocName(courseId: number): Observable<ApiResponse<DocNameResponseData[]>> {
     const headers = this.getAuthHeaders();
-    return this.http.get<ApiResponse<DocNameResponseData>>(`${this.courseApiUrl}/${courseId}/docNames/root`, { headers })
+    return this.http.get<ApiResponse<DocNameResponseData[]>>(`${this.courseApiUrl}/${courseId}/docNames/root`, { headers })
   }
+
+  //학습 주제 전체 조회
+  getAllDocName(courseId: number): Observable<ApiResponse<DocNameResponseData[]>> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<ApiResponse<DocNameResponseData[]>>(`${this.courseApiUrl}/${courseId}/docNames/allDN`, { headers })
+  }
+
 
   // 학습 자료 주제 조회(GET | 특정 pa_topic_id를 갖는 topic 조회) => topic_id로 특정 pa_topic_id를 갖는 topic들 반환, 즉 파라미터로 받는 topic_id를 pa_topic_id로 하는 모든 topic 조회
   getDocName(courseId: number, topicId: number): Observable<ApiResponse<DocNameResponseData>> {
@@ -154,11 +171,12 @@ export class CourseService {
     return this.http.post<ApiResponse<VideoTopicResponseData>>(`${this.courseApiUrl}/${courseId}/videoTopics/registerVT`, VideoTopicData, { headers })
   }
 
-  // 영상 주제 조회(GET | 전체 조회)
-  getAllVideoTopic(courseId: number): Observable<ApiResponse<VideoTopicResponseData>> {
+// 영상 주제 조회(GET | 전체 조회)
+  getAllVideoTopic(courseId: number): Observable<ApiResponse<VideoTopicResponseData[]>> {
     const headers = this.getAuthHeaders();
-    return this.http.get<ApiResponse<VideoTopicResponseData>>(`${this.courseApiUrl}/${courseId}/videoTopics/allVT`, { headers })
+    return this.http.get<ApiResponse<VideoTopicResponseData[]>>(`${this.courseApiUrl}/${courseId}/videoTopics/allVT`, { headers });
   }
+
 
   // 영상 주제 수정(PATCH)
   updateVideoTopic(courseId: number, videoTopicId: number, VideoTopicData: any): Observable<ApiResponse<VideoTopicResponseData>> {
@@ -166,11 +184,12 @@ export class CourseService {
     return this.http.patch<ApiResponse<VideoTopicResponseData>>(`${this.courseApiUrl}/${courseId}/videoTopics/${videoTopicId}/update`, VideoTopicData, { headers })
   }
 
-  // 영상 주제 삭제(DELETE)
-  deleteVideoTopic(courseId: number, videoTopicId: number): Observable<ApiResponse<VideoTopicResponseData>> {
+// 영상 주제 삭제(DELETE)
+  deleteVideoTopic(courseId: number, videoTopicId: number): Observable<ApiResponse<void>> {
     const headers = this.getAuthHeaders();
-    return this.http.delete<ApiResponse<VideoTopicResponseData>>(`${this.courseApiUrl}/${courseId}/videoTopics/${videoTopicId}/delete`, { headers })
+    return this.http.delete<ApiResponse<void>>(`${this.courseApiUrl}/${courseId}/videoTopics/${videoTopicId}/delete`, { headers });
   }
+
 
   // 영상 생성(업로드, POST)
   createVideo(courseId: number, videoTopicId: number, VideoData: any): Observable<ApiResponse<VideoResponseData>> {
