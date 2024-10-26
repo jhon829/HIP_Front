@@ -15,10 +15,11 @@ import { ApiResponse } from '../../../models/common/api-response.interface';
 export class ClassmyPage implements OnInit {
   activeSection: string = 'lecture'; // 기본적으로 강의 목록을 활성화
   newCourseTitle: string = ''; // 새 강의 제목을 저장하는 변수
+  course_id = 1;
   VideoTopics: {
-    video_topic_id: number;
-    video_pa_topic_title: string; video_topic_title: string }[] = []; // 객체 배열로 변경
-  course_id: number = 14; // courseId 저장
+    video_topic_id: number | null;
+    video_pa_topic_id: number | null; 
+    video_topic_title: string }[] = []; // 객체 배열로 변경
   lectureItems: Array<{ title: string; newCourseTitle: string }> = [];
   isEmptyState = true;  // 비어있는 상태인지 확인
 
@@ -31,6 +32,14 @@ export class ClassmyPage implements OnInit {
   }
 
   ngOnInit() {
+    // URL 경로에서 course_id 파라미터를 가져와 저장
+    this.route.paramMap.subscribe(params => {
+      const courseId = params.get('course_id');
+      if (courseId) {
+        this.course_id = +courseId; // 가져온 값을 숫자로 변환하여 저장
+      }
+    });
+
     // 페이지가 로드될 때 강의 주제 로드
     this.loadCourses();
   }
@@ -50,8 +59,6 @@ export class ClassmyPage implements OnInit {
     this.lectureItems.push({ title: '', newCourseTitle: '' }); // 첫 항목 추가
   }
 
-
-
   async loadCourses() {
     try {
       // ApiResponse에서 배열을 받도록 변경
@@ -62,7 +69,7 @@ export class ClassmyPage implements OnInit {
       this.VideoTopics = response.data.map(videoTopic => ({
         video_topic_id: videoTopic.video_topic_id,
         video_topic_title: videoTopic.video_topic_title,
-        video_pa_topic_title: videoTopic.video_pa_topic_title,
+        video_pa_topic_id: videoTopic.video_pa_topic_id,
       }));
 
       // 로드 후 빈 배열 여부 확인 (필요할 경우)
@@ -90,9 +97,6 @@ export class ClassmyPage implements OnInit {
     }
   }
 
-
-
-
   // 비디오 주제를 생성하는 메서드
   async videotopicRegister(i: number) {
     const lectureItem = this.lectureItems[i]; // 현재 항목 가져오기
@@ -101,16 +105,18 @@ export class ClassmyPage implements OnInit {
     }
 
     // 비디오 주제를 생성할 때 사용할 데이터
-    const videoTopicData = {
-      video_topic_title: lectureItem.newCourseTitle,
-      video_pa_topic_id: i+1 // 인덱스를 video_pa_topic_id로 설정
-    };
+    // const videoTopicData = {
+    //   video_topic_title: lectureItem.newCourseTitle,
+    //   video_pa_topic_id: i+1 // 인덱스를 video_pa_topic_id로 설정
+    // };
 
-    console.log('전송할 비디오 주제 데이터:', videoTopicData); // 확인용 로그
+    const video_topic_title =  { video_topic_title: lectureItem.newCourseTitle }
+
+    console.log('전송할 비디오 주제 데이터:', video_topic_title); // 확인용 로그
 
     try {
       const response = await firstValueFrom(
-        this.courseService.createVideoTopic(this.course_id, videoTopicData)
+        this.courseService.createVideoTopic(this.course_id, video_topic_title)
       );
       console.log('비디오 주제가 성공적으로 생성되었습니다:', response);
       alert('비디오 주제가 성공적으로 생성되었습니다!');
@@ -124,11 +130,12 @@ export class ClassmyPage implements OnInit {
     }
   }
 
-
-
-
   // Alert 메시지 표시를 위한 메서드
   async showAlert(title: string, message: string) {
     alert(`${title}: ${message}`);
   }
+
+
+
+  
 }
