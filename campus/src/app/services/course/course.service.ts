@@ -183,12 +183,11 @@ export class CourseService {
     return this.http.patch<ApiResponse<VideoTopicResponseData>>(`${this.courseApiUrl}/${courseId}/videoTopics/${videoTopicId}/update`, VideoTopicData, { headers })
   }
 
-// 영상 주제 삭제(DELETE)
+  // 영상 주제 삭제(DELETE)
   deleteVideoTopic(courseId: number, videoTopicId: number): Observable<ApiResponse<void>> {
     const headers = this.getAuthHeaders();
     return this.http.delete<ApiResponse<void>>(`${this.courseApiUrl}/${courseId}/videoTopics/${videoTopicId}/delete`, { headers });
   }
-
 
   // 영상 생성(업로드, POST)
   createVideo(courseId: number, videoTopicId: number, VideoData: any): Observable<ApiResponse<VideoResponseData>> {
