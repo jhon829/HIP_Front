@@ -22,6 +22,7 @@
       </section>
 
       <div *ngIf="activeSection === 'lecture'"  [ngClass]="{ active: activeSection === 'lecture' }" class="active-section">
+
         <div class="lecture-entire-inner">
           <div class="lecture-inner">
             <div class="lecture-title-icon">
@@ -66,9 +67,12 @@
                 </div>
                 <div class="lecture-menu">
                   <div class="video-upload">영상파일 올리기</div>
-                  <ion-icon name="trash" style="cursor: pointer"
+                  <ion-icon *ngIf="VT.video_topic_id !== null" name="trash" style="cursor: pointer;"
                             (click)="deleteVideo(course_id, VT.video_topic_id)">
                   </ion-icon>
+                  <button *ngIf="VT.video_topic_id !== null" (click)="deleteVideo(course_id, VT.video_topic_id)" style="cursor: pointer;">
+                    Delete Video
+                  </button>
                 </div>
               </div>
             </li>

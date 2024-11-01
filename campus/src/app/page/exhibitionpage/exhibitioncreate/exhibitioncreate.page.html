@@ -1,27 +1,33 @@
 <ion-content>
   <form (ngSubmit)="onSubmit()">
     <div class="form-group">
-      <label for="projectName">프로젝트 이름:</label>
-      <input type="text" id="projectName" [(ngModel)]="projectName" name="projectName" required />
+      <label for="exhibition_title">프로젝트 이름:</label>
+      <input type="text" id="exhibition_title" [(ngModel)]="exhibition_title" name="exhibition_title" required />
     </div>
 
     <div class="form-group">
-      <label for="teamName">팀 이름:</label>
-      <input type="text" id="teamName" [(ngModel)]="teamName" name="teamName" required />
+      <label for="exhibition_generation">기수:</label>
+      <input type="text" id="exhibition_generation" [(ngModel)]="exhibitionGeneration" name="exhibition_generation" required />
+    </div>
+    
+    <div class="form-group">
+      <label for="team_name">팀 이름:</label>
+      <input type="text" id="team_name" [(ngModel)]="team_name" name="team_name" required />
     </div>
 
     <div class="form-group">
-      <label for="course">교육과정:</label>
-      <input type="text" id="course" [(ngModel)]="course" name="course" required />
+      <label for="description">교육과정:</label>
+      <input type="text" id="description" [(ngModel)]="description" name="description" required />
     </div>
 
-    <div class="form-group">
+    <<div class="form-group">
       <label for="thumbnail">썸네일 (이미지파일, 규격 1920x1080):</label>
       <input type="file" id="thumbnail" (change)="onFileChange($event)" accept="image/*" required />
       <div *ngIf="thumbnailPreview" class="thumbnail-preview">
         <img [src]="thumbnailPreview" alt="Thumbnail Preview" style="width: 100%; max-width: 300px; margin-top: 10px;" />
       </div>
     </div>
+    
 
     <div class="form-group">
       <label for="introduce">Introduce (1~5 문장):</label>
@@ -34,6 +40,8 @@
     </div>
 
     <div class="form-group">
+      <label for="memberGeneration">기수:</label>
+      <input type="text" id="memberGeneration" [(ngModel)]="memberGeneration" name="memberGeneration" required />
       <label for="memberName">Member 이름:</label>
       <input type="text" id="memberName" [(ngModel)]="memberName" name="memberName" required />
       <label for="memberImage">Member 사진:</label>
