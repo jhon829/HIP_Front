@@ -71,43 +71,55 @@ export class ExhibitionService {
 
   // Read: 특정 전시물 가져오기 (상세페이지) - 전체 내용
 
-  // 데이터를 병렬로 효율적으로 가져오기 위함 + 데이터의 구조를 편리한 형태로 바꿈
+  // // 데이터를 병렬로 효율적으로 가져오기 위함 + 데이터의 구조를 편리한 형태로 바꿈
+  // getAllExhibitionDetails(id: number): Observable<any> {
+  //   return forkJoin({
+  //     exhibition: this.getExhibitionDetails(id),
+  //     intro: this.getExhibitionIntroDetails(id),
+  //     docs: this.getExhibitionDocsDetails(id),
+  //     members: this.getExhibitionMembersDetails(id)
+  //   }).pipe(
+  //     map(results => ({
+  //       ...results.exhibition,
+  //       intro: results.intro,
+  //       docs: results.docs,
+  //       members: results.members
+  //     }))
+  //   );
+  // }
+
+  // private getExhibitionDetails(id: number): Observable<any> {
+  //   const headers = this.validateToken()
+  //   return this.http.get<any>(`${this.apiUrl}/exhibitions/${id}`, { headers });
+  // }
+
+  // private getExhibitionIntroDetails(id: number): Observable<any> {
+  //   const headers = this.validateToken()
+  //   return this.http.get<any>(`${this.apiUrl}/exhibition-intro/${id}`, { headers });
+  // }
+
+  // private getExhibitionDocsDetails(id: number): Observable<any> {
+  //   const headers = this.validateToken()
+  //   return this.http.get<any>(`${this.apiUrl}/exhibition-docs/${id}`, { headers });
+  // }
+
+  // private getExhibitionMembersDetails(id: number): Observable<any> {
+  //   const headers = this.validateToken()
+  //   return this.http.get<any>(`${this.apiUrl}/exhibition-members/${id}`, { headers });
+  // }
   getAllExhibitionDetails(id: number): Observable<any> {
-    return forkJoin({
-      exhibition: this.getExhibitionDetails(id),
-      intro: this.getExhibitionIntroDetails(id),
-      docs: this.getExhibitionDocsDetails(id),
-      members: this.getExhibitionMembersDetails(id)
-    }).pipe(
-      map(results => ({
-        ...results.exhibition,
-        intro: results.intro,
-        docs: results.docs,
-        members: results.members
+    return this.getExhibitionDetails(id).pipe(
+      map(result => ({
+        // 모든 관련 정보가 포함된 exhibition 데이터를 반환
+        ...result
       }))
     );
   }
-
+  
   private getExhibitionDetails(id: number): Observable<any> {
-    const headers = this.validateToken()
+    const headers = this.validateToken();
     return this.http.get<any>(`${this.apiUrl}/exhibitions/${id}`, { headers });
   }
-
-  private getExhibitionIntroDetails(id: number): Observable<any> {
-    const headers = this.validateToken()
-    return this.http.get<any>(`${this.apiUrl}/exhibition-intro/${id}`, { headers });
-  }
-
-  private getExhibitionDocsDetails(id: number): Observable<any> {
-    const headers = this.validateToken()
-    return this.http.get<any>(`${this.apiUrl}/exhibition-docs/${id}`, { headers });
-  }
-
-  private getExhibitionMembersDetails(id: number): Observable<any> {
-    const headers = this.validateToken()
-    return this.http.get<any>(`${this.apiUrl}/exhibition-members/${id}`, { headers });
-  }
-
   // Update: 전시물 수정(파일을 삭제하고 올릴 수 있게)
   updateExhibition(id: string, exhibitionData: FormData, introData: FormData, membersData: FormData, outputsData: FormData): Observable<any> {
     return forkJoin({
