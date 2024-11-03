@@ -174,7 +174,7 @@ export class CourseService {
   // 영상 주제 조회(GET | 전체 조회)
   getAllVideoTopic(courseId: number | null): Observable<ApiResponse<VideoTopicResponseData[]>> {
     const headers = this.getAuthHeaders();
-    return this.http.get<ApiResponse<VideoTopicResponseData[]>>(`${this.courseApiUrl}/${courseId}/videoTopics/allVT2`, { headers });
+    return this.http.get<ApiResponse<VideoTopicResponseData[]>>(`${this.courseApiUrl}/${courseId}/videoTopics/gettopic`, { headers });
   }
 
   // 영상 주제 수정(PATCH)
