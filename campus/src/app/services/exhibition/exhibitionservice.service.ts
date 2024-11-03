@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -11,32 +11,62 @@ export class ExhibitionService {
 
   constructor(private http: HttpClient) {}
 
+  getAuthHeaders() {
+    const token = localStorage.getItem('token'); // 또는 다른 저장소에서 토큰 가져오기
+    return {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    };
+  }
+
+  private validateToken() {
+    const token = localStorage.getItem('token');
+
+    // 토큰이 제대로 불러와지는지 확인하는 로그
+    if (!token) {
+      console.error('토큰을 찾을 수 없습니다.');
+    } else {
+      console.log('불러온 토큰:', token);
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`, // 인증 헤더 추가
+    });
+    return headers
+  }
+
   // Create: 전시물 생성하기 (생성페이지)
   saveExhibitionData(data: FormData): Observable<any> {
-    return this.http.post(`${this.apiUrl}/exhibitions/register`, data);
+    const headers = this.validateToken()
+    return this.http.post(`${this.apiUrl}/exhibitions/register`, data, { headers });
   }
 
   saveIntroductions(data: FormData): Observable<any> {
-    return this.http.post(`${this.apiUrl}/exhibition-intro/register`, data);
+    const headers = this.validateToken()
+    return this.http.post(`${this.apiUrl}/exhibition-intro/register`, data, { headers });
   }
 
   saveMembers(data: FormData): Observable<any> {
-    return this.http.post(`${this.apiUrl}/exhibition-members/register`, data);
+    const headers = this.validateToken()
+    return this.http.post(`${this.apiUrl}/exhibition-members/register`, data, { headers });
   }
 
   saveOutputs(data: FormData): Observable<any> {
-    return this.http.post(`${this.apiUrl}/exhibition-docs/register`, data);
+    const headers = this.validateToken()
+    return this.http.post(`${this.apiUrl}/exhibition-docs/register`, data, { headers });
   }
 
   // Read: 전시물 목록 가져오기 (메인페이지) - 프로젝트이름, 팀이름, 기수, 썸네일
   getExhibitions(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/exhibitions`);
+    const headers = this.validateToken()
+    return this.http.get<any[]>(`${this.apiUrl}/exhibitions`, { headers });
   }
 
   // Presigned URL 요청 메소드
   getPresignedUrls(Id: number): Observable<{ url: string }> {
+    const headers = this.validateToken()
     console.log('getpresingedurl 확인');
-    return this.http.get<{ url: string }>(`${this.apiUrl}/exhibitions/presigned-url/${Id}`);
+    return this.http.get<{ url: string }>(`${this.apiUrl}/exhibitions/presigned-url/${Id}`, { headers });
   }
 
   // Read: 특정 전시물 가져오기 (상세페이지) - 전체 내용
@@ -59,19 +89,23 @@ export class ExhibitionService {
   }
 
   private getExhibitionDetails(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/exhibitions/${id}`);
+    const headers = this.validateToken()
+    return this.http.get<any>(`${this.apiUrl}/exhibitions/${id}`, { headers });
   }
 
   private getExhibitionIntroDetails(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/exhibition-intro/${id}`);
+    const headers = this.validateToken()
+    return this.http.get<any>(`${this.apiUrl}/exhibition-intro/${id}`, { headers });
   }
 
   private getExhibitionDocsDetails(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/exhibition-docs/${id}`);
+    const headers = this.validateToken()
+    return this.http.get<any>(`${this.apiUrl}/exhibition-docs/${id}`, { headers });
   }
 
   private getExhibitionMembersDetails(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/exhibition-members/${id}`);
+    const headers = this.validateToken()
+    return this.http.get<any>(`${this.apiUrl}/exhibition-members/${id}`, { headers });
   }
 
   // Update: 전시물 수정(파일을 삭제하고 올릴 수 있게)
