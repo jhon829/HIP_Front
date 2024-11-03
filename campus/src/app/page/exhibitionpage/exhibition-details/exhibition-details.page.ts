@@ -13,7 +13,6 @@ export class ExhibitionDetailsPage implements OnInit {
   exhibitionDetails: any = null;
   isLoading: boolean = true;
   error: string | null = null;
-  videoUrls: { [key: number]: string | null } = {};
 
   constructor(
     private route: ActivatedRoute,
@@ -43,7 +42,6 @@ export class ExhibitionDetailsPage implements OnInit {
       );
     }
   }
-
   async deleteExhibition() {
     const alert = await this.alertController.create({
       header: '전시물 삭제',
@@ -75,18 +73,4 @@ export class ExhibitionDetailsPage implements OnInit {
 
     await alert.present();
   }
-
-  loadExhibitionVideo(exhibitionDocId: number) {
-    this.exhibitionService.getPresignedUrls(exhibitionDocId).subscribe(
-      (response) => {
-        console.log('Received presigned URL:', response.url); // URL 확인 
-        this.videoUrls[exhibitionDocId] = response.url; // 전시관 ID에 따른 presigned URL 저장
-      },
-      (error) => {
-        console.error('비디오 URL 로딩 실패:', error);
-        this.error = '비디오 URL을 불러오는 데 실패했습니다.';
-      }
-    );
-  }
 }
-
