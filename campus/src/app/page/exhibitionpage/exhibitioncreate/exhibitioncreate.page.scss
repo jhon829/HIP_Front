@@ -1,15 +1,74 @@
-ion-content {
-  padding: 16px;
-  background-color: #f9f9f9;
+
+
+.section1 {
+  width: 100%;
+  height: 350px;
+  background: linear-gradient(213deg, #FDF2FF 0%, #E9F1FF 100%);
 }
 
-.form-group {
+.section1 .section1content {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 수평 중앙 정렬 */
+  justify-content: center; /* 수직 중앙 정렬 */
+  height: 100%; /* 부모 요소의 높이를 차지하게 */
+  margin: auto;
+}
+
+.section1 .section1content .title {
+  font-size: 40px;
+  font-family: 'pretendard-B', serif;
+  align-self: flex-start;
+  color : #545454;
+}
+
+.section1 .section1content .title .titledetail {
+  font-family: 'pretendard-B', serif;
+  color: #7269EE;
+}
+
+.section1 .section1content .content{
+  font-size: 17px;
+  font-family: 'pretendard-B', serif;
+  align-self: flex-start;
+  color : #545454;
+}
+
+.section1 .section1content .content .contentdetail{
+  font-family: 'pretendard-B', serif;
+  color: #7269EE;
+}
+
+.maincontent {
+  height: 100vh; /* 전체 높이를 사용 */
+  margin-top: -50px;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+}
+.shadow-box {
+  padding: 20px;
+  background-color: white;
+  position: relative;
+  border-top: 2px solid transparent;
+  box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.maincontent .form-group {
   margin-bottom: 16px;
 }
 
-label {
-  font-weight: bold;
-  display: block;
+.maincontent .form-group .align-label {
+  display: flex;
+  align-items: center;
+}
+
+.maincontent .form-group .align-label i {
+  margin-right: 5px;
+}
+.maincontent .form-group label {
+  font-size: 20px;
+  font-family: 'pretendard-B', serif;
   margin-bottom: 8px;
 }
 
@@ -28,7 +87,7 @@ textarea {
 }
 
 button {
-  background-color: #007bff;
+  background-color: #6f5de3;
   color: white;
   padding: 10px 15px;
   border: none;

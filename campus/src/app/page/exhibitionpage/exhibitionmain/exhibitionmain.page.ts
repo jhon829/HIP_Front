@@ -23,8 +23,8 @@ export class ExhibitionmainPage implements OnInit {
 
   loadExhibitions() {
     this.exhibitionService.getExhibitions().subscribe(
-      (data) => {
-        this.exhibitions = data;
+      (response: any) => {
+        this.exhibitions = response.exhibitions;
       },
       (error) => {
         console.error('전시관 데이터 로딩 실패:', error);
@@ -37,8 +37,8 @@ export class ExhibitionmainPage implements OnInit {
   }
 
   changeTitle(newTitle: string) {
-    this.accordionTitle = newTitle; // 제목 변경
-    this.isOpen = !this.isOpen; // 아코디언 열림/닫힘 상태 반전
+    this.accordionTitle = newTitle;
+    this.isOpen = !this.isOpen;
   }
 
   navigateToExhibitionCreate() {
