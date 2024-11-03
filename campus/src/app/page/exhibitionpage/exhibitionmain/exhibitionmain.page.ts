@@ -55,7 +55,6 @@ export class ExhibitionmainPage implements OnInit {
   }
 
   // 파일 다운로드 로직 구현
-    
     downloadFile(exhibitionId: number) {
       this.exhibitionService.getPresignedUrls(exhibitionId).subscribe(
         (response) => {
