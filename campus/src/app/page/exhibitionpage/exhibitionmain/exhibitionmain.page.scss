@@ -19,7 +19,7 @@ ion-checkbox::part(container) {
   position: relative; /* 그림자 효과를 위한 위치 설정 */
   border-top: 2px solid transparent; /* 위쪽 테두리 설정 */
   /* 왼쪽과 아래쪽 그림자를 제거하기 위해 수평, 수직 오프셋을 조정 */
-  box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1);
 }
 
 

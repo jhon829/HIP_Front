@@ -11,6 +11,7 @@ import { ExhibitionmainPageRoutingModule } from './exhibitionmain-routing.module
 import { ExhibitionmainPage } from './exhibitionmain.page';
 import {TopBarComponent} from "../../../component/top-bar/top-bar.component";
 import {CardComponent} from "../../../component/cardcomponent/cardcomponent.component";
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import {CardComponent} from "../../../component/cardcomponent/cardcomponent.comp
     IonicModule,
     ExhibitionmainPageRoutingModule,
     TopBarComponent,
-    CardComponent
+    CardComponent,
+    HttpClientModule
   ],
   declarations: [ExhibitionmainPage]
 })

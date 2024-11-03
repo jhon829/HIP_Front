@@ -51,70 +51,50 @@ export class JoinpagePage implements OnInit {
   async onSubmit() {
     const data = this.registerForm.value;
 
-    // 비밀번호와 비밀번호 확인이 일치하는지 확인
-    if (data.password !== data.passwordConfirm) {
-      const alert = await this.alertController.create({
-        header: '입력 오류',
-        message: '비밀번호와 비밀번호 확인이 일치하지 않습니다.',
-        buttons: ['OK'],
-      });
-      await alert.present();
-      return;
-    }
-
     if (this.registerForm.valid) {
-      try {
-        const response = await firstValueFrom(this.authService.register(data));
-        console.log('회원가입 성공:', response);
+        try {
+            const response = await firstValueFrom(this.authService.register(data));
+            console.log('회원가입 성공:', response);
+
+            const alert = await this.alertController.create({
+                header: 'Success',
+                message: '회원가입이 성공했습니다',
+                buttons: ['OK'],
+            });
+            await alert.present();
+
+            this.registerForm.reset();
+            await this.router.navigate(['/loginpage']);
+        } catch (error: any) {
+            console.error('회원가입 실패:', error);
+
+            const alert = await this.alertController.create({
+                header: '입력 오류',
+                message: error.message, // 서비스에서 반환된 오류 메시지 사용
+                buttons: ['OK'],
+            });
+            await alert.present();
+        }
+    } else {
+        let errorMessage = '다음 입력란을 확인해주세요:\n';
+
+        for (const field in this.registerForm.controls) {
+            const control = this.registerForm.get(field);
+            if (control && control.invalid) {
+                const fieldName = this.getFieldName(field);
+                errorMessage += `- ${fieldName}\n`;
+            }
+        }
 
         const alert = await this.alertController.create({
-          header: 'Success',
-          message: '회원가입이 성공했습니다',
-          buttons: ['OK'],
+            header: '입력 오류',
+            message: errorMessage,
+            buttons: ['OK'],
         });
         await alert.present();
-
-        this.registerForm.reset();
-        await this.router.navigate(['/loginpage']);
-      } catch (error: any) { // 'any'로 단언
-        console.error('회원가입 실패:', error);
-
-        // 이메일 중복 오류 처리
-        if (error.status === 409) {
-          const alert = await this.alertController.create({
-            header: '입력 오류',
-            message: '이미 사용 중인 이메일입니다.',
-            buttons: ['OK'],
-          });
-          await alert.present();
-        } else {
-          const alert = await this.alertController.create({
-            header: 'Error',
-            message: '회원가입 실패: ',
-            buttons: ['OK'],
-          });
-          await alert.present();
-        }
-      }
-    } else {
-      let errorMessage = '다음 입력란을 확인해주세요:\n';
-
-      for (const field in this.registerForm.controls) {
-        const control = this.registerForm.get(field);
-        if (control && control.invalid) {
-          const fieldName = this.getFieldName(field);
-          errorMessage += `- ${fieldName}\n`;
-        }
-      }
-
-      const alert = await this.alertController.create({
-        header: '입력 오류',
-        message: errorMessage,
-        buttons: ['OK'],
-      });
-      await alert.present();
     }
-  }
+}
+
 
 
   getFieldName(field: string): string {

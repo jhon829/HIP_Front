@@ -40,7 +40,7 @@ const routes: Routes = [
     loadChildren: () => import('./page/exhibitionpage/exhibition-details/exhibition-details.module').then(m => m.ExhibitionDetailsPageModule)
   },
   {
-    path: 'exhibition-details/:id', loadChildren: () => import('./page/exhibitionpage/exhibition-details/exhibition-details.module').then(m => m.ExhibitionDetailsPageModule)
+    path: 'exhibition/:id', loadChildren: () => import('./page/exhibitionpage/exhibition-details/exhibition-details.module').then(m => m.ExhibitionDetailsPageModule)
   },
 // 사이드 메뉴 경로
   {
@@ -78,7 +78,8 @@ const routes: Routes = [
   {
     path: 'introduce-metaverse',
     loadChildren: () => import('./page/mainpage/introduce-metaverse/introduce-metaverse.module').then(m => m.IntroduceMetaversePageModule)
-  },  {
+  },
+  {
     path: 'exhibition-update',
     loadChildren: () => import('./page/exhibitionpage/exhibition-update/exhibition-update.module').then( m => m.ExhibitionUpdatePageModule)
   },
