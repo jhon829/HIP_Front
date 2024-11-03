@@ -57,33 +57,32 @@ export class ClassmyPage implements OnInit {
 
   private routeSubscription?: Subscription;
 
+  async loadCourses() {
+    try {
+      // ApiResponse에서 배열을 받도록 변경
+      const response: ApiResponse<VideoTopicResponseData[]> = await firstValueFrom(
+        this.courseService.getAllVideoTopic(this.course_id)
+      );
 
+      this.data.VideoTopics = response.data.map(videoTopic => ({
+        video_topic_id: videoTopic.video_topic_id,
+        video_topic_title: videoTopic.video_topic_title,
+        video_pa_topic_id: videoTopic.video_pa_topic_id,
+      }));
 
-      async loadCourses() {
-        try {
-          // ApiResponse에서 배열을 받도록 변경
-          const response: ApiResponse<VideoTopicResponseData[]> = await firstValueFrom(
-            this.courseService.getAllVideoTopic(this.course_id)
-          );
-
-          this.data.VideoTopics = response.data.map(videoTopic => ({
-            video_topic_id: videoTopic.video_topic_id,
-            video_topic_title: videoTopic.video_topic_title,
-            video_pa_topic_id: videoTopic.video_pa_topic_id,
-          }));
-
-          // 로드 후 빈 배열 여부 확인 (필요할 경우)
-          if (this.data.VideoTopics.length === 0) {
-            console.log('비디오 주제가 없습니다.');
-          } else {
-            console.log('로드된 비디오 주제:', this.data.VideoTopics);
-          }
-        } catch (error) {
-          console.error('Error loading courses', error);
-        }
+      // 로드 후 빈 배열 여부 확인 (필요할 경우)
+      if (this.data.VideoTopics.length === 0) {
+        console.log('비디오 주제가 없습니다.');
+      } else {
+        console.log('로드된 비디오 주제:', this.data.VideoTopics);
       }
+    } catch (error) {
+      console.error('Error loading courses', error);
+    }
+  }
 
-      // 모든 비디오 토픽을 가져오는 메서드
+
+  // 모든 비디오 토픽을 가져오는 메서드
       async getAllVideoTopics() {
         try {
           const response: ApiResponse<VideoTopicResponseData[]> = await firstValueFrom(
