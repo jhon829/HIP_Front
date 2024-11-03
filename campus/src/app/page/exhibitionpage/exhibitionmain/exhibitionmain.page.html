@@ -52,7 +52,13 @@
         <ion-row>
           <ion-col size="12" size-md="6" size-lg="4" *ngFor="let exhibition of exhibitions">
             <ion-card (click)="navigateToExhibition(exhibition.exhibition_id)">
-              <img *ngIf="imageUrl" [src]="imageUrl" alt="Exhibition Image"/>
+              <img *ngIf="imageUrls[exhibition.exhibition_id]; else loading" 
+                   [src]="imageUrls[exhibition.exhibition_id]" 
+                   alt="{{ exhibition.exhibition_title }} 이미지" 
+                   style="width: 100%; height: auto;"/>
+              <ng-template #loading>
+                <ion-spinner></ion-spinner> <!-- 로딩 스피너 -->
+              </ng-template>
               <ion-card-header>
                 <ion-card-subtitle>{{ exhibition.generation }} - {{ exhibition.team_name }}</ion-card-subtitle>
                 <ion-card-title>{{ exhibition.exhibition_title }}</ion-card-title>
