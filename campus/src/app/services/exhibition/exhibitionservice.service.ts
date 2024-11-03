@@ -34,8 +34,9 @@ export class ExhibitionService {
   }
 
   // Presigned URL 요청 메소드
-  getPresignedUrl(filePath: string): Observable<{ url: string }> {
-    return this.http.get<{ url: string }>(`${this.apiUrl}/presigned-url?filePath=${filePath}`);
+  getPresignedUrls(Id: number): Observable<{ url: string }> {
+    console.log('getpresingedurl 확인');
+    return this.http.get<{ url: string }>(`${this.apiUrl}/exhibitions/presigned-url/${Id}`);
   }
 
   // Read: 특정 전시물 가져오기 (상세페이지) - 전체 내용
