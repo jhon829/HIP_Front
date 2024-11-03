@@ -10,32 +10,28 @@
   <ion-button [routerLink]="['/exhibition-update', exhibitionId]">수정하기</ion-button>
   <ion-button expand="block" color="danger" (click)="deleteExhibition()">전시물 삭제</ion-button>
 </ion-content>
-
-<div class="repcontent">
-  <div class="part1">
-    <img class="title-image" [src]="exhibitionDetails.titleImage || '../../../assets/jpg/1.jpg'">
-  </div>
-  <div class="part2">
-    <br>
-    <div class="project-name">{{ exhibitionDetails.title }}</div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <div class="team-name">{{ exhibitionDetails.teamName }}</div>
-    <div class="class-name">{{ exhibitionDetails.className }}</div>
-  </div>
-</div>
-
-<div class="maincontent shadow-box">
-  <div class="maxmaincontent">
-    <div class="introduce texts">
-      <ion-icon name="bulb-outline" class="icons"></ion-icon> Introduce
+  <div class="repcontent">
+    <div class="part1"><img class="title-image" [src]="exhibitionDetails.titleImage || '../../../assets/jpg/1.jpg'"></div>
+    <div class="part2">
+      <br>
+      <div class="project-name">{{ exhibitionDetails.title }}</div>
+      <br>
+      <br>
+      <br>
+      <br>
+      <div class="team-name">{{ exhibitionDetails.teamName }}</div>
+      <div class="class-name">{{ exhibitionDetails.className }}</div>
     </div>
-    <ul>
-      <li class="introduce-content" *ngFor="let intro of exhibitionDetails.intro">{{ intro }}</li>
-    </ul>
-    <ion-item class="boundary"></ion-item>
+  </div>
+  <div class="maincontent shadow-box">
+    <div class="maxmaincontent">
+      <div class="introduce texts">
+        <ion-icon name="bulb-outline" class="icons"></ion-icon> Introduce
+      </div>
+      <ul>
+        <li class="introduce-content" *ngFor="let intro of exhibitionDetails.intro">{{ intro }}</li>
+      </ul>
+      <ion-item class="boundary"></ion-item>
 
     <div class="members texts">
       <ion-icon name="people-outline" class="icons"></ion-icon> Members
