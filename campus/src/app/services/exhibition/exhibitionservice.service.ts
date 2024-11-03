@@ -28,13 +28,16 @@ export class ExhibitionService {
     return this.http.post(`${this.apiUrl}/exhibition-docs/register`, data);
   }
 
-
   // Read: 전시물 목록 가져오기 (메인페이지) - 프로젝트이름, 팀이름, 기수, 썸네일
   getExhibitions(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/exhibitions`);
   }
 
-
+  // Presigned URL 요청 메소드
+  getPresignedUrls(Id: number): Observable<{ url: string }> {
+    console.log('getpresingedurl 확인');
+    return this.http.get<{ url: string }>(`${this.apiUrl}/exhibitions/presigned-url/${Id}`);
+  }
 
   // Read: 특정 전시물 가져오기 (상세페이지) - 전체 내용
 
@@ -54,6 +57,7 @@ export class ExhibitionService {
       }))
     );
   }
+
   private getExhibitionDetails(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/exhibitions/${id}`);
   }

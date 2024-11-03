@@ -15,13 +15,13 @@
       <section class="lecture-page">
         <h3 class="detail-menu">상세메뉴</h3>
         <ul id="lecture-menu">
-          <li class="lecture-list" [ngClass]="{ active: activeSection === 'lecture' }" (click)="setActiveSection('lecture')">강의목록</li>
-          <li class="learn-material" [ngClass]="{ active: activeSection === 'material' }" (click)="setActiveSection('material')">학습자료</li>
+          <li class="lecture-list" [ngClass]="{ active: data.activeSection === 'lecture' }" (click)="setActiveSection('lecture')">강의목록</li>
+          <li class="learn-material" [ngClass]="{ active: data.activeSection === 'material' }" (click)="setActiveSection('material')">학습자료</li>
         </ul>
         <hr/>
       </section>
 
-      <div *ngIf="activeSection === 'lecture'"  [ngClass]="{ active: activeSection === 'lecture' }" class="active-section">
+      <div *ngIf="data.activeSection === 'lecture'"  [ngClass]="{ active: data.activeSection === 'lecture' }" class="active-section">
 
         <div class="lecture-entire-inner">
           <div class="lecture-inner">
@@ -30,16 +30,16 @@
               <span class="lecture-title-des">지난 날의 강의를 다시 복습할 수 있어요</span>
             </div>
 
-            <div class="VideoTopics-length">총 {{ VideoTopics.length }}강의</div>
+            <div class="VideoTopics-length">총 {{ data.VideoTopics.length }}강의</div>
             <ul class="lecture-item-list">
-              <li *ngIf="isEmptyState" class="lecture-item-empty">
+              <li *ngIf="data.isEmptyState" class="lecture-item-empty">
                 <div class="lecture-item lecture-item-add">
                   <span>영상 주제를 추가해볼까요?</span>
                   <div (click)="addFirstLectureItem()" class="create-btn"> + </div>
                 </div>
               </li>
 
-              <li *ngFor="let item of lectureItems; let i = index" class="lecture-item-entire">
+              <li *ngFor="let item of data.lectureItems; let i = index" class="lecture-item-entire">
                 <div class="lecture-item lecture-item-add">
                   <div class="lecture-order-name">
                     <span class="lecture-order"></span>
@@ -58,7 +58,7 @@
           </div>
 
           <ul class="lecture-item-list">
-            <li class="lecture-item-entire" *ngFor="let VT of VideoTopics; let i = index">
+            <li class="lecture-item-entire" *ngFor="let VT of data.VideoTopics; let i = index">
               <div class="create-btn">+</div>
               <div class="lecture-item">
                 <div class="lecture-order-name">
@@ -84,7 +84,7 @@
         </div>
 
       </div>
-      <div *ngIf="activeSection === 'material'" class="active-section">
+      <div *ngIf="data.activeSection === 'material'" class="active-section">
         <app-doc-topic></app-doc-topic>
       </div>
     </div>
