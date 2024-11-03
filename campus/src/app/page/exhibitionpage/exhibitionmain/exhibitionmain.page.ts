@@ -55,27 +55,27 @@ export class ExhibitionmainPage implements OnInit {
   }
 
   // 파일 다운로드 로직 구현
-    downloadFile(exhibitionId: number) {
-      this.exhibitionService.getPresignedUrls(exhibitionId).subscribe(
-        (response) => {
-          const fileUrl = response.url; // presigned URL 획득
-          this.triggerDownload(fileUrl); // 다운로드 트리거
-        },
-        (error) => {
-          console.error('URL 요청 실패:', error);
-        }
-      );
-    }
+    // downloadFile(exhibitionId: number) {
+    //   this.exhibitionService.getPresignedUrls(exhibitionId).subscribe(
+    //     (response) => {
+    //       const fileUrl = response.url; // presigned URL 획득
+    //       this.triggerDownload(fileUrl); // 다운로드 트리거
+    //     },
+    //     (error) => {
+    //       console.error('URL 요청 실패:', error);
+    //     }
+    //   );
+    // }
   
-    private triggerDownload(url: string) {
-      const link = document.createElement('a');
-      link.href = url;
-      link.target = '_blank'; // 새 탭에서 열기
-      link.download = ''; // 다운로드할 파일 이름을 지정할 수 있습니다.
-      document.body.appendChild(link);
-      link.click(); // 다운로드 실행
-      document.body.removeChild(link); // 링크 요소 제거
-    }
+    // private triggerDownload(url: string) {
+    //   const link = document.createElement('a');
+    //   link.href = url;
+    //   link.target = '_blank'; // 새 탭에서 열기
+    //   link.download = ''; // 다운로드할 파일 이름을 지정할 수 있습니다.
+    //   document.body.appendChild(link);
+    //   link.click(); // 다운로드 실행
+    //   document.body.removeChild(link); // 링크 요소 제거
+    // }
 
     loadImage(exhibitionId: number) {
       console.log('loadImage called for ID:', exhibitionId); // 메서드 호출 확인
