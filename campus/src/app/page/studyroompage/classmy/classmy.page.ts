@@ -57,14 +57,11 @@
 
     private routeSubscription?: Subscription;
 
-
-  //화면로드
-  async loadCourses() {
-    try {
-      // ApiResponse에서 배열을 받도록 변경
-      const response: ApiResponse<VideoTopicResponseData[]> = await firstValueFrom(
-        this.courseService.getAllVideoTopic(this.course_id)
-      );
+    ngOnDestroy() {
+      if (this.routeSubscription) {
+        this.routeSubscription.unsubscribe();
+      }
+    }
 
     async loadCourses() {
       try {

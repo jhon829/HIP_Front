@@ -76,26 +76,17 @@ export class CourseService {
   }
 
   //course join(Post)
-  /*
   joinCourse(courseId: number, registrationData: Omit<CreateCourseRegistrationDto, 'userId'>): Observable<ApiResponse<CreateCourseRegistrationDto>> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`, // 인증 헤더 추가
-    }); // 인증 헤더 가져오기ㅋ
+    }); // 인증 헤더 가져오기
 
-    const url = `${this.courseApiUrl}/${courseId}/courseRegistrationcourses/${courseId}/courseRegistration/register`; // courseId를 사용해 URL 구성
+    const url = `http://localhost:3000/courses/${courseId}/courseRegistration/register`; // courseId를 사용해 URL 구성
     return this.http.post<ApiResponse<CreateCourseRegistrationDto>>(url, registrationData, { headers });
   }
-  */
 
-
-  //수강 신청 받음
-  joinCourse(courseId: number, registrationData: CreateCourseRegistrationDto): Observable<ApiResponse<CreateCourseRegistrationDto>> {
-    const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
-    const url = `${this.courseApiUrl}/${courseId}/courseRegistration/register`; // 올바른 URL 구성
-    return this.http.post<ApiResponse<CreateCourseRegistrationDto>>(url, registrationData, { headers }); // POST 요청으로 변경
-  }
 
 
 
