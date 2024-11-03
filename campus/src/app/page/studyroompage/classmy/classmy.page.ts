@@ -52,6 +52,7 @@ export class ClassmyPage implements OnInit {
 
 
 
+  //화면로드
   async loadCourses() {
     try {
       // ApiResponse에서 배열을 받도록 변경
