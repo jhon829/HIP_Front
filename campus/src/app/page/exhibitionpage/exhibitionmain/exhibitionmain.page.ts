@@ -11,7 +11,7 @@ export class ExhibitionmainPage implements OnInit {
   exhibitions: any[] = [];
   accordionTitle: string = '최신순';
   isOpen: boolean = true;
-  imageUrl: string | null = null; // 이미지 URL을 저장할 변수
+  imageUrls: { [key: number]: string | null } = {}; // 전시관 ID에 따른 이미지 URL을 저장하는 객체
 
   constructor(
     private router: Router,
@@ -20,13 +20,18 @@ export class ExhibitionmainPage implements OnInit {
 
   ngOnInit() {
     this.loadExhibitions();
-    this.loadImage('path/');
   }
 
   loadExhibitions() {
     this.exhibitionService.getExhibitions().subscribe(
       (response: any) => {
+        console.log('API 응답:', response); // 응답을 로그로 출력
         this.exhibitions = response.exhibitions;
+        // 각 전시의 이미지를 로드
+        this.exhibitions.forEach(exhibition => {
+          console.log('전시관 ID:', exhibition.exhibition_id); // ID를 로그로 출력
+          this.loadImage(exhibition.exhibition_id); // exhibition.id를 사용하여 이미지 로드
+        });
       },
       (error) => {
         console.error('전시관 데이터 로딩 실패:', error);
@@ -35,6 +40,8 @@ export class ExhibitionmainPage implements OnInit {
   }
 
   navigateToExhibition(exhibitionId: number) {
+    console.log('navigateToExhibition called:', exhibitionId);
+    this.loadImage(exhibitionId); // 이미지 로드 호출
     this.router.navigate(['/exhibition', exhibitionId]);
   }
 
@@ -49,8 +56,8 @@ export class ExhibitionmainPage implements OnInit {
 
   // 파일 다운로드 로직 구현
     
-    downloadFile(filePath: string) {
-      this.exhibitionService.getPresignedUrl(filePath).subscribe(
+    downloadFile(exhibitionId: number) {
+      this.exhibitionService.getPresignedUrls(exhibitionId).subscribe(
         (response) => {
           const fileUrl = response.url; // presigned URL 획득
           this.triggerDownload(fileUrl); // 다운로드 트리거
@@ -71,15 +78,16 @@ export class ExhibitionmainPage implements OnInit {
       document.body.removeChild(link); // 링크 요소 제거
     }
 
-    loadImage(filePath: string) {
-      this.exhibitionService.getPresignedUrl(filePath).subscribe(
-        (response) => {
-          this.imageUrl = response.url; // presigned URL 저장
-        },
-        (error) => {
-          console.error('URL 요청 실패:', error);
-        }
-      );
+    loadImage(exhibitionId: number) {
+      console.log('loadImage called for ID:', exhibitionId); // 메서드 호출 확인
+      if (isNaN(exhibitionId) || exhibitionId == null || exhibitionId === undefined) {
+        console.error('유효하지 않은 exhibitionId:', exhibitionId);
+        return; // 유효하지 않은 ID일 경우 메서드 종료
+      }
+    
+      
     }
     
+    
+
 }
