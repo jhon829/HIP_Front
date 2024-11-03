@@ -84,7 +84,47 @@ export class ExhibitionmainPage implements OnInit {
         console.error('유효하지 않은 exhibitionId:', exhibitionId);
         return; // 유효하지 않은 ID일 경우 메서드 종료
       }
-    
+      
+      this.exhibitionService.getPresignedUrls(exhibitionId).subscribe(
+        (response) => {
+          console.log('Received presigned URL:', response.url); // URL 확인 
+          this.imageUrls[exhibitionId] = response.url; // 전시관 ID에 따른 presigned URL 저장
+          
+          const imageUrl = this.imageUrls[exhibitionId];
+          
+          // URL이 null이 아닐 경우에만 fetch 호출
+          if (imageUrl) {
+            fetch(imageUrl)
+            .then(response => {
+              if (!response.ok) {
+                console.error('Fetch 오류:', response.status, response.statusText);
+                throw new Error('이미지 요청 실패: ' + response.statusText);
+              }
+              return response.blob();
+            })
+            .then(imageBlob => {
+              const imgUrl = URL.createObjectURL(imageBlob);
+              const imgElement = document.createElement('img');
+              imgElement.src = imgUrl;
+              document.body.appendChild(imgElement);
+
+              // 메모리 누수 방지를 위해 나중에 URL 해제
+              imgElement.onload = () => {
+                URL.revokeObjectURL(imgUrl);
+              };
+            })
+            .catch(error => {
+              console.error('이미지 요청 에러:', error);
+            });
+
+          } else {
+            console.error('유효하지 않은 URL:', this.imageUrls[exhibitionId]);
+          }
+        },
+        (error) => {
+          console.error('URL 요청 실패:', error);
+        }
+      );
       
     }
     
