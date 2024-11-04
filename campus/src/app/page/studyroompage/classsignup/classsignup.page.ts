@@ -44,6 +44,7 @@ export class ClasssignupPage implements OnInit {
       this.selectedGeneration = parseInt(savedGeneration, 10);
     }
     this.loadCourses();
+    this.loadAllCourseInquiries();
   }
 
   async loadAllCourseInquiries() {
@@ -57,8 +58,9 @@ export class ClasssignupPage implements OnInit {
       .filter(registration => registration.generation === this.selectedGeneration);
   }
 
+
   onGenerationChange() {
-    localStorage.setItem('selectedGeneration', this.selectedGeneration.toString());
+    sessionStorage.setItem('selectedGeneration', this.selectedGeneration.toString());
     this.loadCourses();
   }
 
@@ -141,45 +143,7 @@ export class ClasssignupPage implements OnInit {
     return new Date(); // 현재 날짜를 Date 객체로 반환
   }
 
-  /*
-  //11-06 : Date 상태
-  async joinCourse(courseId: number) {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    console.error('토큰을 찾을 수 없습니다.');
-    alert('로그인이 필요합니다.');
-    return;
-  }
-
-  try {
-    const courseReportingDate = await this.getCurrentMonthDay();
-    const registrationData: CreateCourseRegistrationDto = {
-      course_reporting_date: courseReportingDate,
-      course_registration_status: Registration.PENDING,
-    };
-
-    const response: ApiResponse<CreateCourseRegistrationDto> = await firstValueFrom(
-      this.courseService.joinCourse(courseId, registrationData)
-    );
-    console.log('강의 신청 성공:', response.message);
-    alert('강의 신청이 완료되었습니다.');
-    this.registeredCourses.add(courseId);
-  } catch (error) {
-    if (error instanceof HttpErrorResponse) {
-      // HTTP 오류 처리
-      const errorMessage = error.error?.message || '알 수 없는 오류가 발생했습니다.';
-      console.error('강의 신청 중 오류 발생:', errorMessage);
-      alert(`오류: ${errorMessage}`);
-    } else {
-      // 일반 오류 처리
-      console.error('강의 신청 중 예상치 못한 오류:', error);
-      alert('강의 신청 중 예상치 못한 오류가 발생했습니다.');
-    }
-  }
-}
-
-  */
-
+  //강의신청
   async joinCourse(courseId: number) {
     const token = localStorage.getItem('token');
 
