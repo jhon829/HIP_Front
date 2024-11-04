@@ -68,6 +68,14 @@ export class ExhibitionService {
     console.log('getpresingedurl 확인');
     return this.http.get<{ url: string }>(`${this.apiUrl}/exhibitions/presigned-url/${Id}`, { headers });
   }
+  getMemberSignedUrl(memberId: number): Observable<{ url: string }> {
+    return this.http.get<{ url: string }>(`${this.apiUrl}/exhibition-members/presigned-url/${memberId}`);
+  }
+
+  getDocSignedUrl(docId: number): Observable<{ url: string }> {
+    return this.http.get<{ url: string }>(`${this.apiUrl}/exhibition-docs/presigned-url/${docId}`);
+  }
+ 
 
   // Read: 특정 전시물 가져오기 (상세페이지) - 전체 내용
 
