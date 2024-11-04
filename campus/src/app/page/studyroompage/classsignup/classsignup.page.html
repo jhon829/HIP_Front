@@ -5,6 +5,12 @@
       <ion-header class="ion-no-border">
         <ion-toolbar>
           <ion-title>클래스 신청</ion-title>
+          <div class="generation-selector">
+            <ion-label>세대 선택:</ion-label>
+            <ion-select [(ngModel)]="selectedGeneration" (ionChange)="onGenerationChange()">
+              <ion-select-option *ngFor="let gen of generations" [value]="gen">{{gen}}기</ion-select-option>
+            </ion-select>
+          </div>
         </ion-toolbar>
       </ion-header>
       <div class="main-container">

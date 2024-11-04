@@ -29,6 +29,8 @@ export class ClasssignupPage implements OnInit {
   courses: CourseResponseDto[] = []; // 가져온 강의 정보를 저장할 배열
   // 클래스의 맨 위에 타입 정의 추가
   AdminResponseCourseRegistration: { [courseId: number]: AdminResponseCourseRegistrationDto[] } = {};
+  generations: number[] = [1, 2, 3, 4, 5]; // 가능한 세대 목록
+  selectedGeneration: number = 1; // 기본값으로 1세대 선택
 
 
   constructor(
@@ -49,23 +51,41 @@ export class ClasssignupPage implements OnInit {
   }
 
   getApplicantsForCourse(courseId: number): AdminResponseCourseRegistrationDto[] {
-    return this.AdminResponseCourseRegistration[courseId] || [];
+    return (this.AdminResponseCourseRegistration[courseId] || [])
+      .filter(registration => registration.generation === this.selectedGeneration);
+  }
+
+  onGenerationChange() {
+    this.loadCourses(); // 세대가 변경될 때마다 강의 목록을 다시 로드
   }
 
 
   async loadCourses() {
     try {
       const response: ApiResponse<CourseResponseDto[]> = await firstValueFrom(this.courseService.getAllCourses());
-      this.courses = response.data; // response.data에서 배열 추출
+      console.log('All courses:', response.data);
+      this.courses = response.data.filter(course => {
+        console.log(`Comparing course generation ${course.generation} with selected generation ${this.selectedGeneration}`);
+        return course.generation == this.selectedGeneration;
+      });
+      console.log('Filtered courses:', this.courses);
+      if (this.courses.length === 0) {
+        console.warn('No courses found for the selected generation');
+      }
     } catch (error) {
       console.error('Error loading courses', error);
     }
   }
 
+
+
   async createCourse() {
     const modal = await this.modalController.create({
       component: CourseCreateModalComponent,
       cssClass: 'modal',
+      componentProps: {
+        selectedGeneration: this.selectedGeneration
+      }
     });
     return await modal.present();
   }
@@ -159,17 +179,20 @@ export class ClasssignupPage implements OnInit {
 
   async joinCourse(courseId: number) {
     const token = localStorage.getItem('token');
+
     if (!token) {
       console.error('토큰을 찾을 수 없습니다.');
       alert('로그인이 필요합니다.');
       return;
     }
 
+
     try {
       const courseReportingDate = await this.getCurrentDate(); // Date 객체 가져오기
       const registrationData: CreateCourseRegistrationDto = {
         course_reporting_date: courseReportingDate.toISOString(), // ISO 문자열로 변환하여 설정
         course_registration_status: Registration.PENDING,
+        generation: this.selectedGeneration // 선택된 세대 정보 추가
       };
 
       const response: ApiResponse<CreateCourseRegistrationDto> = await firstValueFrom(
