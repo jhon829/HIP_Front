@@ -39,9 +39,11 @@ export class ClasssignupPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadCourses().then(() => {
-      this.loadAllCourseInquiries();
-    });
+    const savedGeneration = localStorage.getItem('selectedGeneration');
+    if (savedGeneration) {
+      this.selectedGeneration = parseInt(savedGeneration, 10);
+    }
+    this.loadCourses();
   }
 
   async loadAllCourseInquiries() {
@@ -56,7 +58,8 @@ export class ClasssignupPage implements OnInit {
   }
 
   onGenerationChange() {
-    this.loadCourses(); // 세대가 변경될 때마다 강의 목록을 다시 로드
+    localStorage.setItem('selectedGeneration', this.selectedGeneration.toString());
+    this.loadCourses();
   }
 
 
@@ -192,7 +195,6 @@ export class ClasssignupPage implements OnInit {
       const registrationData: CreateCourseRegistrationDto = {
         course_reporting_date: courseReportingDate.toISOString(), // ISO 문자열로 변환하여 설정
         course_registration_status: Registration.PENDING,
-        generation: this.selectedGeneration // 선택된 세대 정보 추가
       };
 
       const response: ApiResponse<CreateCourseRegistrationDto> = await firstValueFrom(
