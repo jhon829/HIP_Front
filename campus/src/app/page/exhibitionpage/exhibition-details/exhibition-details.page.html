@@ -7,9 +7,6 @@
 </ion-header>
 
 <ion-content *ngIf="exhibitionDetails">
-  <ion-button [routerLink]="['/exhibition-update', exhibitionDetails.exhibition_id]">수정하기</ion-button>
-  <ion-button expand="block" color="danger" (click)="deleteExhibition()">전시물 삭제</ion-button>
-  
   <div class="repcontent">
     <div class="part1">
       <img class="title-image" [src]="imageUrl || '../../../assets/jpg/1.jpg'" alt="전시물 이미지">
@@ -67,7 +64,14 @@
         </ng-container>
       </div>
       <ion-item class="boundary"></ion-item>
-
+      <div class="parent-container">
+        <div class="button-container">
+          <ion-button [routerLink]="['/exhibition-update', exhibitionDetails.exhibition_id]" class="custom-button">수정하기</ion-button>
+          <ion-button expand="block" color="danger" (click)="deleteExhibition()" class="custom-button">전시물 삭제</ion-button>
+        </div>
+      </div>
+      
+      
       <!-- <div class="docs texts" *ngIf="exhibitionDetails.exhibitionDocs && exhibitionDetails.exhibitionDocs.length > 0">
         <ion-icon name="document-outline" class="icons"></ion-icon> Documents
         <ul class="doc-list">
