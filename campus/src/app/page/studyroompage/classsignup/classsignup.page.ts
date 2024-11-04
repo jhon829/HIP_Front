@@ -55,7 +55,7 @@ export class ClasssignupPage implements OnInit {
 
   getApplicantsForCourse(courseId: number): AdminResponseCourseRegistrationDto[] {
     return (this.AdminResponseCourseRegistration[courseId] || [])
-      .filter(registration => registration.generation === this.selectedGeneration);
+      .filter(registration => registration.currentCourse.generation === this.selectedGeneration);
   }
 
 
@@ -79,6 +79,21 @@ export class ClasssignupPage implements OnInit {
       }
     } catch (error) {
       console.error('Error loading courses', error);
+    }
+  }
+
+  //조회하기
+  async courseinqueryUser(courseId: number) {
+
+    try {
+      const response: ApiResponse<AdminResponseCourseRegistrationDto[]> = await firstValueFrom(
+        this.courseService.getAllinqueryUsers(courseId)
+      );
+
+      this.AdminResponseCourseRegistration[courseId] = response.data || [];
+      console.log(`Loaded registrations for course ${courseId}:`, this.AdminResponseCourseRegistration[courseId]);
+    } catch (error) {
+      console.error(`Error loading registrations for course ${courseId}`, error);
     }
   }
 
@@ -180,20 +195,7 @@ export class ClasssignupPage implements OnInit {
     return this.registeredCourses.has(courseId); // 강의 ID가 Set에 존재하는지 확인
   }
 
-  //조회하기
-  async courseinqueryUser(courseId: number) {
 
-    try {
-      const response: ApiResponse<AdminResponseCourseRegistrationDto[]> = await firstValueFrom(
-        this.courseService.getAllinqueryUsers(courseId)
-      );
-
-      this.AdminResponseCourseRegistration[courseId] = response.data || [];
-      console.log(`Loaded registrations for course ${courseId}:`, this.AdminResponseCourseRegistration[courseId]);
-    } catch (error) {
-      console.error(`Error loading registrations for course ${courseId}`, error);
-    }
-  }
 
 
 
