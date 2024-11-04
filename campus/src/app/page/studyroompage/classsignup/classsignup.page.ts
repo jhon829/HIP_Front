@@ -9,11 +9,7 @@ import { CreateCourseRegistrationDto } from '../../../models/course/courses/cour
 import { Registration } from '../../../models/enums/role.enums';
 import { HttpErrorResponse } from '@angular/common/http';
 import {AdminResponseCourseRegistrationDto} from "../../../models/course/courses/course-get-admin-registration";
-/*
-interface DecodedToken {
-  user_id: number;
-  // 필요한 경우 다른 토큰 필드들을 여기에 추가하세요
-}*/
+
 
 @Component({
   selector: 'app-classsignup',
@@ -25,11 +21,11 @@ interface DecodedToken {
 
 
 export class ClasssignupPage implements OnInit {
-  registeredCourses: Set<number> = new Set(); // 신청한 강의 ID를 저장할 Set
-  courses: CourseResponseDto[] = []; // 가져온 강의 정보를 저장할 배열
+  registeredCourses: Set<number> = new Set();
+  courses: CourseResponseDto[] = [];
   // 클래스의 맨 위에 타입 정의 추가
   AdminResponseCourseRegistration: { [courseId: number]: AdminResponseCourseRegistrationDto[] } = {};
-  generations: number[] = [1, 2, 3, 4, 5]; // 가능한 세대 목록
+  generations: number[] = [1, 2, 3, 4, 5]; // 가능한 세대 목록(하드코딩)
   selectedGeneration: number = 1; // 기본값으로 1세대 선택
 
 
@@ -66,11 +62,11 @@ export class ClasssignupPage implements OnInit {
 
 
   async loadCourses() {
+
     try {
       const response: ApiResponse<CourseResponseDto[]> = await firstValueFrom(this.courseService.getAllCourses());
       console.log('All courses:', response.data);
       this.courses = response.data.filter(course => {
-        console.log(`Comparing course generation ${course.generation} with selected generation ${this.selectedGeneration}`);
         return course.generation == this.selectedGeneration;
       });
       console.log('Filtered courses:', this.courses);
@@ -82,7 +78,7 @@ export class ClasssignupPage implements OnInit {
     }
   }
 
-  //조회하기
+  //강의 신청 유저 조회하기
   async courseinqueryUser(courseId: number) {
 
     try {
@@ -91,9 +87,9 @@ export class ClasssignupPage implements OnInit {
       );
 
       this.AdminResponseCourseRegistration[courseId] = response.data || [];
-      console.log(`Loaded registrations for course ${courseId}:`, this.AdminResponseCourseRegistration[courseId]);
     } catch (error) {
       console.error(`Error loading registrations for course ${courseId}`, error);
+      alert('강의 등록 정보를 불러오는 중 오류가 발생했습니다.');
     }
   }
 
@@ -111,23 +107,20 @@ export class ClasssignupPage implements OnInit {
   }
 
   async updateCourse(course: CourseResponseDto) {
-    // 1. 모달을 열어서 기존 강의 데이터를 전달하고 수정할 수 있게 함
     const modal = await this.modalController.create({
       component: CourseCreateModalComponent,
       cssClass: 'modal',
-      componentProps: { course } // 기존 강의 데이터를 모달에 전달
+      componentProps: { course }
     });
 
-    // 2. 모달이 닫힌 후의 결과 처리
     modal.onDidDismiss().then(async (result) => {
       if (result.data) {
-        // 사용자가 수정을 완료하고 데이터를 반환했을 때
         try {
           const updatedCourse = result.data;
           const response = await firstValueFrom(this.courseService.updateCourse(course.course_id, updatedCourse));
           console.log('Course updated successfully:', response);
 
-          // 3. 업데이트 후 강의 목록을 다시 불러옴
+
           this.loadCourses();
         } catch (error) {
           console.error('Error updating course:', error);
@@ -141,21 +134,21 @@ export class ClasssignupPage implements OnInit {
 
 
   async deleteCourse(courseId: number) {
-    const confirmed = confirm('이 강의를 삭제하시겠습니까?'); // 삭제 확인 다이얼로그
+    const confirmed = confirm('이 강의를 삭제하시겠습니까?');
     if (!confirmed) {
-      return; // 사용자가 삭제를 취소한 경우
+      return;
     }
     try {
       const response: ApiResponse<void> = await firstValueFrom(this.courseService.deleteCourse(courseId)); // 숫자를 문자열로 변환하여 삭제 API 호출
-      console.log(response.message); // 삭제 성공 메시지 출력
-      this.loadCourses(); // 삭제 후 목록 갱신
+      console.log(response.message);
+      this.loadCourses();
     } catch (error) {
       console.error('강의 삭제 중 오류 발생', error);
     }
   }
 
   async getCurrentDate(): Promise<Date> {
-    return new Date(); // 현재 날짜를 Date 객체로 반환
+    return new Date();
   }
 
   //강의신청
