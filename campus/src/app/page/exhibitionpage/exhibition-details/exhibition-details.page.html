@@ -39,7 +39,7 @@
       <ul class="member-list">
         <li *ngFor="let member of exhibitionDetails.exhibitionMembers" class="member-item">
           <div class="member-container">
-            <img [src]="member.signedUrl || member.file_path" alt="{{ member.name }}" class="member-image" />
+            <img [src]="member.signedUrl" alt="{{ member.name }}" class="member-image" />
             <p class="member-name">{{ member.name }}</p>
           </div>
         </li>
@@ -53,13 +53,14 @@
         <ng-container *ngIf="exhibitionDetails.exhibitionDocs && exhibitionDetails.exhibitionDocs.length > 0">
           <ng-container *ngFor="let doc of exhibitionDetails.exhibitionDocs">
             <!-- 비디오가 있는 경우 -->
-            <video *ngIf="doc.file_path.endsWith('.mp4')" controls class="output-video">
-              <source [src]="doc.signedUrl || doc.file_path" type="video/mp4">
+            <video *ngIf="doc.file_path.endsWith('.mp4') && doc.signedUrl" controls class="output-video">
+              <source [src]="doc.signedUrl" type="video/mp4">
               Your browser does not support the video tag.
             </video>
+            
             <!-- 이미지를 표시 -->
             <img *ngIf="(doc.file_path.endsWith('.png') || doc.file_path.endsWith('.jpg'))"
-                 [src]="doc.signedUrl || doc.file_path" 
+                 [src]="doc.signedUrl" 
                  alt="Document Image" 
                  class="doc-image">
           </ng-container>
