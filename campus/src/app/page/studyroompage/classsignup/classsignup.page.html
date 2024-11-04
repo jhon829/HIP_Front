@@ -48,6 +48,9 @@
 
           <!-- 해당 강의를 신청한 유저 조회 -->
           <div class="applicants-box">
+            <div *ngIf="getApplicantsForCourse(course.course_id).length === 0">
+              이 강의에 신청한 유저가 없습니다.
+            </div>
             <div class="project-box" *ngFor="let courseUser of getApplicantsForCourse(course.course_id)">
               <ion-grid class="class1">
                 <ion-row>
@@ -55,8 +58,8 @@
                   <ion-col>{{ courseUser.applicant.user_name }}</ion-col>
                   <ion-col>{{ courseUser.applicant.id }}</ion-col>
                   <ion-col>
-                    <ion-icon class="accept" (click)="acceptApplicant(courseUser)">수락</ion-icon>
-                    <ion-icon class="reject" (click)="rejectApplicant(courseUser)">거절</ion-icon>
+                    <ion-button class="accept" (click)="acceptApplicant(courseUser)">수락</ion-button>
+                    <ion-button class="reject" (click)="rejectApplicant(courseUser)">거절</ion-button>
                   </ion-col>
                 </ion-row>
               </ion-grid>
