@@ -49,18 +49,41 @@ export class ClasssignupPage implements OnInit {
     }
   }
 
-  getApplicantsForCourse(courseId: number): AdminResponseCourseRegistrationDto[] {
-    return (this.AdminResponseCourseRegistration[courseId] || [])
-      .filter(registration => registration.currentCourse.generation === this.selectedGeneration);
+  //강의 신청 유저 조회하기
+  async courseinqueryUser(courseId: number) {
+
+    try {
+      const response: ApiResponse<AdminResponseCourseRegistrationDto[]> = await firstValueFrom(
+        this.courseService.getAllinqueryUsers(courseId)
+      );
+
+      this.AdminResponseCourseRegistration[courseId] = response.data || [];
+    } catch (error) {
+      console.error(`Error loading registrations for course ${courseId}`, error);
+      alert('강의 등록 정보를 불러오는 중 오류가 발생했습니다.');
+    }
   }
 
 
+
+
+  //courseId를 받고 generation이 같을 경우 반환
+  getApplicantsForCourse(courseId: number): AdminResponseCourseRegistrationDto[] {
+    const applicants = (this.AdminResponseCourseRegistration[courseId] || [])
+      .filter(registration => registration.currentCourse.generation === this.selectedGeneration);
+
+    console.log(`Applicants for course ID ${courseId} (Generation ${this.selectedGeneration}):`, applicants);
+    return applicants;
+  }
+
+
+  //기수값 변경
   onGenerationChange() {
     sessionStorage.setItem('selectedGeneration', this.selectedGeneration.toString());
     this.loadCourses();
   }
 
-
+  //모든 강의 정보 로드
   async loadCourses() {
 
     try {
@@ -75,21 +98,6 @@ export class ClasssignupPage implements OnInit {
       }
     } catch (error) {
       console.error('Error loading courses', error);
-    }
-  }
-
-  //강의 신청 유저 조회하기
-  async courseinqueryUser(courseId: number) {
-
-    try {
-      const response: ApiResponse<AdminResponseCourseRegistrationDto[]> = await firstValueFrom(
-        this.courseService.getAllinqueryUsers(courseId)
-      );
-
-      this.AdminResponseCourseRegistration[courseId] = response.data || [];
-    } catch (error) {
-      console.error(`Error loading registrations for course ${courseId}`, error);
-      alert('강의 등록 정보를 불러오는 중 오류가 발생했습니다.');
     }
   }
 
