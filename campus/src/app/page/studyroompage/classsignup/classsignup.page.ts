@@ -8,6 +8,7 @@ import { ApiResponse } from 'src/app/models/common/api-response.interface';
 import { CreateCourseRegistrationDto } from '../../../models/course/courses/course-registration.interface';
 import { Registration } from '../../../models/enums/role.enums';
 import { HttpErrorResponse } from '@angular/common/http';
+import {AdminResponseCourseRegistrationDto} from "../../../models/course/courses/course-get-admin-registration";
 /*
 interface DecodedToken {
   user_id: number;
@@ -26,8 +27,8 @@ interface DecodedToken {
 export class ClasssignupPage implements OnInit {
   registeredCourses: Set<number> = new Set(); // 신청한 강의 ID를 저장할 Set
   courses: CourseResponseDto[] = []; // 가져온 강의 정보를 저장할 배열
-  coursesRegistration : CreateCourseRegistrationDto[] = [];
-
+  // 클래스의 맨 위에 타입 정의 추가
+  AdminResponseCourseRegistration: { [courseId: number]: AdminResponseCourseRegistrationDto[] } = {};
 
 
   constructor(
@@ -36,13 +37,20 @@ export class ClasssignupPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadCourses(); // 컴포넌트가 초기화될 때 강의 목록을 불러옴
-    this.courseJoinUser(); //이게 실행되면 페이지에 load가 되지 않는 오류가 ㅣㅇㅆ음
+    this.loadCourses().then(() => {
+      this.loadAllCourseInquiries();
+    });
   }
 
+  async loadAllCourseInquiries() {
+    for (const course of this.courses) {
+      await this.courseinqueryUser(course.course_id);
+    }
+  }
 
-
-
+  getApplicantsForCourse(courseId: number): AdminResponseCourseRegistrationDto[] {
+    return this.AdminResponseCourseRegistration[courseId] || [];
+  }
 
 
   async loadCourses() {
@@ -63,7 +71,7 @@ export class ClasssignupPage implements OnInit {
   }
 
   async updateCourse(course: CourseResponseDto) {
-   // 1. 모달을 열어서 기존 강의 데이터를 전달하고 수정할 수 있게 함
+    // 1. 모달을 열어서 기존 강의 데이터를 전달하고 수정할 수 있게 함
     const modal = await this.modalController.create({
       component: CourseCreateModalComponent,
       cssClass: 'modal',
@@ -178,29 +186,26 @@ export class ClasssignupPage implements OnInit {
   }
 
 
-
-
-
-
   //현재 강의를 신청했는지에 대한 변수
   isRegistered(courseId: number): boolean {
     return this.registeredCourses.has(courseId); // 강의 ID가 Set에 존재하는지 확인
   }
 
+  //조회하기
+  async courseinqueryUser(courseId: number) {
 
-  //신청하기
-  async courseJoinUser() {
     try {
-      const response: ApiResponse<any> = await firstValueFrom(this.courseService.getAllJoinUsers());
+      const response: ApiResponse<AdminResponseCourseRegistrationDto[]> = await firstValueFrom(
+        this.courseService.getAllinqueryUsers(courseId)
+      );
 
-      // 응답이 객체일 경우 적절히 배열로 변환
-      this.coursesRegistration = response.data.registrations || [];
-
-      console.log('Loaded courses:', this.coursesRegistration);
+      this.AdminResponseCourseRegistration[courseId] = response.data || [];
+      console.log(`Loaded registrations for course ${courseId}:`, this.AdminResponseCourseRegistration[courseId]);
     } catch (error) {
-      console.error('Error loading courses', error);
+      console.error(`Error loading registrations for course ${courseId}`, error);
     }
   }
+
 
 
   /*//취소하기 기능
@@ -236,24 +241,12 @@ export class ClasssignupPage implements OnInit {
   }*/
 
 
-
-
-
-
-
-
-  async userInquiry(){
-
-
-
-  }
-
-  acceptUser(userId: number) {
+  acceptApplicant(userId: AdminResponseCourseRegistrationDto) {
     // 유저 수락 로직을 여기에 구현
     console.log(`User ${userId} accepted.`);
   }
 
-  rejectUser(userId: number) {
+  rejectApplicant(userId: AdminResponseCourseRegistrationDto) {
     // 유저 거절 로직을 여기에 구현
     console.log(`User ${userId} rejected.`);
   }
