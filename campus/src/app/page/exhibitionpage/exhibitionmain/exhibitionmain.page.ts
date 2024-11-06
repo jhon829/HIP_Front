@@ -12,6 +12,11 @@ export class ExhibitionmainPage implements OnInit {
   accordionTitle: string = '최신순';
   isOpen: boolean = true;
   imageUrls: { [key: number]: string | null } = {}; // 전시관 ID에 따른 이미지 URL을 저장하는 객체
+  filteredExhibitions: any[] = [];
+  selectedGeneration1: boolean = false; // 1기 체크박스 상태
+  selectedGeneration2: boolean = false; // 2기 체크박스 상태
+  selectedGeneration3: boolean = false; // 3기 체크박스 상태
+  
 
   constructor(
     private router: Router,
@@ -25,12 +30,19 @@ export class ExhibitionmainPage implements OnInit {
   loadExhibitions() {
     this.exhibitionService.getExhibitions().subscribe(
       (response: any) => {
-        console.log('API 응답:', response); // 응답을 로그로 출력
-        this.exhibitions = response.exhibitions;
+        console.log('API 응답:', response);
+        this.exhibitions = response.exhibitions; // 새로운 전시 목록 로드
+  
+        // 기수 필터링
+        this.filterExhibitions();
+  
+        // 최신순으로 정렬
+        this.sortExhibitions(this.accordionTitle);
+  
         // 각 전시의 이미지를 로드
-        this.exhibitions.forEach(exhibition => {
-          console.log('전시관 ID:', exhibition.exhibition_id); // ID를 로그로 출력
-          this.loadImage(exhibition.exhibition_id); // exhibition.id를 사용하여 이미지 로드
+        this.filteredExhibitions.forEach(exhibition => {
+          console.log('전시관 ID:', exhibition.exhibition_id);
+          this.loadImage(exhibition.exhibition_id);
         });
       },
       (error) => {
@@ -38,6 +50,37 @@ export class ExhibitionmainPage implements OnInit {
       }
     );
   }
+  
+  filterExhibitions() {
+    // 체크된 기수에 따라 필터링
+    this.filteredExhibitions = this.exhibitions.filter(exhibition => {
+      return (this.selectedGeneration1 && exhibition.generation === '1기') ||
+             (this.selectedGeneration2 && exhibition.generation === '2기') ||
+             (this.selectedGeneration3 && exhibition.generation === '3기') ||
+             (!this.selectedGeneration1 && !this.selectedGeneration2 && !this.selectedGeneration3); // 모든 체크박스가 해제된 경우
+    });
+  }
+  
+
+  sortExhibitions(order: string) {
+    if (order === '최신순') {
+      this.filteredExhibitions.sort((a, b) => {
+        return new Date(b.exhibition_date).getTime() - new Date(a.exhibition_date).getTime(); // 최신순
+      });
+    } else if (order === '오래된순') {
+      this.filteredExhibitions.sort((a, b) => {
+        return new Date(a.exhibition_date).getTime() - new Date(b.exhibition_date).getTime(); // 오래된순
+      });
+    }
+  }
+  
+  changeTitle(newTitle: string) {
+    this.accordionTitle = newTitle;
+    this.isOpen = !this.isOpen;
+    // 정렬하기 전에 필터링된 전시 목록을 다시 정렬
+    this.sortExhibitions(newTitle);
+  }
+  
 
   navigateToExhibition(exhibitionId: number) {
     console.log('navigateToExhibition called:', exhibitionId);
@@ -45,11 +88,20 @@ export class ExhibitionmainPage implements OnInit {
     this.router.navigate(['/exhibition', exhibitionId]);
   }
 
-  changeTitle(newTitle: string) {
-    this.accordionTitle = newTitle;
-    this.isOpen = !this.isOpen;
-  }
+  // changeTitle(newTitle: string) {
+  //   this.accordionTitle = newTitle;
+  //   this.isOpen = !this.isOpen;
+  // }
 
+  // changeTitle(newTitle: string) {
+  //   this.accordionTitle = newTitle;
+  //   this.isOpen = !this.isOpen;
+  //   if (newTitle === '최신순') {
+  //     this.loadExhibitions(); // 최신순 선택 시 전시 목록 다시 로드
+  //   }
+  // }
+
+  
   navigateToExhibitionCreate() {
     this.router.navigate(['/exhibitioncreate']);
   }
@@ -128,6 +180,14 @@ export class ExhibitionmainPage implements OnInit {
       
     }
     
+    resetFilters() {
+      this.selectedGeneration1 = false;
+      this.selectedGeneration2 = false;
+      this.selectedGeneration3 = false;
+      
+      // 초기화 후 전시 목록 다시 로드
+      this.loadExhibitions();
+    }
     
 
 }
