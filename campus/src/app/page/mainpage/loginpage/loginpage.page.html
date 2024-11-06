@@ -18,11 +18,13 @@
           formControlName="password"
           color="none"
           placeholder="비밀번호"
+          (keydown.enter)="onSearchKeyPress($event)"
         ></ion-input>
         <ion-icon
           name="eye"
           (click)="togglePasswordVisibility()"
           style="color:#9B9B9B; width: 20px; margin-left: 10px; cursor: pointer;"
+          
         ></ion-icon>
       </div>
 

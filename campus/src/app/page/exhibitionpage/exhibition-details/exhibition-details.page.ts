@@ -13,6 +13,7 @@ export class ExhibitionDetailsPage implements OnInit {
   exhibitionDetails: any = null;
   isLoading: boolean = true;
   error: string | null = null;
+  imageUrl: string | null = null; // 프리사인드 URL을 저장할 변수 추가
 
   constructor(
     private route: ActivatedRoute,
@@ -23,6 +24,7 @@ export class ExhibitionDetailsPage implements OnInit {
 
   ngOnInit() {
     this.exhibitionId = Number(this.route.snapshot.paramMap.get('id'));
+    console.log('전시물 ID:', this.exhibitionId); // ID 확인
     this.loadExhibitionDetails();
   }
 
@@ -31,7 +33,11 @@ export class ExhibitionDetailsPage implements OnInit {
       this.isLoading = true;
       this.exhibitionService.getAllExhibitionDetails(this.exhibitionId).subscribe(
         (data) => {
-          this.exhibitionDetails = data;
+          console.log('API 응답:', data); // 응답 확인
+          this.exhibitionDetails = data.exhibition; // exhibition 객체 할당
+          this.loadPresignedUrl(this.exhibitionDetails.exhibition_id); // 전시물 프리사인드 URL 요청
+          this.loadMemberSignedUrls(); // 멤버 프리사인드 URL 요청
+          this.loadDocSignedUrls(); // 문서 프리사인드 URL 요청
           this.isLoading = false;
         },
         (error) => {
@@ -42,6 +48,54 @@ export class ExhibitionDetailsPage implements OnInit {
       );
     }
   }
+
+  loadPresignedUrl(exhibitionId: number) {
+    this.exhibitionService.getPresignedUrls(exhibitionId).subscribe(
+      (response) => {
+        this.imageUrl = response.url; // 프리사인드 URL 저장
+        console.log('프리사인드 URL:', this.imageUrl); // 디버깅용 로그
+      },
+      (error) => {
+        console.error('프리사인드 URL 로딩 실패:', error);
+        this.error = '프리사인드 URL을 불러오는 데 실패했습니다.';
+      }
+    );
+  }
+
+  loadMemberSignedUrls() {
+    if (this.exhibitionDetails && this.exhibitionDetails.exhibitionMembers) {
+      this.exhibitionDetails.exhibitionMembers.forEach((member: { exhibition_member_id: number; signedUrl: string; }) => {
+        this.exhibitionService.getMemberSignedUrl(member.exhibition_member_id).subscribe(
+          (response) => {
+            member.signedUrl = response.url; // 멤버의 프리사인드 URL 저장
+            console.log('멤버 프리사인드 URL:', member.signedUrl);
+          },
+          (error) => {
+            console.error('멤버 프리사인드 URL 로딩 실패:', error);
+            this.error = '멤버 프리사인드 URL을 불러오는 데 실패했습니다.';
+          }
+        );
+      });
+    }
+  }
+
+  loadDocSignedUrls() {
+    if (this.exhibitionDetails && this.exhibitionDetails.exhibitionDocs) {
+      this.exhibitionDetails.exhibitionDocs.forEach((doc: { exhibition_doc_id: number; signedUrl: string; }) => {
+        this.exhibitionService.getDocSignedUrl(doc.exhibition_doc_id).subscribe(
+          (response) => {
+            doc.signedUrl = response.url; // 문서의 프리사인드 URL 저장
+            console.log('문서 프리사인드 URL:', doc.signedUrl);
+          },
+          (error) => {
+            console.error('문서 프리사인드 URL 로딩 실패:', error);
+            this.error = '문서 프리사인드 URL을 불러오는 데 실패했습니다.';
+          }
+        );
+      });
+    }
+  }
+
   async deleteExhibition() {
     const alert = await this.alertController.create({
       header: '전시물 삭제',

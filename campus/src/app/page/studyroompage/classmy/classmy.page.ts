@@ -9,23 +9,23 @@
   import { ModalController } from '@ionic/angular';
   import { VideoCreateModalComponent } from '../../../component/video-create-modal/video-create-modal.component';
 
-  @Component({
-    selector: 'app-classmy',
-    templateUrl: './classmy.page.html',
-    styleUrls: ['./classmy.page.scss'],
-  })
+@Component({
+  selector: 'app-classmy',
+  templateUrl: './classmy.page.html',
+  styleUrls: ['./classmy.page.scss'],
+})
 
-  export class ClassmyPage implements OnInit {
+export class ClassmyPage implements OnInit {
 
-    // public course_id!: number;
-    course_id = 13;
+  // public course_id!: number;
+  course_id = 13;
 
-    public data: ClassmyResponseData = {
-      VideoTopics: [],
-      activeSection: 'lecture',
-      isEmptyState: true,
-      lectureItems: []
-    };
+  public data: ClassmyResponseData = {
+    VideoTopics: [],
+    activeSection: 'lecture',
+    isEmptyState: true,
+    lectureItems: []
+  };
 
     constructor(
       private courseService: CourseService,
@@ -187,5 +187,5 @@
       return await modal.present();
     }
 
-    
-  }
+
+    }

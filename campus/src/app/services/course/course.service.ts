@@ -9,6 +9,7 @@ import { DocNameResponseData } from 'src/app/models/course/doc_name/doc_name-res
 import { CourseDocResponseData } from 'src/app/models/course/course_doc/course_doc-response.interface';
 import { VideoTopicResponseData } from 'src/app/models/course/video_topic/video_topic-response.interface';
 import { VideoResponseData } from 'src/app/models/course/video/video-response.interface';
+import {AdminResponseCourseRegistrationDto} from "../../models/course/courses/course-get-admin-registration";
 
 
 @Injectable({
@@ -76,23 +77,33 @@ export class CourseService {
   }
 
   //course join(Post)
+  /*
   joinCourse(courseId: number, registrationData: Omit<CreateCourseRegistrationDto, 'userId'>): Observable<ApiResponse<CreateCourseRegistrationDto>> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`, // 인증 헤더 추가
-    }); // 인증 헤더 가져오기
+    }); // 인증 헤더 가져오기ㅋ
 
-    const url = `http://localhost:3000/courses/${courseId}/courseRegistration/register`; // courseId를 사용해 URL 구성
+    const url = `${this.courseApiUrl}/${courseId}/courseRegistrationcourses/${courseId}/courseRegistration/register`; // courseId를 사용해 URL 구성
     return this.http.post<ApiResponse<CreateCourseRegistrationDto>>(url, registrationData, { headers });
+  }
+  */
+
+
+  //수강 신청 받음
+  joinCourse(courseId: number, registrationData: CreateCourseRegistrationDto): Observable<ApiResponse<CreateCourseRegistrationDto>> {
+    const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
+    const url = `${this.courseApiUrl}/${courseId}/courseRegistration/register`; // 올바른 URL 구성
+    return this.http.post<ApiResponse<CreateCourseRegistrationDto>>(url, registrationData, { headers }); // POST 요청으로 변경
   }
 
 
-
-
-  getAllJoinUsers(): Observable<ApiResponse<CreateCourseRegistrationDto[]>> {
+  //수강신청 조회
+  getAllinqueryUsers(courseId:number): Observable<ApiResponse<AdminResponseCourseRegistrationDto[]>> {
     const headers = this.getAuthHeaders();
-    return this.http.get<ApiResponse<CreateCourseRegistrationDto[]>>(this.courseApiUrl, { headers });
+    const url = `${this.courseApiUrl}/${courseId}/courseRegistration`;
+    return this.http.get<ApiResponse<AdminResponseCourseRegistrationDto[]>>(url, { headers });
   }
 
   // 강의 삭제 메서드 추가
