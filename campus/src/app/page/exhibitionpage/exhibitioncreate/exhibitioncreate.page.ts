@@ -360,6 +360,7 @@
 // }
 import { Component } from '@angular/core';
 import { ExhibitionService } from "../../../services/exhibition/exhibitionservice.service";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-exhibitioncreate',
@@ -376,15 +377,15 @@ export class ExhibitioncreatePage {
   introductions: string[] = []; // 소개 문장 배열
   memberName: string = ''; // 멤버 이름
   memberImage: File | null = null; // 멤버 이미지 (null 가능)
-  memberGeneration: string = ''; // 멤버 세대
-  members: { name: string; image: File | null; generation: string; }[] = []; // 멤버 배열
+  members: { name: string; image: File | null; }[] = []; // 멤버 배열
   outputImagesList: File[] = []; // Output 이미지 파일을 저장할 배열
   outputImages: FileList | null = null;
   outputVideo: File | null = null; // 출력 비디오 파일
   outputVideoPreview: string | null = null; // 비디오 미리보기 URL
   exhibitionGeneration: string = ''; // 전시 세대 추가
 
-  constructor(private exhibitionService: ExhibitionService) {}
+  constructor( private router: Router,
+               private exhibitionService: ExhibitionService) {}
 
   // Introduce 추가
   addIntroduce() {
@@ -401,11 +402,11 @@ export class ExhibitioncreatePage {
 
   // Member 추가
   addMember() {
-    if (this.memberName && this.memberGeneration && this.memberImage) {
+    if (this.memberName  && this.memberImage) {
       this.members.push({
         name: this.memberName,
         image: this.memberImage, // File 객체를 저장
-        generation: this.memberGeneration // 멤버 세대
+       
       });
       
       // 초기화
@@ -517,12 +518,16 @@ export class ExhibitioncreatePage {
         this.submitIntroductions(exhibitionId);
         this.submitMembers(exhibitionId);
         this.submitOutputs(exhibitionId);
+        alert('전시 생성에 성공했습니다.');
+        this.router.navigate(['/exhibitionmain']); 
       },
       error: (exhibitionError) => {
         console.error('전시 생성 실패:', exhibitionError);
         alert('전시 생성에 실패했습니다. 다시 시도해 주세요.');
       }
     });
+   
+
   }
   
   // 전시 데이터 준비
@@ -552,7 +557,7 @@ export class ExhibitioncreatePage {
     this.exhibitionService.saveIntroductions(introductionsData).subscribe({
       next: (introResponse) => {
         console.log('소개 생성 성공:', introResponse);
-        alert('소개가 성공적으로 추가되었습니다.');
+       
       },
       error: (introError) => {
         console.error('소개 생성 실패:', introError);
@@ -570,7 +575,7 @@ export class ExhibitioncreatePage {
     // 멤버 기본 정보 추가
     this.members.forEach((member, index) => {
         membersData.append(`members[${index}][name]`, member.name);
-        membersData.append(`members[${index}][generation]`, member.generation);
+      
     });
     
     // 파일들을 별도로 처리
@@ -583,7 +588,6 @@ export class ExhibitioncreatePage {
     this.exhibitionService.saveMembers(membersData).subscribe({
         next: (membersResponse) => {
             console.log('멤버 생성 성공:', membersResponse);
-            alert('멤버가 성공적으로 추가되었습니다.');
         },
         error: (membersError) => {
             console.error('멤버 생성 실패:', membersError.error);
@@ -610,7 +614,6 @@ submitOutputs(exhibitionId: number) {
   this.exhibitionService.saveOutputs(outputData).subscribe({
       next: (outputResponse) => {
           console.log('출력 생성 성공:', outputResponse);
-          alert('출력이 성공적으로 추가되었습니다.');
       },
       error: (outputError) => {
           console.error('출력 생성 실패:', outputError);
@@ -618,6 +621,7 @@ submitOutputs(exhibitionId: number) {
       }
   });
 }
+  
 
 
 
@@ -628,7 +632,7 @@ submitOutputs(exhibitionId: number) {
   resetMemberInputs() {
     this.memberName = ''; // 멤버 이름 초기화
     this.memberImage = null; // 멤버 이미지 초기화
-    this.memberGeneration = ''; // 멤버 세대 초기화
+   
   }
   
   // Data URL을 File 객체로 변환하는 헬퍼 함수
@@ -647,3 +651,4 @@ submitOutputs(exhibitionId: number) {
     throw new Error('Invalid data URL');
   }
 }
+
