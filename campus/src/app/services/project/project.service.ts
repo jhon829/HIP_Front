@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { ApiResponse } from "src/app/models/common/api-response.interface";
+import { FeedbackRequestData } from "src/app/models/project/feedback/feedback-request.interface";
 import { FeedbackResponseData } from "src/app/models/project/feedback/feedback-response.interface";
 import { ProjectDocResponseData } from "src/app/models/project/project_doc/project_doc-response.interface";
 import { ProjectResponseData } from "src/app/models/project/projects/projects-response.interface";
@@ -15,6 +16,14 @@ import { ProjectResponseData } from "src/app/models/project/projects/projects-re
     private projectApiUrl = 'http://localhost:3000/projects'; // 실제 API URL로 변경하세요.
 
     constructor(private http: HttpClient) {}
+
+    getAuthHeaders() {
+        const token = localStorage.getItem('token'); // 또는 다른 저장소에서 토큰 가져오기
+        return {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        };
+    }
 
     // projects
     createProject(projectData: any): Observable<ApiResponse<ProjectResponseData>> {
@@ -55,23 +64,27 @@ import { ProjectResponseData } from "src/app/models/project/projects/projects-re
     }
 
     // feedback
-    // createFeedback(): Observable<ApiResponse<FeedbackResponseData>> {
-    //     return this.http.post<ApiResponse<FeedbackResponseData>>(`${this.projectApiUrl}`);
-    //   }
-
-    // getAllFeedback(): Observable<ApiResponse<FeedbackResponseData>> {
-    //     return this.http.get<ApiResponse<FeedbackResponseData>>(`${this.projectApiUrl}`);
-    // }
+    createFeedback(projectId: number, projectDocId: number, feedbackData: FeedbackRequestData): Observable<ApiResponse<FeedbackResponseData>> {
+        return this.http.post<ApiResponse<FeedbackResponseData>>(
+            `${this.projectApiUrl}/${projectId}/projectDocs/${projectDocId}/feedback/register`,
+            feedbackData
+        );
+    }
+    
+    getAllFeedback(projectId: number, projectDocId: number, feedbackId: number): Observable<ApiResponse<FeedbackResponseData>> {
+        return this.http.get<ApiResponse<FeedbackResponseData>>(
+            `${this.projectApiUrl}/${projectId}/projectDocs/${projectDocId}/feedback/${feedbackId}`);
+    }
 
     // getFeedback(): Observable<ApiResponse<FeedbackResponseData>> {
     //     return this.http.get<ApiResponse<FeedbackResponseData>>(`${this.projectApiUrl}`);
     // }
 
-    // updateFeedback(): Observable<ApiResponse<FeedbackResponseData>> {
-    //     return this.http.patch<ApiResponse<FeedbackResponseData>>(`${this.projectApiUrl}`);
-    // }
+    updateFeedback(projectId: number, projectDocId: number, feedbackId: number, feedbackData: any): Observable<ApiResponse<FeedbackResponseData>> {
+        return this.http.patch<ApiResponse<FeedbackResponseData>>(`${this.projectApiUrl}/${projectId}/projectDocs/${projectDocId}/feedback/${feedbackId}/update`, feedbackData);
+    }
       
-    // deleteFeedback(): Observable<ApiResponse<FeedbackResponseData>> {
-    //     return this.http.delete<ApiResponse<FeedbackResponseData>>(`${this.projectApiUrl}`);
-    // }
+    deleteFeedback(projectId: number, projectDocId: number, feedbackId: number): Observable<ApiResponse<FeedbackResponseData>> {
+        return this.http.delete<ApiResponse<FeedbackResponseData>>(`${this.projectApiUrl}/${projectId}/projectDocs/${projectDocId}/feedback/${feedbackId}/delete`);
+    }
   }
