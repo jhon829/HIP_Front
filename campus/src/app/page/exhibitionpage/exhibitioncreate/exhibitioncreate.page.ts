@@ -377,8 +377,7 @@ export class ExhibitioncreatePage {
   introductions: string[] = []; // 소개 문장 배열
   memberName: string = ''; // 멤버 이름
   memberImage: File | null = null; // 멤버 이미지 (null 가능)
-  memberGeneration: string = ''; // 멤버 세대
-  members: { name: string; image: File | null; generation: string; }[] = []; // 멤버 배열
+  members: { name: string; image: File | null; }[] = []; // 멤버 배열
   outputImagesList: File[] = []; // Output 이미지 파일을 저장할 배열
   outputImages: FileList | null = null;
   outputVideo: File | null = null; // 출력 비디오 파일
@@ -403,11 +402,11 @@ export class ExhibitioncreatePage {
 
   // Member 추가
   addMember() {
-    if (this.memberName && this.memberGeneration && this.memberImage) {
+    if (this.memberName  && this.memberImage) {
       this.members.push({
         name: this.memberName,
         image: this.memberImage, // File 객체를 저장
-        generation: this.memberGeneration // 멤버 세대
+       
       });
       
       // 초기화
@@ -519,6 +518,7 @@ export class ExhibitioncreatePage {
         this.submitIntroductions(exhibitionId);
         this.submitMembers(exhibitionId);
         this.submitOutputs(exhibitionId);
+        alert('전시 생성에 성공했습니다.');
         this.router.navigate(['/exhibitionmain']); 
       },
       error: (exhibitionError) => {
@@ -575,7 +575,7 @@ export class ExhibitioncreatePage {
     // 멤버 기본 정보 추가
     this.members.forEach((member, index) => {
         membersData.append(`members[${index}][name]`, member.name);
-        membersData.append(`members[${index}][generation]`, member.generation);
+      
     });
     
     // 파일들을 별도로 처리
@@ -632,7 +632,7 @@ submitOutputs(exhibitionId: number) {
   resetMemberInputs() {
     this.memberName = ''; // 멤버 이름 초기화
     this.memberImage = null; // 멤버 이미지 초기화
-    this.memberGeneration = ''; // 멤버 세대 초기화
+   
   }
   
   // Data URL을 File 객체로 변환하는 헬퍼 함수
