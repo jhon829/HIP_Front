@@ -21,7 +21,7 @@
 
   <div class="maincontent shadow-box">
     <div class="maxmaincontent">
-      
+
       <div class="introduce texts">
         <ion-icon name="bulb-outline" class="icons"></ion-icon> Introduce
       </div>
@@ -49,16 +49,17 @@
       <div class="output-container">
         <ng-container *ngIf="exhibitionDetails.exhibitionDocs && exhibitionDetails.exhibitionDocs.length > 0">
           <ng-container *ngFor="let doc of exhibitionDetails.exhibitionDocs">
+            <ion-item class="boundary"></ion-item>
             <!-- 비디오가 있는 경우 -->
             <video *ngIf="doc.file_path.endsWith('.mp4') && doc.signedUrl" controls class="output-video">
               <source [src]="doc.signedUrl" type="video/mp4">
               Your browser does not support the video tag.
             </video>
-            
+
             <!-- 이미지를 표시 -->
             <img *ngIf="(doc.file_path.endsWith('.png') || doc.file_path.endsWith('.jpg'))"
-                 [src]="doc.signedUrl" 
-                 alt="Document Image" 
+                 [src]="doc.signedUrl"
+                 alt="Document Image"
                  class="doc-image">
           </ng-container>
         </ng-container>
@@ -70,8 +71,8 @@
           <ion-button expand="block" color="danger" (click)="deleteExhibition()" class="custom-button">전시물 삭제</ion-button>
         </div>
       </div>
-      
-      
+
+
       <!-- <div class="docs texts" *ngIf="exhibitionDetails.exhibitionDocs && exhibitionDetails.exhibitionDocs.length > 0">
         <ion-icon name="document-outline" class="icons"></ion-icon> Documents
         <ul class="doc-list">
