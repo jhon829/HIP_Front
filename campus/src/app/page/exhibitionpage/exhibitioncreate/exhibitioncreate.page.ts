@@ -360,6 +360,7 @@
 // }
 import { Component } from '@angular/core';
 import { ExhibitionService } from "../../../services/exhibition/exhibitionservice.service";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-exhibitioncreate',
@@ -384,7 +385,8 @@ export class ExhibitioncreatePage {
   outputVideoPreview: string | null = null; // 비디오 미리보기 URL
   exhibitionGeneration: string = ''; // 전시 세대 추가
 
-  constructor(private exhibitionService: ExhibitionService) {}
+  constructor( private router: Router,
+               private exhibitionService: ExhibitionService) {}
 
   // Introduce 추가
   addIntroduce() {
@@ -517,12 +519,15 @@ export class ExhibitioncreatePage {
         this.submitIntroductions(exhibitionId);
         this.submitMembers(exhibitionId);
         this.submitOutputs(exhibitionId);
+        this.router.navigate(['/exhibitionmain']); 
       },
       error: (exhibitionError) => {
         console.error('전시 생성 실패:', exhibitionError);
         alert('전시 생성에 실패했습니다. 다시 시도해 주세요.');
       }
     });
+   
+
   }
   
   // 전시 데이터 준비
@@ -552,7 +557,7 @@ export class ExhibitioncreatePage {
     this.exhibitionService.saveIntroductions(introductionsData).subscribe({
       next: (introResponse) => {
         console.log('소개 생성 성공:', introResponse);
-        alert('소개가 성공적으로 추가되었습니다.');
+       
       },
       error: (introError) => {
         console.error('소개 생성 실패:', introError);
@@ -583,7 +588,6 @@ export class ExhibitioncreatePage {
     this.exhibitionService.saveMembers(membersData).subscribe({
         next: (membersResponse) => {
             console.log('멤버 생성 성공:', membersResponse);
-            alert('멤버가 성공적으로 추가되었습니다.');
         },
         error: (membersError) => {
             console.error('멤버 생성 실패:', membersError.error);
@@ -610,7 +614,6 @@ submitOutputs(exhibitionId: number) {
   this.exhibitionService.saveOutputs(outputData).subscribe({
       next: (outputResponse) => {
           console.log('출력 생성 성공:', outputResponse);
-          alert('출력이 성공적으로 추가되었습니다.');
       },
       error: (outputError) => {
           console.error('출력 생성 실패:', outputError);
@@ -618,6 +621,7 @@ submitOutputs(exhibitionId: number) {
       }
   });
 }
+  
 
 
 
@@ -647,3 +651,4 @@ submitOutputs(exhibitionId: number) {
     throw new Error('Invalid data URL');
   }
 }
+
