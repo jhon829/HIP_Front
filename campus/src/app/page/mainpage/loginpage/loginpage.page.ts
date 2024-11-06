@@ -93,4 +93,10 @@ export class LoginpagePage implements OnInit {
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
+
+  onSearchKeyPress(event: Event) {
+    if ((event as KeyboardEvent).key === 'Enter') {
+       this.onSubmit()
+    }
+  }
 }
