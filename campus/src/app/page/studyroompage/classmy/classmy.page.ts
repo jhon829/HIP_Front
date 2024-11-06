@@ -6,6 +6,8 @@
   import { ApiResponse } from '../../../models/common/api-response.interface';
   import { ClassmyResponseData } from '../../../models/course/dummy/classmy/classmy-response.interface'
   import { Router } from '@angular/router';
+  import { ModalController } from '@ionic/angular';
+  import { VideoCreateModalComponent } from '../../../component/video-create-modal/video-create-modal.component';
 
   @Component({
     selector: 'app-classmy',
@@ -27,6 +29,7 @@
 
     constructor(
       private courseService: CourseService,
+      private modalController: ModalController,
       // ActivatedRoute는 URL 경로에서 course_id를 동적으로 가져온다.
       private route: ActivatedRoute,
       private router: Router // Router 주입
@@ -177,7 +180,12 @@
       alert(`${title}: ${message}`);
     }
 
-
+    async openVideoCreateModal() {
+      const modal = await this.modalController.create({
+        component: VideoCreateModalComponent,
+      });
+      return await modal.present();
+    }
 
     
   }
