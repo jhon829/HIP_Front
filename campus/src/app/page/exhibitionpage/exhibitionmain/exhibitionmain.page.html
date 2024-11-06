@@ -9,15 +9,20 @@
 
 <ion-content>
   <div class="searchbox">
-    <div class = "searchcontent">
+    <div class="searchcontent">
       <div class="searchmessage">당신의 <span class="output">output</span>을 검색해보세요.</div>
       <div class="searchcomponent">
-        <ion-searchbar class="searchbar" search-icon="none" placeholder="검색하기" ></ion-searchbar>
-        <ion-button class="searchbarbtn" color="primary" slot="start">
+        <ion-searchbar 
+          class="searchbar" 
+          search-icon="none" 
+          placeholder="검색하기" 
+          [(ngModel)]="searchTerm" 
+          (keydown.enter)="onSearchKeyPress($event)">
+        </ion-searchbar>
+        <ion-button class="searchbarbtn" color="primary" (click)="onSearchInput()">
           검색
         </ion-button>
       </div>
-
     </div>
 
   </div>
