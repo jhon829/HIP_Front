@@ -9,6 +9,7 @@ import { DocNameResponseData } from 'src/app/models/course/doc_name/doc_name-res
 import { CourseDocResponseData } from 'src/app/models/course/course_doc/course_doc-response.interface';
 import { VideoTopicResponseData } from 'src/app/models/course/video_topic/video_topic-response.interface';
 import { VideoResponseData } from 'src/app/models/course/video/video-response.interface';
+import {AdminResponseCourseRegistrationDto} from "../../models/course/courses/course-get-admin-registration";
 
 
 @Injectable({
@@ -98,10 +99,11 @@ export class CourseService {
   }
 
 
-
-  getAllJoinUsers(): Observable<ApiResponse<CreateCourseRegistrationDto[]>> {
+  //수강신청 조회
+  getAllinqueryUsers(courseId:number): Observable<ApiResponse<AdminResponseCourseRegistrationDto[]>> {
     const headers = this.getAuthHeaders();
-    return this.http.get<ApiResponse<CreateCourseRegistrationDto[]>>(this.courseApiUrl, { headers });
+    const url = `${this.courseApiUrl}/${courseId}/courseRegistration`;
+    return this.http.get<ApiResponse<AdminResponseCourseRegistrationDto[]>>(url, { headers });
   }
 
   // 강의 삭제 메서드 추가
