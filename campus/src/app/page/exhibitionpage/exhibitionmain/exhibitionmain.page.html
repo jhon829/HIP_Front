@@ -9,8 +9,8 @@
 
 <ion-content>
   <div class="searchbox">
-    <div class="searchcontent">
-      <div class="searchmessage">당신의 <span class="output">output</span>을 검색해보세요.</div>
+    <div class = "searchcontent">
+      <div class="searchmessage"><span class="output">프로젝트</span>를 검색해보세요.</div>
       <div class="searchcomponent">
         <ion-searchbar 
           class="searchbar" 
@@ -59,28 +59,28 @@
 
 
       <ion-grid>
-  <ion-row>
-    <ion-col size="12" size-md="6" size-lg="4" *ngFor="let exhibition of filteredExhibitions">
-      <ion-card (click)="navigateToExhibition(exhibition.exhibition_id)">
-        <img *ngIf="imageUrls[exhibition.exhibition_id]; else loading" 
-             [src]="imageUrls[exhibition.exhibition_id]" 
-             alt="{{ exhibition.exhibition_title }} 이미지" 
-             style="width: 100%; height: auto;"/>
-        <ng-template #loading>
-          <ion-spinner></ion-spinner> <!-- 로딩 스피너 -->
-        </ng-template>
-        <ion-card-header>
-          <ion-card-subtitle>{{ exhibition.generation }} - {{ exhibition.team_name }}</ion-card-subtitle>
-          <ion-card-title>{{ exhibition.exhibition_title }}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <p>{{ exhibition.description }}</p>
-          <p>{{ exhibition.exhibition_date | date:'yyyy-MM-dd' }}</p>
-        </ion-card-content>
-      </ion-card>
-    </ion-col>
-  </ion-row>
-</ion-grid>
+        <ion-row>
+          <ion-col size="12" size-md="6" size-lg="4" *ngFor="let exhibition of exhibitions">
+            <ion-card class="app-card" (click)="navigateToExhibition(exhibition.exhibition_id)">
+              <img *ngIf="imageUrls[exhibition.exhibition_id]; else loading"
+                   [src]="imageUrls[exhibition.exhibition_id]"
+                   alt="{{ exhibition.exhibition_title }} 이미지"
+                   class="card-image"/>
+              <ng-template #loading>
+                <ion-spinner></ion-spinner> <!-- 로딩 스피너 -->
+              </ng-template>
+              <ion-card-header>
+                <ion-card-title class="card-title">{{ exhibition.exhibition_title }}</ion-card-title>
+                <ion-card-subtitle class="card-subtitle">{{ exhibition.team_name }}</ion-card-subtitle>
+              </ion-card-header>
+              <ion-card-content>
+                <p class="card-description">{{ exhibition.description }}</p>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
 
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button (click)="navigateToExhibitionCreate()">
