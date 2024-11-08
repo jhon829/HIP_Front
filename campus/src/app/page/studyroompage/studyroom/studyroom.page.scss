@@ -114,6 +114,17 @@ hr {
   font-size: 20px;
 }
 
+.blank {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.centered-calendar {
+  --background: transparent;
+  margin: 0 auto;
+}
+
 .content-box {
   height: 35vh;
   min-width: 300px;
