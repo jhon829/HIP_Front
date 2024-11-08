@@ -12,11 +12,11 @@
     <div class = "searchcontent">
       <div class="searchmessage"><span class="output">프로젝트</span>를 검색해보세요.</div>
       <div class="searchcomponent">
-        <ion-searchbar 
-          class="searchbar" 
-          search-icon="none" 
-          placeholder="검색하기" 
-          [(ngModel)]="searchTerm" 
+        <ion-searchbar
+          class="searchbar"
+          search-icon="none"
+          placeholder="검색하기"
+          [(ngModel)]="searchTerm"
           (keydown.enter)="onSearchKeyPress($event)">
         </ion-searchbar>
         <ion-button class="searchbarbtn" color="primary" (click)="onSearchInput()">
@@ -50,10 +50,10 @@
         </ion-button>
       </div>
     </div>
-  
-  
-  
-  
+
+
+
+
 
     <div class="section2">
 
@@ -72,10 +72,8 @@
               <ion-card-header>
                 <ion-card-title class="card-title">{{ exhibition.exhibition_title }}</ion-card-title>
                 <ion-card-subtitle class="card-subtitle">{{ exhibition.team_name }}</ion-card-subtitle>
+                <p class="card-description"><ion-badge color="tertiary">{{ exhibition.description }}</ion-badge></p>
               </ion-card-header>
-              <ion-card-content>
-                <p class="card-description">{{ exhibition.description }}</p>
-              </ion-card-content>
             </ion-card>
           </ion-col>
         </ion-row>
