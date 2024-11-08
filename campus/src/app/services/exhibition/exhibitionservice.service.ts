@@ -75,7 +75,7 @@ export class ExhibitionService {
   getDocSignedUrl(docId: number): Observable<{ url: string }> {
     return this.http.get<{ url: string }>(`${this.apiUrl}/exhibition-docs/presigned-url/${docId}`);
   }
- 
+
 
   // Read: 특정 전시물 가져오기 (상세페이지) - 전체 내용
 
@@ -123,7 +123,7 @@ export class ExhibitionService {
       }))
     );
   }
-  
+
   private getExhibitionDetails(id: number): Observable<any> {
     const headers = this.validateToken();
     return this.http.get<any>(`${this.apiUrl}/exhibitions/${id}`, { headers });
@@ -140,11 +140,12 @@ export class ExhibitionService {
 
   // Delete: 전시물 삭제
   deleteExhibition(id: string): Observable<any> {
+    const headers = this.validateToken();
     return forkJoin({
-      exhibition: this.http.delete(`${this.apiUrl}/exhibitions/${id}`),
-      intro: this.http.delete(`${this.apiUrl}/exhibition-intro/${id}`),
-      docs: this.http.delete(`${this.apiUrl}/exhibition-docs/${id}`),
-      members: this.http.delete(`${this.apiUrl}/exhibition-members/${id}`)
+      exhibition: this.http.delete(`${this.apiUrl}/exhibitions/${id}`, { headers }),
+      intro: this.http.delete(`${this.apiUrl}/exhibition-intro/${id}`, { headers }),
+      docs: this.http.delete(`${this.apiUrl}/exhibition-docs/${id}`, { headers }),
+      members: this.http.delete(`${this.apiUrl}/exhibition-members/${id}`, { headers })
     });
   }
 }
