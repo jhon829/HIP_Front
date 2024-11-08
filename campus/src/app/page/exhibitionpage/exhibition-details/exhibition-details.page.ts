@@ -112,12 +112,11 @@ export class ExhibitionDetailsPage implements OnInit {
               this.exhibitionService.deleteExhibition(this.exhibitionId.toString()).subscribe(
                 () => {
                   console.log('전시물이 성공적으로 삭제되었습니다.');
-                  this.presentSuccessAlert('전시물이 성공적으로 삭제되었습니다.');
-                  this.router.navigate(['/exhibitions']);
+                  this.router.navigate(['/exhibitions']); // 전시물 목록 페이지로 이동
                 },
                 (error) => {
                   console.error('전시물 삭제 실패:', error);
-                  this.presentErrorAlert('전시물 삭제에 실패했습니다. 다시 시도해주세요.');
+                  this.error = '전시물 삭제에 실패했습니다.';
                 }
               );
             }
@@ -125,24 +124,7 @@ export class ExhibitionDetailsPage implements OnInit {
         }
       ]
     });
-    await alert.present();
-  }
 
-  async presentSuccessAlert(message: string) {
-    const alert = await this.alertController.create({
-      header: '성공',
-      message: message,
-      buttons: ['확인']
-    });
-    await alert.present();
-  }
-
-  async presentErrorAlert(message: string) {
-    const alert = await this.alertController.create({
-      header: '오류',
-      message: message,
-      buttons: ['확인']
-    });
     await alert.present();
   }
 }

@@ -140,12 +140,11 @@ export class ExhibitionService {
 
   // Delete: 전시물 삭제
   deleteExhibition(id: string): Observable<any> {
-    const headers = this.validateToken();
     return forkJoin({
-      exhibition: this.http.delete(`${this.apiUrl}/exhibitions/${id}`, { headers }),
-      intro: this.http.delete(`${this.apiUrl}/exhibition-intro/${id}`, { headers }),
-      docs: this.http.delete(`${this.apiUrl}/exhibition-docs/${id}`, { headers }),
-      members: this.http.delete(`${this.apiUrl}/exhibition-members/${id}`, { headers })
+      exhibition: this.http.delete(`${this.apiUrl}/exhibitions/${id}`),
+      intro: this.http.delete(`${this.apiUrl}/exhibition-intro/${id}`),
+      docs: this.http.delete(`${this.apiUrl}/exhibition-docs/${id}`),
+      members: this.http.delete(`${this.apiUrl}/exhibition-members/${id}`)
     });
   }
 }
