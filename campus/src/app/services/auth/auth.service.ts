@@ -175,13 +175,28 @@ export class AuthService {
     return throwError(() => new Error(errorMessage));
   }
 
-  // 회원정보 불러오기
-  getUserProfile(): Observable<any> {
-    const token = localStorage.getItem('token');
-    return this.http.get(`${this.userApiUrl}/users`, {
-      headers: { Authorization: `Bearer ${token}` }
-    }).pipe(
-      catchError(this.handleError)
-    );
+  // // 회원정보 불러오기
+  // getUserProfile(): Observable<any> {
+  //   const token = localStorage.getItem('token');
+  //   return this.http.get(`${this.userApiUrl}/users`, {
+  //     headers: { Authorization: `Bearer ${token}` }
+  //   }).pipe(
+  //     catchError(this.handleError)
+  //   );
+  // }
+
+  getToken() {
+    return localStorage.getItem('token');
+  }
+
+  getUserInfo() {
+    const token = this.getToken();
+    console.log(token)
+    if (token) {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload;
+      
+    }
+    return null;
   }
 }
