@@ -114,15 +114,11 @@ hr {
   font-size: 20px;
 }
 
-.blank {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
 
 .centered-calendar {
   --background: transparent;
-  margin: 0 auto;
+  margin: auto;
 }
 
 .content-box {
@@ -131,6 +127,11 @@ hr {
   min-height: 365px;
   max-height: 500px;
   margin: 0;
+}
+
+.blank-box{
+  display: flex;
+  margin: auto;
 }
 
 .class-project {
