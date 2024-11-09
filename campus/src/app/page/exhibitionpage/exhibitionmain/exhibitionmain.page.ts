@@ -32,13 +32,13 @@ export class ExhibitionmainPage implements OnInit {
       (response: any) => {
         console.log('API 응답:', response);
         this.exhibitions = response.exhibitions; // 새로운 전시 목록 로드
-  
+
         // 기수 필터링
         this.filterExhibitions();
-  
+
         // 최신순으로 정렬
         this.sortExhibitions(this.accordionTitle);
-  
+
         // 각 전시의 이미지를 로드
         this.filteredExhibitions.forEach(exhibition => {
           console.log('전시관 ID:', exhibition.exhibition_id);
@@ -143,7 +143,7 @@ export class ExhibitionmainPage implements OnInit {
   }
 
   onSearchInput() {
-    this.filterExhibitions(); 
+    this.filterExhibitions();
   }
 
   onSearchKeyPress(event: Event) {
@@ -151,4 +151,23 @@ export class ExhibitionmainPage implements OnInit {
       this.filterExhibitions();
     }
   }
+  private colors = ['tertiary', 'warning', 'danger', 'secondary', 'primary'];
+  private colorIndex = 0;
+
+  getBadgeColor(description: string): string {
+    // description에 따라 고유한 색상 인덱스를 생성합니다.
+    const index = this.hashCode(description) % this.colors.length;
+    return this.colors[index];
+  }
+
+  private hashCode(str: string): number {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    return Math.abs(hash);
+  }
+
 }
