@@ -242,14 +242,15 @@ ion-checkbox {
 .card-subtitle {
   font-size: 14px; /* 팀 이름 크기 */
   color: #666; /* 팀 이름 색상 */
+  display: flex;
 }
 
 .card-description {
   font-size: 12px; /* 설명 크기 */
   color: #444; /* 설명 색상 */
-  text-align: right;
-  margin: 0px;
+  margin-right: 20px;
 }
+
 
 .card-date {
   font-size: 12px; /* 날짜 크기 */

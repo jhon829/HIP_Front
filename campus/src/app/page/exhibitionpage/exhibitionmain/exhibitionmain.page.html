@@ -71,8 +71,12 @@
               </ng-template>
               <ion-card-header>
                 <ion-card-title class="card-title">{{ exhibition.exhibition_title }}</ion-card-title>
-                <ion-card-subtitle class="card-subtitle">{{ exhibition.team_name }}</ion-card-subtitle>
-                <p class="card-description"><ion-badge color="tertiary">{{ exhibition.description }}</ion-badge></p>
+                <ion-card-subtitle class="card-subtitle">{{ exhibition.team_name }}
+                  <span class="card-description">
+                    <ion-badge [color]="getBadgeColor(exhibition.description)">
+                      {{ exhibition.description }}
+                    </ion-badge>
+                  </span></ion-card-subtitle>
               </ion-card-header>
             </ion-card>
           </ion-col>
