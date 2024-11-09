@@ -6,7 +6,6 @@ import { IonicModule } from '@ionic/angular';
 
 import { ProjectmyPageRoutingModule } from './projectmy-routing.module';
 
-import { ProjectmyPage } from './projectmy.page';
 import {SidemenuComponent} from "../../../component/sidemenucomponent/sidemenu.component";
 
 @NgModule({
@@ -17,6 +16,5 @@ import {SidemenuComponent} from "../../../component/sidemenucomponent/sidemenu.c
     ProjectmyPageRoutingModule,
     SidemenuComponent
   ],
-  declarations: [ProjectmyPage]
 })
 export class ProjectmyPageModule {}
