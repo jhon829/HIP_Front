@@ -52,9 +52,10 @@
                         <img src="./assets/svg/Hongik_University.svg" alt="Profile Image">
                       </div>
                       <div class="profile-info">
-                        <h2>김동년</h2>
-                        <p>qwert884{{'@'}}naver.com</p>
-                        </div>
+                        <h2>{{ userProfile?.name }}</h2>
+                        <p>{{ userProfile?.email }}</p>
+                        <p>역할: {{ userProfile?.role }}</p>
+                      </div>
                       </div>
                     <div class="profile-body">
                       <div class="profile-item">
