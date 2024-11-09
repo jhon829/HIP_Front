@@ -82,7 +82,11 @@ const routes: Routes = [
   {
     path: 'exhibition-update',
     loadChildren: () => import('./page/exhibitionpage/exhibition-update/exhibition-update.module').then( m => m.ExhibitionUpdatePageModule)
+  },  {
+    path: 'project-mypage',
+    loadChildren: () => import('./page/studyroompage/project-mypage/project-mypage.module').then( m => m.ProjectMypagePageModule)
   },
+
 
 
 
