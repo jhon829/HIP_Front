@@ -20,6 +20,7 @@ import {JoinModalComponent} from "../join-modal/join-modal.component";
 })
 export class TopBarComponent implements OnInit {
   isLoggedIn = false;
+  userProfile: any;
 
   constructor(
     private modalController: ModalController,
@@ -31,6 +32,7 @@ export class TopBarComponent implements OnInit {
       console.log('로그인 상태:', status);
       this.isLoggedIn = status;  // 로그인 상태가 변경될 때 업데이트
     });
+
   }
 
   logout() {

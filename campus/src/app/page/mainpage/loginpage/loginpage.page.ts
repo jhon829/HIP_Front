@@ -46,7 +46,6 @@ export class LoginpagePage implements OnInit {
         // 성공 알림을 사용자에게 표시합니다.
         await this.showAlert('로그인 성공', '로그인이 성공적으로 완료되었습니다.');
         // 메인 페이지로 이동합니다.
-        alert('로그인 성공')
         this.router.navigate(['main']);
       } else {
         throw new Error('토큰이 없습니다.'); // 토큰이 없으면 예외를 발생시킵니다.
@@ -93,5 +92,11 @@ export class LoginpagePage implements OnInit {
   // 비밀번호 보기 토글 메서드
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
+  }
+
+  onSearchKeyPress(event: Event) {
+    if ((event as KeyboardEvent).key === 'Enter') {
+       this.onSubmit()
+    }
   }
 }

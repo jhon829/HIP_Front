@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CourseService } from '../../services/course/course.service'; // 서비스 import
+import { CommonModule } from '@angular/common';
 import { AlertController } from '@ionic/angular'; // AlertController import
 import { firstValueFrom } from 'rxjs'; // firstValueFrom import
 import { IonicModule } from '@ionic/angular';
@@ -13,10 +14,15 @@ import { IonicModule } from '@ionic/angular';
   imports: [
     IonicModule,
     ReactiveFormsModule,  // 추가된 부분
+    CommonModule,
+
   ]
 })
+
+
 export class CourseCreateModalComponent implements OnInit {
   courseForm!: FormGroup;
+  @Input() selectedGeneration: number = 3;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -27,6 +33,7 @@ export class CourseCreateModalComponent implements OnInit {
       course_title: ['', Validators.required],
       instructor_name: ['', Validators.required],
       description: ['', Validators.required],
+      generation: [this.selectedGeneration, Validators.required], // generation 필드 추가
     });
   }
 

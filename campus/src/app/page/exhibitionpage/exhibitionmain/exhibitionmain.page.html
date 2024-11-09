@@ -10,31 +10,38 @@
 <ion-content>
   <div class="searchbox">
     <div class = "searchcontent">
-      <div class="searchmessage">당신의 <span class="output">output</span>을 검색해보세요.</div>
+      <div class="searchmessage"><span class="output">프로젝트</span>를 검색해보세요.</div>
       <div class="searchcomponent">
-        <ion-searchbar class="searchbar" search-icon="none" placeholder="검색하기" ></ion-searchbar>
-        <ion-button class="searchbarbtn" color="primary" slot="start">
+        <ion-searchbar
+          class="searchbar"
+          search-icon="none"
+          placeholder="검색하기"
+          [(ngModel)]="searchTerm"
+          (keydown.enter)="onSearchKeyPress($event)">
+        </ion-searchbar>
+        <ion-button class="searchbarbtn" color="primary" (click)="onSearchInput()">
           검색
         </ion-button>
       </div>
-
     </div>
 
   </div>
-    <div class="maincontent shadow-box">
+  <<div class="maincontent shadow-box">
     <div class="section section1">
-      <div class ="classycontent"><ion-icon name="search" ></ion-icon> 프로젝트 탐색
-        <div class ="clssfy">
-          <span class="currycu">교육과정</span><span class="reset">초기화<ion-icon name="reload-outline" class="reseticon"></ion-icon></span>
+      <div class="classycontent">
+        <ion-icon name="search"></ion-icon> 프로젝트 탐색
+        <div class="clssfy">
+          <span class="currycu">교육과정</span>
+          <span class="reset" (click)="resetFilters()">초기화<ion-icon name="reload-outline" class="reseticon"></ion-icon></span>
           <div class="classnamebox">
             <div class="classname">
-              <ion-checkbox class="custom-checkbox" labelPlacement="end">1기</ion-checkbox>
+              <ion-checkbox class="custom-checkbox" [(ngModel)]="selectedGeneration1" (ionChange)="loadExhibitions()" labelPlacement="end">1기</ion-checkbox>
             </div>
             <div class="classname">
-              <ion-checkbox class="custom-checkbox" labelPlacement="end">2기</ion-checkbox>
+              <ion-checkbox class="custom-checkbox" [(ngModel)]="selectedGeneration2" (ionChange)="loadExhibitions()" labelPlacement="end">2기</ion-checkbox>
             </div>
             <div class="classname">
-              <ion-checkbox class="custom-checkbox" labelPlacement="end">3기</ion-checkbox>
+              <ion-checkbox class="custom-checkbox" [(ngModel)]="selectedGeneration3" (ionChange)="loadExhibitions()" labelPlacement="end">3기</ion-checkbox>
             </div>
           </div>
         </div>
@@ -45,32 +52,33 @@
     </div>
 
 
+
+
+
     <div class="section2">
 
 
       <ion-grid>
         <ion-row>
           <ion-col size="12" size-md="6" size-lg="4" *ngFor="let exhibition of exhibitions">
-            <ion-card (click)="navigateToExhibition(exhibition.exhibition_id)">
-              <img *ngIf="imageUrls[exhibition.exhibition_id]; else loading" 
-                   [src]="imageUrls[exhibition.exhibition_id]" 
-                   alt="{{ exhibition.exhibition_title }} 이미지" 
-                   style="width: 100%; height: auto;"/>
+            <ion-card class="app-card" (click)="navigateToExhibition(exhibition.exhibition_id)">
+              <img *ngIf="imageUrls[exhibition.exhibition_id]; else loading"
+                   [src]="imageUrls[exhibition.exhibition_id]"
+                   alt="{{ exhibition.exhibition_title }} 이미지"
+                   class="card-image"/>
               <ng-template #loading>
                 <ion-spinner></ion-spinner> <!-- 로딩 스피너 -->
               </ng-template>
               <ion-card-header>
-                <ion-card-subtitle>{{ exhibition.generation }} - {{ exhibition.team_name }}</ion-card-subtitle>
-                <ion-card-title>{{ exhibition.exhibition_title }}</ion-card-title>
+                <ion-card-title class="card-title">{{ exhibition.exhibition_title }}</ion-card-title>
+                <ion-card-subtitle class="card-subtitle">{{ exhibition.team_name }}</ion-card-subtitle>
+                <p class="card-description"><ion-badge color="tertiary">{{ exhibition.description }}</ion-badge></p>
               </ion-card-header>
-              <ion-card-content>
-                <p>{{ exhibition.description }}</p>
-                <p>{{ exhibition.exhibition_date | date:'yyyy-MM-dd' }}</p>
-              </ion-card-content>
             </ion-card>
           </ion-col>
         </ion-row>
       </ion-grid>
+
 
       <ion-fab vertical="bottom" horizontal="end" slot="fixed">
         <ion-fab-button (click)="navigateToExhibitionCreate()">
@@ -85,9 +93,6 @@
           </ion-item>
           <div class="ion-padding" slot="content">
             <ion-button expand="full" (click)="changeTitle('최신순')">최신순</ion-button>
-          </div>
-          <div class="ion-padding" slot="content">
-            <ion-button expand="full" (click)="changeTitle('조회순')">조회순</ion-button>
           </div>
           <div class="ion-padding" slot="content">
             <ion-button expand="full" (click)="changeTitle('오래된순')">오래된순</ion-button>
