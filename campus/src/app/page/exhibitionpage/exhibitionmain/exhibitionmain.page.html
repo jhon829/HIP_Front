@@ -58,9 +58,9 @@
     <div class="section2">
 
 
-      <ion-grid>
-        <ion-row>
-          <ion-col size="12" size-md="6" size-lg="4" *ngFor="let exhibition of exhibitions">
+      <ion-grid >
+        <ion-row class="grid">
+          <ion-col size="12" size-md="6" size-lg="3" *ngFor="let exhibition of exhibitions">
             <ion-card class="app-card" (click)="navigateToExhibition(exhibition.exhibition_id)">
               <img *ngIf="imageUrls[exhibition.exhibition_id]; else loading"
                    [src]="imageUrls[exhibition.exhibition_id]"
@@ -71,12 +71,14 @@
               </ng-template>
               <ion-card-header>
                 <ion-card-title class="card-title">{{ exhibition.exhibition_title }}</ion-card-title>
-                <ion-card-subtitle class="card-subtitle">{{ exhibition.team_name }}
+                <div class="subtitle-container">
+                  <ion-card-subtitle class="card-subtitle">{{ exhibition.team_name }}</ion-card-subtitle>
                   <span class="card-description">
                     <ion-badge [color]="getBadgeColor(exhibition.description)">
                       {{ exhibition.description }}
                     </ion-badge>
-                  </span></ion-card-subtitle>
+                  </span>
+                </div>
               </ion-card-header>
             </ion-card>
           </ion-col>

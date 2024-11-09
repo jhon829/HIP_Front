@@ -151,7 +151,7 @@ export class ExhibitionmainPage implements OnInit {
       this.filterExhibitions();
     }
   }
-  private colors = ['tertiary', 'warning', 'danger', 'secondary', 'primary'];
+  private colors = [ "success", 'tertiary', 'warning', 'medium', 'secondary', 'danger', 'primary'];
   private colorIndex = 0;
 
   getBadgeColor(description: string): string {
