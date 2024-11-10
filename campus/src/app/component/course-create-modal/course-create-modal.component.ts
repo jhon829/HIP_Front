@@ -22,7 +22,7 @@ import { IonicModule } from '@ionic/angular';
 
 export class CourseCreateModalComponent implements OnInit {
   courseForm!: FormGroup;
-  @Input() selectedGeneration: number = 3;
+  @Input() selectedGeneration: string = '3기';
 
   constructor(
     private formBuilder: FormBuilder,
