@@ -25,6 +25,8 @@
     </div>
   </div>
 
+
+
   <div class="maincontent shadow-box">
     <div class="maxmaincontent">
 
@@ -70,14 +72,8 @@
           </ng-container>
         </ng-container>
       </div>
-      <ion-item class="boundary"></ion-item>
-      <div class="parent-container">
-        <div class="button-container">
-          <ion-button [routerLink]="['/exhibition-update', exhibitionDetails.exhibition_id]" class="custom-button">수정하기</ion-button>
-          <ion-button expand="block" color="danger" (click)="deleteExhibition()" class="custom-button">전시물 삭제</ion-button>
-        </div>
-      </div>
 
+<!--      // 전시물 수정 & 삭제-->
 
       <!-- <div class="docs texts" *ngIf="exhibitionDetails.exhibitionDocs && exhibitionDetails.exhibitionDocs.length > 0">
         <ion-icon name="document-outline" class="icons"></ion-icon> Documents
@@ -87,6 +83,17 @@
       <!-- </div> -->
     </div>
   </div>
+  <!--      // 프로젝트 체험하기-->
+
+  <div class="iframe-container">
+    <img src="assets/png/background.png" class="background-image">
+    <iframe src="https://share.arcware.cloud/v1/share-4f7f6223-2623-4c0f-8a5d-285faf8217e9" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+  </div>
+
+
+
+
+
 </ion-content>
 
 <ion-content *ngIf="isLoading">
