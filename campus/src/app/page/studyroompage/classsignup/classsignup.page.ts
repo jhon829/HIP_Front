@@ -26,11 +26,9 @@ export class ClasssignupPage implements OnInit {
   courses: CourseResponseDto[] = [];
   // 클래스의 맨 위에 타입 정의 추가
   AdminResponseCourseRegistration: { [courseId: number]: AdminResponseCourseRegistrationDto[] } = {};
-  generations: number[] = [1, 2, 3, 4, 5]; // 가능한 세대 목록(하드코딩)
-  selectedGeneration: number = 1; // 기본값으로 1세대 선택
+  generations: string[] = ['1기', '2기', '3기', '4기', '5기']; // 가능한 세대 목록(하드코딩)
+  selectedGeneration: string = '3기' // 기본값으로 3세대 선택
   userRoleU : { [user_role : string ] : UseResponse[] } = {} ;
-
-
 
   constructor(
     private modalController: ModalController,
@@ -41,7 +39,7 @@ export class ClasssignupPage implements OnInit {
     const savedGeneration = localStorage.getItem('selectedGeneration');
     const savedUserRole = localStorage.getItem('userRole');
     if (savedGeneration) {
-      this.selectedGeneration = parseInt(savedGeneration, 10);
+      this.selectedGeneration = savedGeneration
     }
 
     // userRole 값 가져오기

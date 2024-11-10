@@ -30,6 +30,8 @@ export class CourseService {
     };
   }
 
+  /*course CRUD*/
+
   createCourse(courseData: any): Observable<ApiResponse<CourseResponseDto>> {
     const token = localStorage.getItem('token');
 
@@ -48,13 +50,16 @@ export class CourseService {
     return this.http.post<ApiResponse<CourseResponseDto>>(`${this.courseApiUrl}/register`, courseData, { headers });
   }
 
-
-  /*course CRUD*/
-
   // 모든 강의 정보를 불러오는 메서드
   getAllCourses(): Observable<ApiResponse<CourseResponseDto[]>> {
     const headers = this.getAuthHeaders();
-    return this.http.get<ApiResponse<CourseResponseDto[]>>(this.courseApiUrl, { headers });
+    return this.http.get<ApiResponse<CourseResponseDto[]>>(`${this.courseApiUrl}/course-all`, { headers });
+  }
+
+  // 강의 삭제 메서드 추가
+  deleteCourse(courseId: number): Observable<ApiResponse<void>> {
+    const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
+    return this.http.delete<ApiResponse<void>>(`${this.courseApiUrl}/course/${courseId}/delete`, { headers }); // DELETE 요청
   }
 
   // 특정 강의 정보를 불러오는 메서드
@@ -68,12 +73,6 @@ export class CourseService {
     const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
     return this.http.patch<ApiResponse<CourseResponseDto>>(`${this.courseApiUrl}/course/${courseId}/update`, courseData, { headers }); // PUT 요청
 
-  }
-
-  // 강의 삭제 메서드 추가
-  deleteCourse(courseId: number): Observable<ApiResponse<void>> {
-    const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
-    return this.http.delete<ApiResponse<void>>(`${this.courseApiUrl}/course/${courseId}/delete`, { headers }); // DELETE 요청
   }
 
   //course join(Post)
@@ -185,7 +184,7 @@ export class CourseService {
   // 영상 주제 조회(GET | 전체 조회)
   getAllVideoTopic(courseId: number | null): Observable<ApiResponse<VideoTopicResponseData[]>> {
     const headers = this.getAuthHeaders();
-    return this.http.get<ApiResponse<VideoTopicResponseData[]>>(`${this.courseApiUrl}/${courseId}/videoTopics/allVT2`, { headers });
+    return this.http.get<ApiResponse<VideoTopicResponseData[]>>(`${this.courseApiUrl}/${courseId}/videoTopics/gettopic`, { headers });
   }
 
   // 영상 주제 수정(PATCH)

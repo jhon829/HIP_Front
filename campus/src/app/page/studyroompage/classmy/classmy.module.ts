@@ -10,6 +10,7 @@ import { ClassmyPage } from './classmy.page';
 import {SidemenuComponent} from "../../../component/sidemenucomponent/sidemenu.component";
 import {CourseTitleComponent} from "../../../component/course-title/course-title.component";
 import {DocTopicComponent} from "../../../component/doc-topic/doc-topic.component";
+import { VideoCreateModalComponent } from 'src/app/component/video-create-modal/video-create-modal.component';
 
 @NgModule({
   imports: [
@@ -17,8 +18,8 @@ import {DocTopicComponent} from "../../../component/doc-topic/doc-topic.componen
     FormsModule,
     IonicModule,
     ClassmyPageRoutingModule,
-    SidemenuComponent
+    SidemenuComponent,
   ],
-    declarations: [ClassmyPage, CourseTitleComponent, DocTopicComponent]
+    declarations: [ClassmyPage, CourseTitleComponent, DocTopicComponent, VideoCreateModalComponent]
 })
 export class ClassmyPageModule {}

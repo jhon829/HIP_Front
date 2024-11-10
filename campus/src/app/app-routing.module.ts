@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { SidemenuComponent } from './component/sidemenucomponent/sidemenu.component';
 import {TopBarComponent} from "./component/top-bar/top-bar.component";
+import { VideoCreateModalComponent } from './component/video-create-modal/video-create-modal.component';
 
 
 
@@ -18,7 +19,9 @@ const routes: Routes = [
   {
     path: 'sidemenu', component: SidemenuComponent
   },
-
+  {
+    path: 'video-create', component: VideoCreateModalComponent
+  },
   {
     path: 'main',
     loadChildren: () => import('./page/mainpage/firstpage/firstpage.module').then(m => m.FirstpagePageModule)

@@ -83,7 +83,11 @@
 
         </div>
 
+        
       </div>
+      <ion-button (click)="openVideoCreateModal()" expand="full">
+        강의생성
+      </ion-button>
       <div *ngIf="data.activeSection === 'material'" class="active-section">
         <app-doc-topic></app-doc-topic>
       </div>

@@ -1,0 +1,13 @@
+<div class="video-upload">
+  <input type="text" [(ngModel)]="courseId" placeholder="Course ID" />
+  <input type="text" [(ngModel)]="videoTopicId" placeholder="Video Topic ID" />
+  <input type="file" (change)="onFileSelected($event)" accept="video/*" />
+  <button (click)="onUpload()">확인</button> <!-- 업로드 버튼 추가 -->
+</div>
+
+<div class="video-list">
+  <div class="video-item" *ngFor="let video of videos">
+    <div class="video-file">{{ video.file.name }}</div> <!-- 파일 이름 출력 -->
+    <div class="video-title">영상 제목 : {{ video.title }}</div>
+  </div>
+</div>
