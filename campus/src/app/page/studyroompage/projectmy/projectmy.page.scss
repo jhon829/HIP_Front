@@ -83,6 +83,37 @@
 
   }
 
+  .project-inner{
+    display: flex;
+  }
+
+  .project-title-img{
+    display: flex;
+
+
+  }
+
+  .project-title{
+    display:flex;
+    flex-direction: column;
+
+  }
+
+  .project-newfolder{
+    width: 23%;
+    margin: 20px;
+  }
+
+  .project-folder{
+    display: flex;
+    align-items: flex-start;
+
+  }
+
+  .projectinfo{
+
+  }
+
 /*
   .folder{
     position: absolute;

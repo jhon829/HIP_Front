@@ -11,7 +11,9 @@ import { ProjectResponseData } from '../../../models/project/projects/projects-r
   styleUrls: ['./projectmy.page.scss'],
 })
 export class ProjectmyPage implements OnInit {
+  isHidden=false;
   project_id: number = 1;
+  isfolderinner=true;
 
   // 새로운 ProjectResponseData 인터페이스에 맞게 초기화
   public data: ProjectResponseData = {
@@ -56,10 +58,10 @@ export class ProjectmyPage implements OnInit {
       const response: ApiResponse<ProjectResponseData[]> = await firstValueFrom(
         this.projectService.getAllProjects()
       );
-  
+
       // 로드한 프로젝트 리스트를 저장
       this.projectsList = response.data || [];
-  
+
       if (this.projectsList.length === 0) {
         console.log('프로젝트가 없습니다.');
       } else {
@@ -158,5 +160,15 @@ export class ProjectmyPage implements OnInit {
   // Alert 메시지 표시를 위한 메서드
   async showAlert(title: string, message: string) {
     alert(`${title}: ${message}`);
+  }
+
+  hideElement() {
+    this.isHidden = true; // 클릭 시 요소를 숨김
+    this.isfolderinner = false; // 클릭 시 요소를 숨김
+  }
+
+  visibleElement() {
+    this.isHidden = false;
+    this.isfolderinner = true; // 클릭 시 요소를 숨김
   }
 }
