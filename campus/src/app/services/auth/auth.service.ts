@@ -65,7 +65,7 @@
 
 //     private handleError(error: HttpErrorResponse) {
 //       let errorMessage = '알 수 없는 오류가 발생했습니다.';
-  
+
 //       if (error.error instanceof ErrorEvent) {
 //           errorMessage = `Error: ${error.error.message}`;
 //       } else {
@@ -86,7 +86,7 @@
 //       }
 //       return throwError(() => new Error(errorMessage));
 //   }
-  
+
 
 // }
 import { Injectable } from '@angular/core';
@@ -173,5 +173,30 @@ export class AuthService {
       }
     }
     return throwError(() => new Error(errorMessage));
+  }
+
+  // // 회원정보 불러오기
+  // getUserProfile(): Observable<any> {
+  //   const token = localStorage.getItem('token');
+  //   return this.http.get(`${this.userApiUrl}/users`, {
+  //     headers: { Authorization: `Bearer ${token}` }
+  //   }).pipe(
+  //     catchError(this.handleError)
+  //   );
+  // }
+
+  getToken() {
+    return localStorage.getItem('token');
+  }
+
+  getUserInfo() {
+    const token = this.getToken();
+    console.log(token)
+    if (token) {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload;
+      
+    }
+    return null;
   }
 }

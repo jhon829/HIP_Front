@@ -9,6 +9,7 @@ import { CreateCourseRegistrationDto } from '../../../models/course/courses/cour
 import { Registration } from '../../../models/enums/role.enums';
 import { HttpErrorResponse } from '@angular/common/http';
 import {AdminResponseCourseRegistrationDto} from "../../../models/course/courses/course-get-admin-registration";
+import {UseResponse} from "../../../models/common/use-response";
 
 
 @Component({
@@ -27,7 +28,7 @@ export class ClasssignupPage implements OnInit {
   AdminResponseCourseRegistration: { [courseId: number]: AdminResponseCourseRegistrationDto[] } = {};
   generations: string[] = ['1기', '2기', '3기', '4기', '5기']; // 가능한 세대 목록(하드코딩)
   selectedGeneration: string = '3기' // 기본값으로 3세대 선택
-
+  userRoleU : { [user_role : string ] : UseResponse[] } = {} ;
 
   constructor(
     private modalController: ModalController,
@@ -36,8 +37,14 @@ export class ClasssignupPage implements OnInit {
 
   ngOnInit() {
     const savedGeneration = localStorage.getItem('selectedGeneration');
+    const savedUserRole = localStorage.getItem('userRole');
     if (savedGeneration) {
       this.selectedGeneration = savedGeneration
+    }
+
+    // userRole 값 가져오기
+    if (savedUserRole) {
+      this.userRoleU = JSON.parse(savedUserRole); // JSON.parse로 파싱
     }
     this.loadCourses();
     this.loadAllCourseInquiries();

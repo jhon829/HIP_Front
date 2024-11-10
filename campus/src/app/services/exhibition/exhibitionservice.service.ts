@@ -75,7 +75,7 @@ export class ExhibitionService {
   getDocSignedUrl(docId: number): Observable<{ url: string }> {
     return this.http.get<{ url: string }>(`${this.apiUrl}/exhibition-docs/presigned-url/${docId}`);
   }
- 
+
 
   // Read: 특정 전시물 가져오기 (상세페이지) - 전체 내용
 
@@ -123,7 +123,7 @@ export class ExhibitionService {
       }))
     );
   }
-  
+
   private getExhibitionDetails(id: number): Observable<any> {
     const headers = this.validateToken();
     return this.http.get<any>(`${this.apiUrl}/exhibitions/${id}`, { headers });
