@@ -8,7 +8,24 @@
           <ion-title>내 프로젝트</ion-title>
         </ion-toolbar>
       </ion-header>
-      <img src="../../../../resourses/img/projectmy.svg"/>
+      <div class="project-inner">
+        <div class="project-title">
+          <img class="project-title-img" src="../../../../resourses/img/project/projectmy.svg"/>
+          <div class="project-folder">
+            <div [ngStyle]="{ display: isHidden ? 'none' : 'flex', }">
+              <img class="project-newfolder" (click)="hideElement()" src="../../../../resourses/img/project/folder2.svg"/>
+              <img class="project-newfolder" src="../../../../resourses/img/project/newfolder.svg"/>
+            </div>
+            <div [ngStyle]="{ display: isfolderinner ? 'none' : 'flex' }">
+              <div></div>
+              <img class="project-newfolder" (click)="visibleElement()" src="../../../../resourses/img/project/folder2.svg"/>
+            </div>
+          </div>
+        </div>
+        <img class="projectinfo" src="../../../../resourses/img/project/projectinfo.svg"/>
+      <div>
+      </div>
     </div>
+  </div>
   </div>
 </ion-content>
