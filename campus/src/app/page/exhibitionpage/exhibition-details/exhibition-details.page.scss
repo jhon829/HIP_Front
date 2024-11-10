@@ -210,3 +210,23 @@ ion-button {
   width: 100%; // 버튼을 가로로 꽉 채움
   font-size: 16px; // 글자 크기 조정
 }
+
+.iframe-container {
+  width: 100vw; /* 전체 너비 */
+  height: 100vh; /* 전체 높이 */
+  margin: 0; /* 외부 여백 제거 */
+  padding: 0; /* 내부 여백 제거 */
+}
+
+.background-image {
+  margin: 0; /* 외부 여백 제거 */
+  padding: 0; /* 내부 여백 제거 */
+  width: 100%; /* 전체 너비 */
+  height: 100%; /* 전체 높이 */
+}
+
+iframe {
+  margin-top: -5px; /* 외부 여백 제거 */
+  width: 100%; /* 전체 너비 */
+  height: 100%; /* 전체 높이 */
+}
