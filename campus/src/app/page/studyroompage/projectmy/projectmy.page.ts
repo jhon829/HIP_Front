@@ -14,6 +14,7 @@ export class ProjectmyPage implements OnInit {
   isHidden=false;
   project_id: number = 1;
   isfolderinner=true;
+  selectedFolderIndex: number | null = null; // 선택된 폴더의 인덱스
 
   // 새로운 ProjectResponseData 인터페이스에 맞게 초기화
   public data: ProjectResponseData = {
@@ -70,6 +71,16 @@ export class ProjectmyPage implements OnInit {
     } catch (error) {
       console.error('프로젝트 로드 중 오류 발생', error);
     }
+  }
+
+  openFolder(index: number) {
+    // 폴더 클릭 시 해당 폴더의 하위 폴더만 보이도록 설정
+    this.selectedFolderIndex = index;
+  }
+
+  goBackToFolders() {
+    // 상위 폴더로 돌아가는 기능
+    this.selectedFolderIndex = null;
   }
 
   // 특정 프로젝트 정보를 가져오는 메서드

@@ -107,6 +107,8 @@
   .project-folder{
     display: flex;
     align-items: flex-start;
+    margin: 13px;
+    gap:10px
 
   }
 
@@ -122,3 +124,25 @@
 
   }
 */
+
+
+.folder-icon-inner{
+  padding: 10px;
+  border: 1px solid #976BEE;
+  border-radius: 25px;
+}
+
+.folder{
+  display: flex;
+  gap:10px;
+  flex-direction: column;
+
+}
+
+.board-inner{
+  display:flex;
+  border: 1px solid #9e65ff;
+  flex-direction: column;
+  p
+
+}
