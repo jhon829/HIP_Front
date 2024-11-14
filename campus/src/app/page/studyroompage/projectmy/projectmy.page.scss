@@ -128,6 +128,7 @@
 .back-button{
   display: flex;
   margin-left: 16px;
+  margin: 10px;
 
   ion-icon{
     width: 30px;
@@ -137,6 +138,7 @@
     font-size: 30px;
     font-weight: bold;
     padding: 10px;
+    font-family: pretendard-B,sans-serif;
   }
 }
 
@@ -159,10 +161,12 @@
 
 .folder-title-name{
   font-size: 20px;
+  font-family: pretendard-B,sans-serif;
 }
 
 .board-title-name{
   font-size: 21px;
+  font-family: pretendard-B,sans-serif;
 
 }
 .board-title-detail-info{
@@ -171,6 +175,10 @@
 
   .day{
     color: #838383;
+  }
+
+  div{
+    font-family: pretendard-B,sans-serif;
   }
 }
 
@@ -188,11 +196,33 @@
   border-radius: 17px;
   border: 1.5px solid #d6d6d6;
   flex-direction: column;
-  margin: 20px;
+  margin-left: 20px;
+  font-family: pretendard-B,sans-serif;
+
 
   .file{
     margin: 10px 0;
     color: #706DAD;
   }
 
+  .chat{
+    display: flex;
+    align-items: center;
+    gap:5px
+  }
+
+}
+
+.board-inner-add{
+  border: 1.5px dotted #d6d6d6;
+  align-items: center;
+  justify-content: center;
+}
+
+.subfolder{
+  display: flex;
+}
+
+.board-detail-page{
+  box-shadow: 1px 1px 0 0 #bdbdbd;
 }
