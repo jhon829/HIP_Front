@@ -15,6 +15,7 @@ export class ProjectmyPage implements OnInit {
   project_id: number = 1;
   isfolderinner=true;
   selectedFolderIndex: number | null = null; // 선택된 폴더의 인덱스
+  selectedFolderIndices: number[] = [];  // 폴더 경로를 저장하는 배열
 
   // 새로운 ProjectResponseData 인터페이스에 맞게 초기화
   public data: ProjectResponseData = {
@@ -73,15 +74,21 @@ export class ProjectmyPage implements OnInit {
     }
   }
 
-  openFolder(index: number) {
-    // 폴더 클릭 시 해당 폴더의 하위 폴더만 보이도록 설정
-    this.selectedFolderIndex = index;
+  // 폴더를 열 때 호출되는 메서드
+  openFolder(folderIndex: number) {
+    this.selectedFolderIndices.push(folderIndex); // 선택한 폴더 인덱스를 추가
   }
 
+  // 폴더 목록으로 돌아갈 때 호출되는 메서드
   goBackToFolders() {
-    // 상위 폴더로 돌아가는 기능
-    this.selectedFolderIndex = null;
+    this.selectedFolderIndices.pop();  // 마지막 선택을 제거하여 상위 폴더로 이동
   }
+
+  // 현재 선택한 폴더의 깊이를 확인하는 메서드
+  isInSubfolder(): boolean {
+    return this.selectedFolderIndices.length > 0;
+  }
+
 
   // 특정 프로젝트 정보를 가져오는 메서드
   async getProjectDetails() {
