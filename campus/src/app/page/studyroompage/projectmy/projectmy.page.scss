@@ -85,6 +85,7 @@
 
   .project-inner{
     display: flex;
+    margin: 13px;
   }
 
   .project-title-img{
@@ -107,8 +108,8 @@
   .project-folder{
     display: flex;
     align-items: flex-start;
-    margin: 13px;
-    gap:10px
+    gap:10px;
+    margin: 10px;
 
   }
 
@@ -124,12 +125,53 @@
 
   }
 */
+.back-button{
+  display: flex;
+  margin-left: 16px;
 
+  ion-icon{
+    width: 30px;
+  }
+
+  .title{
+    font-size: 30px;
+    font-weight: bold;
+    padding: 10px;
+  }
+}
+
+.folder-icon{
+  width: 60px;
+
+}
 
 .folder-icon-inner{
-  padding: 10px;
-  border: 1px solid #976BEE;
+  padding: 50px 68px;
+  border: 1.5px solid #DEDEDE;
   border-radius: 25px;
+}
+
+.folder-icon-add{
+  border: 1.5px dotted #DEDEDE;
+
+}
+
+
+.folder-title-name{
+  font-size: 20px;
+}
+
+.board-title-name{
+  font-size: 21px;
+
+}
+.board-title-detail-info{
+  display: flex;
+  gap: 10px;
+
+  .day{
+    color: #838383;
+  }
 }
 
 .folder{
@@ -140,8 +182,17 @@
 }
 
 .board-inner{
-  display:flex;
-  border: 1px solid #9e65ff;
+  display: flex;
+  width: 271px;
+  padding: 19px;
+  border-radius: 17px;
+  border: 1.5px solid #d6d6d6;
   flex-direction: column;
+  margin: 20px;
+
+  .file{
+    margin: 10px 0;
+    color: #706DAD;
+  }
 
 }
