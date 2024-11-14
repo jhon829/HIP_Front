@@ -50,7 +50,7 @@
           </div>
 
           <!-- 선택한 폴더의 하위 폴더 -->
-          <div *ngIf="selectedFolderIndex !== null" class="subfolder">
+          <div *ngIf="selectedFolderIndex !== null" class="subfolder" (click)="openFolder(1)">
             <div class="board-inner">
               <div class="board-title">
                 <div class="board-title-name">중간발표 대본</div>
@@ -60,8 +60,14 @@
                 </div>
               </div>
               <div class="file">middlePT.pdf</div>
-              <div>
-                <img src="assets/svg/Chat.svg">
+              <div class="chat">
+                <img src="assets/svg/Chat.svg"><div>1</div>
+              </div>
+            </div>
+            <div class="board-inner board-inner-add">
+              <div style=" display: flex;  gap: 6px;">
+                <img style="width: 11px" src="assets/svg/plus.svg"/>
+                <div style="color: #969696">새 글쓰기</div>
               </div>
             </div>
           </div>
