@@ -38,30 +38,38 @@ export class ClasssignupPage implements OnInit {
   ngOnInit() {
     const savedGeneration = localStorage.getItem('selectedGeneration');
     const savedUserRole = localStorage.getItem('userRole');
+    const courseId = Number(localStorage.getItem('courseId'));  // 예시: localStorage에서 courseId 가져오기
+    const userId = Number(localStorage.getItem('userId'));      // 예시: localStorage에서 userId 가져오기
+
     if (savedGeneration) {
-      this.selectedGeneration = savedGeneration
+      this.selectedGeneration = savedGeneration;
     }
 
     // userRole 값 가져오기
     if (savedUserRole) {
       this.userRoleU = JSON.parse(savedUserRole); // JSON.parse로 파싱
     }
-    this.loadCourses();
-    this.loadAllCourseInquiries();
-  }
 
-  async loadAllCourseInquiries() {
-    for (const course of this.courses) {
-      await this.courseinqueryUser(course.course_id);
+    this.loadCourses();
+
+    // courseId와 userId가 존재할 때만 courseinqueryUser 호출
+    if (courseId && userId) {
+      this.courseinqueryUser(courseId, userId);
     }
   }
 
-  //강의 신청 유저 조회하기
-  async courseinqueryUser(courseId: number) {
+  /*
+  async loadAllCourseInquiries() {
+    for (const course of this.courses) {
+      await this.courseinqueryUser(course);
+    }
+  }*/
 
+// 강의 신청 유저 조회하기
+  async courseinqueryUser(courseId: number, userId: number) {
     try {
       const response: ApiResponse<AdminResponseCourseRegistrationDto[]> = await firstValueFrom(
-        this.courseService.getAllinqueryUsers(courseId)
+        this.courseService.getAllinqueryUsers(courseId, userId)
       );
 
       this.AdminResponseCourseRegistration[courseId] = response.data || [];
@@ -70,6 +78,7 @@ export class ClasssignupPage implements OnInit {
       alert('강의 등록 정보를 불러오는 중 오류가 발생했습니다.');
     }
   }
+
 
 
 

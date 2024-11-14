@@ -99,11 +99,12 @@ export class CourseService {
 
 
   //수강신청 조회
-  getAllinqueryUsers(courseId:number): Observable<ApiResponse<AdminResponseCourseRegistrationDto[]>> {
+  getAllinqueryUsers(courseId: number, id: number): Observable<ApiResponse<AdminResponseCourseRegistrationDto[]>> {
     const headers = this.getAuthHeaders();
-    const url = `${this.courseApiUrl}/${courseId}/courseRegistration`;
+    const url = `${this.courseApiUrl}/${courseId}/courseRegistration/${id}`;
     return this.http.get<ApiResponse<AdminResponseCourseRegistrationDto[]>>(url, { headers });
   }
+
 
   // 강의 삭제 메서드 추가
   canceljoinCourse(courseId: number,course_registration_id:number): Observable<ApiResponse<void>> {

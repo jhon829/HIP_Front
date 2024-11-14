@@ -13,7 +13,7 @@
 
           <!-- 뒤로가기 버튼 -->
           <div *ngIf="selectedFolderIndex !== null" class="back-button" (click)="goBackToFolders()">
-            <ion-icon name="arrow-back"></ion-icon> 상위 폴더로 돌아가기
+            <img src="assets/svg/arrow-back.svg"/> <div class="title">중간발표</div>
           </div>
 
           <div *ngIf="selectedFolderIndex === null" class="project-folder">
@@ -24,7 +24,7 @@
                 <img class="folder-icon" src="assets/svg/folder-icon.svg"/>
               </div>
               <div>
-                <div>중간발표</div>
+                <div class="folder-title-name">중간발표</div>
                 <div>2024.08.25</div>
               </div>
             </div>
@@ -35,14 +35,14 @@
                 <img class="folder-icon" src="assets/svg/folder-icon.svg"/>
               </div>
               <div>
-                <div>기말발표</div>
+                <div class="folder-title-name">기말발표</div>
                 <div>2024.12.15</div>
               </div>
             </div>
 
             <!-- 새 폴더 -->
             <div class="folder">
-              <div class="folder-icon-inner">
+              <div class="folder-icon-inner folder-icon-add">
                 <img class="folder-icon" src="assets/svg/Folder_add.svg"/>
               </div>
             </div>
@@ -53,13 +53,13 @@
           <div *ngIf="selectedFolderIndex !== null" class="subfolder">
             <div class="board-inner">
               <div class="board-title">
-                <div>중간발표 대본</div>
-                <div>
+                <div class="board-title-name">중간발표 대본</div>
+                <div class="board-title-detail-info">
                   <div>김재호</div>
-                  <div>2024.08.01</div>
+                  <div class="day">2024.08.01</div>
                 </div>
               </div>
-                <div>middlePT.pdf</div>
+              <div class="file">middlePT.pdf</div>
               <div>
                 <img src="assets/svg/Chat.svg">
               </div>
