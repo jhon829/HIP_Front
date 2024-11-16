@@ -8,7 +8,9 @@ import { ExhibitionService } from '../../../services/exhibition/exhibitionservic
   templateUrl: './exhibition-details.page.html',
   styleUrls: ['./exhibition-details.page.scss'],
 })
+
 export class ExhibitionDetailsPage implements OnInit {
+
   exhibitionId: number | null = null;
   exhibitionDetails: any = null;
   isLoading: boolean = true;
@@ -96,6 +98,7 @@ export class ExhibitionDetailsPage implements OnInit {
     }
   }
 
+
   async deleteExhibition() {
     const alert = await this.alertController.create({
       header: '전시물 삭제',
@@ -127,4 +130,7 @@ export class ExhibitionDetailsPage implements OnInit {
 
     await alert.present();
   }
+
 }
+
+
