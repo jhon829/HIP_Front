@@ -1,4 +1,4 @@
-export interface CourseResponseDto {
+export interface CourseResponseData {
   course_id: number;          // 강의 ID
   course_title: string;       // 강의 제목
   description: string;        // 강의 설명

@@ -1,24 +1,26 @@
-  import { Component, OnInit } from '@angular/core';
-  import { firstValueFrom, Subscription } from 'rxjs';
-  import { ActivatedRoute } from '@angular/router';
-  import { VideoTopicResponseData } from '../../../models/course/video_topic/video_topic-response.interface';
-  import { CourseService } from '../../../services/course/course.service';
-  import { ApiResponse } from '../../../models/common/api-response.interface';
-  import { ClassmyResponseData } from '../../../models/course/dummy/classmy/classmy-response.interface'
-  import { Router } from '@angular/router';
-  import { ModalController } from '@ionic/angular';
-  import { VideoCreateModalComponent } from '../../../component/video-create-modal/video-create-modal.component';
+import { Component, OnInit } from '@angular/core';
+import { firstValueFrom, Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+import { VideoTopicRequestData } from '../../../models/course/video_topic/video_topic-request.interface';
+import { CourseService } from '../../../services/course/course.service';
+import { ApiResponse } from '../../../models/common/api-response.interface';
+import { ClassmyResponseData } from '../../../models/course/dummy/classmy/classmy-response.interface'
+import { Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
+import { VideoCreateModalComponent } from '../../../component/video-create-modal/video-create-modal.component';
+import { Registration, Role } from 'src/app/models/enums/role.enums';
+import { HttpErrorResponse } from '@angular/common/http';
+import { CourseWithCourseRegistrationResponseData } from 'src/app/models/course/courses/course-with-courseregistration-resoinse.interface';
 
 @Component({
   selector: 'app-classmy',
   templateUrl: './classmy.page.html',
   styleUrls: ['./classmy.page.scss'],
 })
-
 export class ClassmyPage implements OnInit {
-
-  // public course_id!: number;
-  course_id = 13;
+  course_id!: number;
+  private routeSubscription?: Subscription;
+  userRole: string = '';
 
   public data: ClassmyResponseData = {
     VideoTopics: [],
@@ -27,73 +29,125 @@ export class ClassmyPage implements OnInit {
     lectureItems: []
   };
 
-    constructor(
-      private courseService: CourseService,
-      private modalController: ModalController,
-      // ActivatedRoute는 URL 경로에서 course_id를 동적으로 가져온다.
-      private route: ActivatedRoute,
-      private router: Router // Router 주입
+  constructor(
+    private courseService: CourseService,
+    private modalController: ModalController,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
-    ) {
-      // this.courseId = +this.route.snapshot.paramMap.get('courseId'); // courseId를 경로에서 가져오기
-    }
-
-    // 컴포넌트(페이지도 하나의 큰 컴포넌트)가 초기화될 때 호출되는 메서드
-    ngOnInit() {
-      // URL 경로에서 course_id 파라미터를 가져와 저장
-      this.route.paramMap.subscribe(params => {
-        const courseId = params.get('course_id');
-        console.log(courseId);
-        if (courseId) {
-          this.course_id = +courseId; // 가져온 값을 숫자로 변환하여 저장
-        }
-        if (this.course_id) {
-          this.router.navigate(['/courses', this.course_id, 'videoTopics', 'allVT2']);
-        } else {
-          console.error('Course ID가 설정되지 않았습니다.');
-        }
-      });
-
-      // 페이지가 로드될 때 강의 주제 로드
-      this.loadCourses();
-    }
-
-    private routeSubscription?: Subscription;
-
-    ngOnDestroy() {
-      if (this.routeSubscription) {
-        this.routeSubscription.unsubscribe();
+  private async checkApprovalStatus(courseId: number): Promise<boolean> {
+    try {
+      if (!courseId || courseId === 0) {
+        return false;
       }
-    }
-
-    async loadCourses() {
-      try {
-        // ApiResponse에서 배열을 받도록 변경
-        const response: ApiResponse<VideoTopicResponseData[]> = await firstValueFrom(
-          this.courseService.getAllVideoTopic(this.course_id)
-        );
-
-        this.data.VideoTopics = response.data.map(videoTopic => ({
-          video_topic_id: videoTopic.video_topic_id,
-          video_topic_title: videoTopic.video_topic_title,
-          video_pa_topic_id: videoTopic.video_pa_topic_id,
-        }));
-
-        // 로드 후 빈 배열 여부 확인 (필요할 경우)
-        if (this.data.VideoTopics.length === 0) {
-          console.log('비디오 주제가 없습니다.');
-        } else {
-          console.log('로드된 비디오 주제:', this.data.VideoTopics);
-        }
-      } catch (error) {
-        console.error('Error loading courses', error);
+  
+      // 현재 유저의 course_registration만 확인
+      const response: ApiResponse<CourseWithCourseRegistrationResponseData[]> = await firstValueFrom(
+        this.courseService.getAllinqueryUsers(courseId)
+      );
+      
+      // 현재 로그인한 유저의 registration만 필터링
+      const currentUserRegistrations = response.data.find(registration => 
+        registration.course_registration.some(reg => {
+          console.log('Registration status:', reg.status);
+          return reg.status === Registration.APPROVED;
+        })
+      );
+  
+      // 디버깅을 위한 로그
+      console.log('Current user registrations:', currentUserRegistrations);
+  
+      // 강사인 경우 항상 접근 허용
+      if (this.isInstructor()) {
+        return true;
       }
+  
+      // 승인된 수강신청이 있는지 확인
+      return !!currentUserRegistrations;
+    } catch (error) {
+      console.error('Approval check failed:', error);
+      if (error instanceof HttpErrorResponse) {
+        switch (error.status) {
+          case 401:
+            this.router.navigate(['/loginpage']);
+            break;
+          case 404:
+            console.error('Course not found');
+            break;
+          default:
+            console.error('API error:', error);
+        }
+      }
+      return false;
     }
+  }
+  
+  async ngOnInit() {
+    this.userRole = localStorage.getItem('Role') || '';
+    
+    // 관리자는 접근 불가
+    if (this.userRole === Role.ADMIN) {
+      this.router.navigate(['/classsignup']);
+      return;
+    }
+
+    this.routeSubscription = this.route.paramMap.subscribe(async params => {
+      const courseId = params.get('course_id');
+      if (courseId) {
+        this.course_id = +courseId;
+        const isApproved = await this.checkApprovalStatus(this.course_id);
+        
+        if (!isApproved) {
+          this.router.navigate(['/classnone']);
+          return;
+        }
+        
+        await this.loadCourses();
+      } else {
+        console.error('Course ID가 설정되지 않았습니다.');
+        this.router.navigate(['/classnone']);
+      }
+    });
+  }
+
+  // 강사 권한 체크
+  isInstructor(): boolean {
+    return this.userRole === Role.INSTRUCTOR;
+  }
+
+  ngOnDestroy() {
+    if (this.routeSubscription) {
+      this.routeSubscription.unsubscribe();
+    }
+  }
+
+  async loadCourses() {
+    try {
+      const response: ApiResponse<VideoTopicRequestData[]> = await firstValueFrom(
+        this.courseService.getAllVideoTopic(this.course_id)
+      );
+
+      this.data.VideoTopics = response.data.map(videoTopic => ({
+        video_topic_id: videoTopic.video_topic_id,
+        video_topic_title: videoTopic.video_topic_title,
+        video_pa_topic_id: videoTopic.video_pa_topic_id,
+      }));
+
+      if (this.data.VideoTopics.length === 0) {
+        console.log('비디오 주제가 없습니다.');
+      } else {
+        console.log('로드된 비디오 주제:', this.data.VideoTopics);
+      }
+    } catch (error) {
+      console.error('Error loading courses', error);
+    }
+  }
 
     // 모든 비디오 토픽을 가져오는 메서드
     async getAllVideoTopics() {
       try {
-        const response: ApiResponse<VideoTopicResponseData[]> = await firstValueFrom(
+        const response: ApiResponse<VideoTopicRequestData[]> = await firstValueFrom(
           this.courseService.getAllVideoTopic(this.course_id)
         );
 
@@ -189,3 +243,5 @@ export class ClassmyPage implements OnInit {
 
 
     }
+
+    

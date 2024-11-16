@@ -3,12 +3,12 @@ import { ModalController } from '@ionic/angular';
 import { CourseCreateModalComponent } from '../../../component/course-create-modal/course-create-modal.component';
 import { CourseService } from '../../../services/course/course.service'; // CourseService 가져오기
 import { firstValueFrom } from 'rxjs'; // firstValueFrom 가져오기
-import { CourseResponseDto } from '../../../models/course/courses/course-response.interface'; // 인터페이스 경로 수정
 import { ApiResponse } from 'src/app/models/common/api-response.interface';
-import { CreateCourseRegistrationDto } from '../../../models/course/courses/course-registration.interface';
+import { CourseRegistrationRequestDto } from '../../../models/course/courses/course-registration.interface';
 import { Registration } from '../../../models/enums/role.enums';
 import { HttpErrorResponse } from '@angular/common/http';
-import {AdminResponseCourseRegistrationDto} from "../../../models/course/courses/course-get-admin-registration";
+import { CourseWithCourseRegistrationResponseData } from 'src/app/models/course/courses/course-with-courseregistration-resoinse.interface';
+import { CourseResponseData } from 'src/app/models/course/courses/course-response.interface';
 
 
 @Component({
@@ -22,9 +22,9 @@ import {AdminResponseCourseRegistrationDto} from "../../../models/course/courses
 
 export class ClasssignupPage implements OnInit {
   registeredCourses: Set<number> = new Set();
-  courses: CourseResponseDto[] = [];
+  courses: CourseResponseData[] = [];
   // 클래스의 맨 위에 타입 정의 추가
-  AdminResponseCourseRegistration: { [courseId: number]: AdminResponseCourseRegistrationDto[] } = {};
+  CourseWithCourseRegistrationResponseData: { [courseId: number]: CourseWithCourseRegistrationResponseData[] } = {};
   generations: string[] = ['1기', '2기', '3기', '4기', '5기']; // 가능한 세대 목록(하드코딩)
   selectedGeneration: string = '3기' // 기본값으로 3세대 선택
 
@@ -53,11 +53,11 @@ export class ClasssignupPage implements OnInit {
   async courseinqueryUser(courseId: number) {
 
     try {
-      const response: ApiResponse<AdminResponseCourseRegistrationDto[]> = await firstValueFrom(
+      const response: ApiResponse<CourseWithCourseRegistrationResponseData[]> = await firstValueFrom(
         this.courseService.getAllinqueryUsers(courseId)
       );
 
-      this.AdminResponseCourseRegistration[courseId] = response.data || [];
+      this.CourseWithCourseRegistrationResponseData[courseId] = response.data || [];
     } catch (error) {
       console.error(`Error loading registrations for course ${courseId}`, error);
       alert('강의 등록 정보를 불러오는 중 오류가 발생했습니다.');
@@ -68,13 +68,13 @@ export class ClasssignupPage implements OnInit {
 
 
   //courseId를 받고 generation이 같을 경우 반환
-  getApplicantsForCourse(courseId: number): AdminResponseCourseRegistrationDto[] {
-    const applicants = (this.AdminResponseCourseRegistration[courseId] || [])
-      .filter(registration => registration.currentCourse.generation === this.selectedGeneration);
+  // getApplicantsForCourse(courseId: number): CourseWithCourseRegistrationResponseData[] {
+  //   const applicants = (this.CourseWithCourseRegistrationResponseData[courseId] || [])
+  //     .filter(registration => registration.currentCourse.generation === this.selectedGeneration);
 
-    console.log(`Applicants for course ID ${courseId} (Generation ${this.selectedGeneration}):`, applicants);
-    return applicants;
-  }
+  //   console.log(`Applicants for course ID ${courseId} (Generation ${this.selectedGeneration}):`, applicants);
+  //   return applicants;
+  // }
 
 
   //기수값 변경
@@ -87,7 +87,7 @@ export class ClasssignupPage implements OnInit {
   async loadCourses() {
 
     try {
-      const response: ApiResponse<CourseResponseDto[]> = await firstValueFrom(this.courseService.getAllCourses());
+      const response: ApiResponse<CourseResponseData[]> = await firstValueFrom(this.courseService.getAllCourses());
       console.log('All courses:', response.data);
       this.courses = response.data.filter(course => {
         return course.generation == this.selectedGeneration;
@@ -114,7 +114,7 @@ export class ClasssignupPage implements OnInit {
     return await modal.present();
   }
 
-  async updateCourse(course: CourseResponseDto) {
+  async updateCourse(course: CourseResponseData) {
     const modal = await this.modalController.create({
       component: CourseCreateModalComponent,
       cssClass: 'modal',
@@ -172,12 +172,12 @@ export class ClasssignupPage implements OnInit {
 
     try {
       const courseReportingDate = await this.getCurrentDate(); // Date 객체 가져오기
-      const registrationData: CreateCourseRegistrationDto = {
+      const registrationData: CourseRegistrationRequestDto = {
         course_reporting_date: courseReportingDate.toISOString(), // ISO 문자열로 변환하여 설정
         course_registration_status: Registration.PENDING,
       };
 
-      const response: ApiResponse<CreateCourseRegistrationDto> = await firstValueFrom(
+      const response: ApiResponse<CourseRegistrationRequestDto> = await firstValueFrom(
         this.courseService.joinCourse(courseId, registrationData)
       );
       console.log('강의 신청 성공:', response.message);
@@ -233,12 +233,12 @@ export class ClasssignupPage implements OnInit {
   }*/
 
 
-  acceptApplicant(userId: AdminResponseCourseRegistrationDto) {
+  acceptApplicant(userId: CourseWithCourseRegistrationResponseData) {
     // 유저 수락 로직을 여기에 구현
     console.log(`User ${userId} accepted.`);
   }
 
-  rejectApplicant(userId: AdminResponseCourseRegistrationDto) {
+  rejectApplicant(userId: CourseWithCourseRegistrationResponseData) {
     // 유저 거절 로직을 여기에 구현
     console.log(`User ${userId} rejected.`);
   }
