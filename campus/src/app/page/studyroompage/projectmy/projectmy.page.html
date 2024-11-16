@@ -78,9 +78,13 @@
 
           <!-- 하얀 박스 (팝업) -->
           <div class="popup-box" *ngIf="isPopupVisible">
+            <div>ddd</div>
             <div class="popup-content">
               <!-- 팝업 내용 -->
-              <button (click)="closePopup()">닫기</button>
+              <div >
+                <p>댓글</p>
+                <button (click)="closePopup()">닫기</button>
+              </div>
               <p>여기에 내용을 추가하세요.</p>
             </div>
           </div>
