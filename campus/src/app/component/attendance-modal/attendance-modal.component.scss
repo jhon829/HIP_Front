@@ -62,3 +62,27 @@ ion-content .button{
   color: #FF3737;
   font-family: "pretendard-R", serif;
 }
+
+.attendance{
+  display: flex;
+  margin: 42px;
+  height: 71px;
+  border: 1px solid;
+  align-items: center;
+  background: #F3F3F3;
+  justify-content: center;
+
+}
+
+.attendance-input{
+  background: #F3F3F3;
+  border: none;
+  width: 127px;
+  height: 34px;
+
+}
+
+input:focus{
+  outline: none;
+  border: none;
+}
