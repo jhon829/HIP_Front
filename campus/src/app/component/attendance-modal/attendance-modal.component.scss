@@ -68,15 +68,16 @@ ion-content .button{
 .attendance{
   display: flex;
   height: 71px;
-  border: 1px solid;
   align-items: center;
-  background: #F3F3F3;
   justify-content: center;
+  border: 1px solid rgba(0, 0, 0, 0.21);
+  background: #F8F8F8;
+
 
 }
 
 .attendance-input{
-  background: #F3F3F3;
+  background: #F8F8F8;
   border: none;
   width: 127px;
   height: 34px;
