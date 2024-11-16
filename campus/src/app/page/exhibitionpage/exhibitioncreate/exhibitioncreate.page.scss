@@ -45,6 +45,7 @@
   margin-top: -50px;
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
+
 }
 .shadow-box {
   padding: 20px;
@@ -104,10 +105,28 @@ button:hover {
   margin-top: 20px;
 }
 
+.form-group{
+  max-width: 899px;
+  margin: auto;
+}
+
 .introductions p, .members p {
   background-color: #e9ecef;
   border-left: 4px solid #007bff;
   padding: 10px;
   border-radius: 4px;
   margin-bottom: 10px;
+}
+
+.submit{
+  text-align: end;
+  background-color: #5e70fa;
+  width: 200px;
+  height: 50px;
+  display: flex;
+  margin: auto;
+}
+
+.submittext{
+  margin: auto ;
 }
