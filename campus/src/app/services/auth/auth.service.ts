@@ -191,12 +191,14 @@ export class AuthService {
 
   getUserInfo() {
     const token = this.getToken();
-    console.log(token)
+    console.log(token);
     if (token) {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload;
-      
+      const payload = token.split('.')[1];
+      const decodedPayload = atob(payload); // Base64 디코딩
+      const utf8Payload = decodeURIComponent(escape(decodedPayload)); // UTF-8로 변환
+      return JSON.parse(utf8Payload); // JSON 파싱
     }
     return null;
   }
+  
 }
