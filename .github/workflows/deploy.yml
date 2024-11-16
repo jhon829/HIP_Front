@@ -16,7 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'  # 원하는 Node.js 버전
+          node-version: '18'  # LTS 버전 사용
 
       - name: Install dependencies
         run: npm install
@@ -32,5 +32,5 @@ jobs:
           AWS_S3_BUCKET: hipacademy.site  # S3 버킷 이름으로 교체
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ap-northeast-2 # 예: us-west-2
-          SOURCE_DIR: ./dist/my-app  # 빌드 결과물 경로로 교체
+          AWS_REGION: ap-northeast-2  # 예: us-west-2
+          SOURCE_DIR: ./www  # 빌드 결과물 경로로 수정
