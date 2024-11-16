@@ -25,12 +25,12 @@ jobs:
         run: npm run build --prod
 
       - name: Deploy to S3
-        uses: jakejarvis/s3-sync-action@0.5.1
+        uses: jakejarvis/s3-sync-action@master  # 최신 버전으로 변경
         with:
           args: --acl public-read --follow-symlinks --delete
         env:
-          AWS_S3_BUCKET: hipacademy.site  # S3 버킷 이름으로 교체
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ap-northeast-2  # 예: us-west-2
-          SOURCE_DIR: ./www  # 빌드 결과물 경로로 수정
+          AWS_S3_BUCKET: hipacademy.site  # S3 버킷 이름
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  # AWS Access Key ID
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # AWS Secret Access Key
+          AWS_REGION: ap-northeast-2  # S3 버킷의 지역
+          SOURCE_DIR: ./www  # 빌드 결과물 경로
