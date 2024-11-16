@@ -19,7 +19,7 @@
   height: 350px;
   background: linear-gradient(213deg, #FDF2FF 0%, #E9F1FF 100%);
   display: flex;
-  flex-direction: row; /* 수평 배열 */
+  flex-direction: column;
   align-items: center; /* 세로 중앙 정렬 */
   justify-content: center; /* 가로 중앙 정렬 */
   margin-bottom: 50px;
@@ -30,27 +30,67 @@
   display: flex;
 }
 
+.top-box{
+  display: flex;
+  font-family: 'pretendard-B', serif;
+  flex-direction: column;
+  margin: auto;
+}
+
+.metatext{
+  color: rgba(0, 0, 0, 0.3);
+  text-align: center;
+  margin-bottom: 30px;
+  margin-top: -30px;
+  font-family: 'pretendard-B', serif;
+  font-size: 20px;
+}
+
 .title-image {
-  width: 500px;
-  height: 300px;
+  width: 300px;
+  height: 168px;
   border-radius: 10px;
+
+  justify-content: flex-end;
 }
 
 .part2 {
-  height: 185px;
-  flex-direction: column; /* 수직 배열로 변경 */
+  flex-direction: row; /* 수직 배열로 변경 */
   justify-content: center; /* 중앙 정렬 */
-  margin-left: 30px; /* 간격 추가 (선택 사항) */
+  width: 899px;
+  display: flex;
+  margin: auto;
+  justify-content: space-between;
 }
 
 .part2 .project-name{
   font-family: 'pretendard-B', serif;
-  font-size: 32px;
+  font-size: 50px;
+  color: #000000;
 }
 
 .part2 .team-name{
-  font-family: "pretendard-R", serif;
+  font-family: "pretendard-B", serif;
   font-size: 24px;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.part2 .class-name{
+  font-family: "pretendard-B", serif;
+  font-size: 24px;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.part2 .description{
+  font-family: "pretendard-B", serif;
+  font-size: 24px;
+  color: rgba(0, 0, 0, 0.8);
+  margin-left: 100px;
+}
+
+.part2 .part2right{
+  align-items: center;
+  display: flex;
 }
 
 .maincontent {
@@ -81,6 +121,13 @@
   background-color: #171717;
   border-radius: 10px;
   padding: 4px;
+}
+
+.part2 .icons{
+  margin-right: 10px;
+  vertical-align: middle;
+  padding: 4px;
+  background-color: salmon;
 }
 
 .introduce-content{
@@ -142,8 +189,8 @@
 }
 
 .doc-image{
-  width : 50%;
-  height: 50%;
+  width : 70%;
+  height: 70%;
 }
 
 .parent-container {
@@ -162,4 +209,24 @@
 ion-button {
   width: 100%; // 버튼을 가로로 꽉 채움
   font-size: 16px; // 글자 크기 조정
+}
+
+.iframe-container {
+  width: 100vw; /* 전체 너비 */
+  height: 100vh; /* 전체 높이 */
+  margin: 0; /* 외부 여백 제거 */
+  padding: 0; /* 내부 여백 제거 */
+}
+
+.background-image {
+  margin: 0; /* 외부 여백 제거 */
+  padding: 0; /* 내부 여백 제거 */
+  width: 100%; /* 전체 너비 */
+  height: 100%; /* 전체 높이 */
+}
+
+iframe {
+  margin-top: -5px; /* 외부 여백 제거 */
+  width: 100%; /* 전체 너비 */
+  height: 100%; /* 전체 높이 */
 }
