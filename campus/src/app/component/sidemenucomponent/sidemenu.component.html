@@ -16,8 +16,9 @@
     </ion-item>
 
     <ion-list [ngClass]="{'slide-down': classesVisible, 'slide-up': !classesVisible}" *ngIf="classesVisible">
-      <ion-item button (click)="navigateTo('classmy')">
+      <ion-item button (click)="navigateTo('classmy')" [disabled]="isLoading">
         <ion-label>내 클래스</ion-label>
+        <ion-spinner *ngIf="isLoading" name="dots"></ion-spinner>
       </ion-item>
       <ion-item button (click)="navigateTo('classsignup')">
         <ion-label>클래스 신청</ion-label>
@@ -39,4 +40,15 @@
       </ion-item>
     </ion-list>
   </ion-list>
+
+  <!-- 에러 메시지 표시 -->
+  <ion-toast
+    *ngIf="errorMessage"
+    [isOpen]="!!errorMessage"
+    [message]="errorMessage"
+    [duration]="3000"
+    (didDismiss)="errorMessage = ''"
+    position="bottom"
+    color="danger"
+  ></ion-toast>
 </aside>

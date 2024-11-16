@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CourseService } from '../../services/course/course.service';
 import { firstValueFrom } from 'rxjs';
-import { DocNameResponseData } from '../../models/course/doc_name/doc_name-response.interface';
+import { DocNameResponseData } from '../../models/course/doc_name/doc_name-request.interface';
 import { ApiResponse } from '../../models/common/api-response.interface';
 
 @Component({
@@ -17,6 +17,8 @@ export class DocTopicComponent implements OnInit {
   newTopicTitle: string = '';
   course_id = 14;
   isInputValid: boolean = false;
+  isLoading = false;
+  errorMessage: string | null = null;
 
   constructor(private courseService: CourseService) {}
 
@@ -25,24 +27,44 @@ export class DocTopicComponent implements OnInit {
   }
 
   async loadTopLevelFolders() {
+    this.isLoading = true;
+    this.errorMessage = null;
+
     try {
-      const response: ApiResponse<DocNameResponseData[]> = await firstValueFrom(
-        this.courseService.getAllDocName(this.course_id)
-      );
-      this.topLevelFolders = response.data.filter(folder => !folder.pa_topic_id);
+        const response = await firstValueFrom(
+            this.courseService.getFirstDocName(this.course_id)
+        );
+        
+        // root 응답은 이미 최상위 폴더만 반환하므로 필터링이 불필요
+        this.topLevelFolders = Array.isArray(response.data) 
+            ? response.data 
+            : [response.data];
+        
     } catch (error) {
-      console.error('상위 폴더 로드 중 오류 발생:', error);
+        this.errorMessage = '상위 폴더를 불러오는 중 오류가 발생했습니다.';
+        console.error('상위 폴더 로드 에러:', error);
+    } finally {
+        this.isLoading = false;
     }
   }
 
   async loadSubFolders(parentId: number) {
+    this.isLoading = true;
+    this.errorMessage = null;
+
     try {
-      const response: ApiResponse<DocNameResponseData[]> = await firstValueFrom(
-        this.courseService.getAllDocName(this.course_id)
-      );
-      this.subFolders = response.data.filter(folder => folder.pa_topic_id === parentId);
+        const response = await firstValueFrom(
+            this.courseService.getDocName(this.course_id, parentId)
+        );
+        
+        // sub_topics가 있는 경우 그것을 사용하고, 없으면 빈 배열
+        this.subFolders = response.data.sub_topics || [];
+        
     } catch (error) {
-      console.error('하위 폴더 로드 중 오류 발생:', error);
+        this.errorMessage = '하위 폴더를 불러오는 중 오류가 발생했습니다.';
+        console.error('하위 폴더 로드 에러:', error);
+    } finally {
+        this.isLoading = false;
     }
   }
 

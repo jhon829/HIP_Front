@@ -1,4 +1,4 @@
-export interface VideoTopicResponseData {
+export interface VideoTopicRequestData {
     video_topic_id: number | null,
     video_topic_title: string,
     video_pa_topic_id: number | null,

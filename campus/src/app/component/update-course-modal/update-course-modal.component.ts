@@ -4,8 +4,7 @@ import { CourseService } from '../../services/course/course.service'; // 서비�
 import { AlertController } from '@ionic/angular'; // AlertController import
 import { firstValueFrom } from 'rxjs'; // firstValueFrom import
 import { IonicModule } from '@ionic/angular'; // IonicModule import
-import { CourseResponseDto } from '../../models/course/courses/course-response.interface'; // 강의 데이터 모델 import
-
+import { CourseResponseData } from 'src/app/models/course/courses/course-response.interface';
 
 @Component({
   selector: 'app-update-course-modal',
@@ -18,7 +17,7 @@ import { CourseResponseDto } from '../../models/course/courses/course-response.i
   ]
 })
 export class UpdateCourseModalComponent  implements OnInit {
-  @Input() course!: CourseResponseDto; // 모달에 전달된 강의 데이터
+  @Input() course!: CourseResponseData; // 모달에 전달된 강의 데이터
   courseForm!: FormGroup;
 
   constructor(
