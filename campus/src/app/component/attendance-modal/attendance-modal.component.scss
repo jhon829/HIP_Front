@@ -22,6 +22,8 @@ ion-content {
 
 .comment1{
   font-family: "pretendard-R", serif;
+  font-size: 20px;
+  margin: 10px;
 }
 
 .comment2{
@@ -65,7 +67,6 @@ ion-content .button{
 
 .attendance{
   display: flex;
-  margin: 42px;
   height: 71px;
   border: 1px solid;
   align-items: center;
@@ -79,10 +80,24 @@ ion-content .button{
   border: none;
   width: 127px;
   height: 34px;
+  text-align: center;
+  font-size: 23px;
 
 }
 
 input:focus{
   outline: none;
   border: none;
+}
+
+.auth-inner{
+  margin: 42px;
+
+
+}
+
+.auth-num{
+  font-size: 23px;
+  font-family: 'pretendard-B',sans-serif;
+  margin: 14px 0;
 }
