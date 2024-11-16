@@ -7,13 +7,9 @@ import { ApiResponse } from 'src/app/models/common/api-response.interface';
 import { CourseRegistrationRequestDto } from '../../../models/course/courses/course-registration.interface';
 import { Registration } from '../../../models/enums/role.enums';
 import { HttpErrorResponse } from '@angular/common/http';
-<<<<<<< HEAD
 import { CourseWithCourseRegistrationResponseData } from 'src/app/models/course/courses/course-with-courseregistration-resoinse.interface';
 import { CourseResponseData } from 'src/app/models/course/courses/course-response.interface';
-=======
-import {AdminResponseCourseRegistrationDto} from "../../../models/course/courses/course-get-admin-registration";
-import {UseResponse} from "../../../models/common/use-response";
->>>>>>> 214e0f1774db74cb3dbf69ee386c1700956e8bfc
+import { UserResponse } from 'src/app/models/common/use-response';
 
 
 @Component({
@@ -32,7 +28,7 @@ export class ClasssignupPage implements OnInit {
   CourseWithCourseRegistrationResponseData: { [courseId: number]: CourseWithCourseRegistrationResponseData[] } = {};
   generations: string[] = ['1기', '2기', '3기', '4기', '5기']; // 가능한 세대 목록(하드코딩)
   selectedGeneration: string = '3기' // 기본값으로 3세대 선택
-  userRoleU : { [user_role : string ] : UseResponse[] } = {} ;
+  userRoleU : { [user_role : string ] : UserResponse[] } = {} ;
 
   constructor(
     private modalController: ModalController,
