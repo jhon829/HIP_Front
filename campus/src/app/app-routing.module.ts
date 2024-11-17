@@ -63,27 +63,21 @@ const routes: Routes = [
     path: 'classsignup',
     loadChildren: () => import('./page/studyroompage/classsignup/classsignup.module')
       .then(m => m.ClasssignupPageModule),
-    canActivate: [AuthGuard]
   },
   {
     path: 'classmy/:course_id',
     loadChildren: () => import('./page/studyroompage/classmy/classmy.module')
       .then(m => m.ClassmyPageModule),
-    canActivate: [AuthGuard]
   },
   {
     path: 'classnone',
     loadChildren: () => import('./page/studyroompage/classnone/classnone.module')
       .then(m => m.ClassnonePageModule),
-    canActivate: [AuthGuard],
-    data: { role: 'student' }
   },
   {
     path: 'classinstructor',
     loadChildren: () => import('./page/studyroompage/classinstructor/classinstructor.module')
       .then(m => m.ClassinstructorPageModule),
-    canActivate: [AuthGuard],
-    data: { role: 'student' }
   },
   {
     path: 'projectsearch',

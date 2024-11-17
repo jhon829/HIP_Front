@@ -4,12 +4,12 @@ import { CourseCreateModalComponent } from '../../../component/course-create-mod
 import { CourseService } from '../../../services/course/course.service'; // CourseService 가져오기
 import { firstValueFrom } from 'rxjs'; // firstValueFrom 가져오기
 import { ApiResponse } from 'src/app/models/common/api-response.interface';
-import { CourseRegistrationRequestDto } from '../../../models/course/courses/course-registration.interface';
 import { Registration } from '../../../models/enums/role.enums';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CourseWithCourseRegistrationResponseData } from 'src/app/models/course/courses/course-with-courseregistration-resoinse.interface';
 import { CourseResponseData } from 'src/app/models/course/courses/course-response.interface';
-import { UserResponse } from 'src/app/models/common/use-response';
+import { UserResponse } from 'src/app/models/common/user-response';
+import { CourseRegistration } from 'src/app/models/course/courses/course-registation-response.interface';
 
 
 @Component({
@@ -167,35 +167,65 @@ export class ClasssignupPage implements OnInit {
   }
 
   //강의신청
-  async joinCourse(courseId: number) {
-    const token = localStorage.getItem('token');
+// course.component.ts
+async joinCourse(courseId: number) {
+  const token = localStorage.getItem('token');
 
-    if (!token) {
+  if (!token) {
       console.error('토큰을 찾을 수 없습니다.');
       alert('로그인이 필요합니다.');
       return;
-    }
+  }
 
-
-    try {
-      const courseReportingDate = await this.getCurrentDate(); // Date 객체 가져오기
-      const registrationData: CourseRegistrationRequestDto = {
-        course_reporting_date: courseReportingDate.toISOString(), // ISO 문자열로 변환하여 설정
-        course_registration_status: Registration.PENDING,
+  try {
+      const courseReportingDate = await this.getCurrentDate();
+      const registrationData: CourseRegistration = {
+          id: 0, // 백엔드에서 생성될 ID
+          status: Registration.PENDING,
+          date: courseReportingDate,
+          applicant: {
+            id: localStorage.getItem('UserId') || '',          // user_id가 아닌 id
+            user_name: localStorage.getItem('UserName') || '', // name이 아닌 user_name
+            email: '',                                         // email은 필수 필드
+            user_role: localStorage.getItem('Role') || ''      // user_role도 필수 필드
+          }
       };
 
-      const response: ApiResponse<CourseRegistrationRequestDto> = await firstValueFrom(
-        this.courseService.joinCourse(courseId, registrationData)
+      const response = await firstValueFrom(
+          this.courseService.joinCourse(courseId, registrationData)
       );
-      console.log('강의 신청 성공:', response.message);
-      alert('강의 신청이 완료되었습니다.');
-      this.registeredCourses.add(courseId);
-    } catch (error) {
-      // 오류 처리 코드
+
+      if (response.status === 200) {
+          console.log('강의 신청 성공:', response.message);
+          alert('강의 신청이 완료되었습니다.');
+          this.registeredCourses.add(courseId);
+      } else {
+          throw new Error(response.message || '강의 신청에 실패했습니다.');
+      }
+
+  } catch (error) {
       console.error('강의 신청 중 오류 발생:', error);
-      alert('강의 신청 중 오류가 발생했습니다.');
-    }
+      let errorMessage = '강의 신청 중 오류가 발생했습니다.';
+
+      if (error instanceof HttpErrorResponse) {
+          switch (error.status) {
+              case 400:
+                  errorMessage = '잘못된 요청입니다.';
+                  break;
+              case 401:
+                  errorMessage = '로그인이 필요합니다.';
+                  break;
+              case 409:
+                  errorMessage = '이미 신청한 강의입니다.';
+                  break;
+              default:
+                  errorMessage = '서버 오류가 발생했습니다.';
+          }
+      }
+
+      alert(errorMessage);
   }
+}
 
 
   //현재 강의를 신청했는지에 대한 변수
