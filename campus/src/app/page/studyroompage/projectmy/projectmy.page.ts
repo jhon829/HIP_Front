@@ -16,6 +16,7 @@ export class ProjectmyPage implements OnInit {
   isfolderinner=true;
   selectedFolderIndex: number | null = null; // 선택된 폴더의 인덱스
   selectedFolderIndices: number[] = [];  // 폴더 경로를 저장하는 배열
+  isPopupVisible: boolean = false; // 팝업 표시 상태
 
   // 새로운 ProjectResponseData 인터페이스에 맞게 초기화
   public data: ProjectResponseData = {
@@ -87,6 +88,15 @@ export class ProjectmyPage implements OnInit {
   // 현재 선택한 폴더의 깊이를 확인하는 메서드
   isInSubfolder(): boolean {
     return this.selectedFolderIndices.length > 0;
+  }
+
+  //팝업
+  openPopup(): void {
+    this.isPopupVisible = true; // 팝업 열기
+  }
+
+  closePopup(): void {
+    this.isPopupVisible = false; // 팝업 닫기
   }
 
 
