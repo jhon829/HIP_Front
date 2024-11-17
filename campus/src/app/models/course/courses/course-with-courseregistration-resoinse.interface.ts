@@ -1,4 +1,4 @@
-import { Registration } from "../../enums/role.enums";
+import { CourseRegistration } from "./course-registation-response.interface";
 
 export interface CourseWithCourseRegistrationResponseData {
     course_id: number;          // 강의 ID
@@ -7,12 +7,5 @@ export interface CourseWithCourseRegistrationResponseData {
     instructor_name: string;    // 강사 이름
     generation: string;         // 기수
     course_notice: string | null; // 강의 공지사항 (null일 수 있음)
-    course_registration: {
-        id: number;
-        status: Registration;
-        date: Date;
-        //...
-    }[];
+    course_registration: CourseRegistration[];
 }
-
-    

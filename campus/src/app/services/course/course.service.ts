@@ -4,13 +4,13 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { catchError, Observable, throwError } from 'rxjs';
 import { CourseResponseData } from '../../models/course/courses/course-response.interface'; // 인터페이스 경로 수정
 import { ApiResponse } from 'src/app/models/common/api-response.interface';
-import { CourseRegistrationRequestDto } from 'src/app/models/course/courses/course-registration.interface';
 import { CourseWithCourseRegistrationResponseData } from 'src/app/models/course/courses/course-with-courseregistration-resoinse.interface';
 import { CourseDocRequestData } from 'src/app/models/course/course_doc/course_doc-request.interface';
 import { VideoTopicRequestData } from 'src/app/models/course/video_topic/video_topic-request.interface';
 import { VideoRequestData } from 'src/app/models/course/video/video-request.interface';
 import { VideoResponseData } from 'src/app/models/course/video/video-response.interface';
 import { DocNameResponseData } from 'src/app/models/course/doc_name/doc_name-request.interface';
+import { CourseRegistration } from 'src/app/models/course/courses/course-registation-response.interface';
 
 
 @Injectable({
@@ -92,17 +92,17 @@ export class CourseService {
 
 
   //수강 신청 받음
-  joinCourse(courseId: number, registrationData: CourseRegistrationRequestDto): Observable<ApiResponse<CourseRegistrationRequestDto>> {
+  joinCourse(courseId: number, registrationData: CourseRegistration): Observable<ApiResponse<CourseRegistration>> {
     const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
     const url = `${this.courseApiUrl}/${courseId}/courseRegistration/register`; // 올바른 URL 구성
-    return this.http.post<ApiResponse<CourseRegistrationRequestDto>>(url, registrationData, { headers }); // POST 요청으로 변경
+    return this.http.post<ApiResponse<CourseRegistration>>(url, registrationData, { headers }); // POST 요청으로 변경
   }
 
 
   //수강신청 조회
   getAllinqueryUsers(courseId:number): Observable<ApiResponse<CourseWithCourseRegistrationResponseData[]>> {
     const headers = this.getAuthHeaders();
-    const url = `${this.courseApiUrl}/${courseId}/courseRegistration`;
+    const url = `${this.courseApiUrl}/course-docname-coursedoc/${courseId}`;
     return this.http.get<ApiResponse<CourseWithCourseRegistrationResponseData[]>>(url, { headers });
   }
 

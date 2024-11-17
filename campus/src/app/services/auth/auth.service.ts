@@ -116,6 +116,7 @@ export class AuthService {
   login_current(token: string) {
     // 토큰을 로컬 스토리지에 저장하고 로그인 상태를 true로 설정
     localStorage.setItem('token', token);
+    
     this.loggedIn.next(true);
   }
 
@@ -191,14 +192,36 @@ export class AuthService {
 
   getUserInfo() {
     const token = this.getToken();
-    console.log(token);
     if (token) {
-      const payload = token.split('.')[1];
-      const decodedPayload = atob(payload); // Base64 디코딩
-      const utf8Payload = decodeURIComponent(escape(decodedPayload)); // UTF-8로 변환
-      return JSON.parse(utf8Payload); // JSON 파싱
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        // 백엔드의 키 이름과 일치하도록 수정
+        localStorage.setItem('UserId', payload.id || '');
+        localStorage.setItem('Role', payload.role || '');
+        localStorage.setItem('Name', payload.name || '');
+        localStorage.setItem('courseId', payload.courseIds || '');
+        return payload;
+      } catch (error) {
+        console.error('Token parsing error:', error);
+        return null;
+      } 
     }
     return null;
   }
-  
+
+  isAuthenticated(): boolean {
+    const token = localStorage.getItem('token');
+    return !!token;
+  }
+
+  getUserId(): string | null {
+    const userId = localStorage.getItem('UserId');
+    // 단순히 userId를 반환하고 리다이렉션은 하지 않음
+    return userId;
+  }
+
+  getUserRole(): string {
+    const role = localStorage.getItem('Role');
+    return role || '';
+  }
 }
