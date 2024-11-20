@@ -3,9 +3,9 @@ import { Registration } from "../../enums/role.enums";
 import { CourseResponseData } from "./course-response.interface";
 
 export interface CourseRegistration {
-    id: number;
-    status: Registration;
-    date: Date;
-    applicant?: UserResponse;
-    currentCourse?: CourseResponseData;
+    course_registration_id: number;
+    course_registration_status: Registration;
+    course_reporting_date: Date;
+    user?: UserResponse;
+    course?: CourseResponseData;
 }
