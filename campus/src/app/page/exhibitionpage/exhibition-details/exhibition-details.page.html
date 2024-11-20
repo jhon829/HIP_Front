@@ -14,7 +14,9 @@
           <div class="part2">
             <div class="part2left">
               <h2 class="project-name">{{ exhibitionDetails.exhibition_title }}</h2>
-              <p class="team-name"><ion-icon class="icons" name="people-outline"></ion-icon>  {{ exhibitionDetails.team_name }}</p>
+              <p class="team-name"><ion-icon class="icons" name="people-outline"></ion-icon>
+                {{ exhibitionDetails.team_name }}
+                <span class="start">안녕하세요</span></p>
               <p class="class-name"><ion-icon class="icons" name="flag-outline"></ion-icon> {{ exhibitionDetails.generation }} <span class="description"><ion-icon class="icons" name="book-outline"></ion-icon>{{ exhibitionDetails.description }}</span></p>
             </div>
             <div class="part2right">
@@ -89,8 +91,28 @@
     <img src="assets/png/background.png" class="background-image">
     <iframe src="https://share.arcware.cloud/v1/share-4f7f6223-2623-4c0f-8a5d-285faf8217e9" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
   </div>
+  
+  <div class="parent-container">
+  <div class="button-container" [ngClass]="{'show': showButtons}"> <!-- 버튼을 조건부로 렌더링 -->
+    <ion-button [routerLink]="['/exhibition-update', exhibitionDetails.exhibition_id]" class="custom-button">수정하기</ion-button>
+    <ion-button expand="block" color="danger" (click)="deleteExhibition()" class="custom-button">전시물 삭제</ion-button>
+  </div>
+  
+  <ion-button (click)="toggleButtons()" class="floating-button"> <!-- 동그란 + 아이콘 -->
+    <ion-icon name="add"></ion-icon> <!-- 또는 원하는 아이콘 사용 -->
+  </ion-button>
+</div>
 
-
+<div class="parent-container">
+  <div class="button-container" [ngClass]="{'show': showButtons}"> <!-- 버튼을 조건부로 렌더링 -->
+    <ion-button [routerLink]="['/exhibition-update', exhibitionDetails.exhibition_id]" class="custom-button">수정하기</ion-button>
+    <ion-button expand="block" color="danger" (click)="deleteExhibition()" class="custom-button">전시물 삭제</ion-button>
+  </div>
+  
+  <ion-button (click)="toggleButtons()" class="floating-button"> <!-- 동그란 + 아이콘 -->
+    <ion-icon name="add"></ion-icon> <!-- 또는 원하는 아이콘 사용 -->
+  </ion-button>
+</div>
 
 
 

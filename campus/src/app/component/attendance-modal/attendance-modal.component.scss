@@ -22,6 +22,8 @@ ion-content {
 
 .comment1{
   font-family: "pretendard-R", serif;
+  font-size: 20px;
+  margin: 10px;
 }
 
 .comment2{
@@ -61,4 +63,42 @@ ion-content .button{
 .remain-time{
   color: #FF3737;
   font-family: "pretendard-R", serif;
+}
+
+.attendance{
+  display: flex;
+  height: 71px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0, 0, 0, 0.21);
+  background: #F8F8F8;
+
+
+}
+
+.attendance-input{
+  background: #F8F8F8;
+  border: none;
+  width: 127px;
+  height: 34px;
+  text-align: center;
+  font-size: 23px;
+
+}
+
+input:focus{
+  outline: none;
+  border: none;
+}
+
+.auth-inner{
+  margin: 42px;
+
+
+}
+
+.auth-num{
+  font-size: 23px;
+  font-family: 'pretendard-B',sans-serif;
+  margin: 14px 0;
 }
