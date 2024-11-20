@@ -100,43 +100,35 @@ export class AuthGuard implements CanActivate {
   }
 
   private async checkApprovalStatus(courseId: number): Promise<boolean> {
+    const userId = Number(localStorage.getItem('UserId'));
     try {
         if (!courseId || courseId === 0) {
             console.log('Invalid courseId');
             return false;
         }
-
-        const userId = this.authService.getUserId();
+        
         if (!userId) {
             console.log('No user ID found');
             return false;
         }
 
         const response = await firstValueFrom(
-            this.courseService.getAllinqueryUsers(courseId)
+            this.courseService.getRegistration(courseId, userId)
         );
 
         console.log('API Response:', response);
 
-        if (!response?.data?.length) {
+        if (!response?.data) {
             console.log('No data in response');
             return false;
         }
 
-        const registrations = response.data[0]?.course_registration || [];
+        const isApproved = 
+            response.data.course_registration_status === Registration.APPROVED && 
+            Number(response.data.user?.id) === userId;
 
-        if (!registrations.length) {
-            console.log('No registrations found');
-            return false;
-        }
-
-        const hasApproved = registrations.some((reg: CourseRegistration) => 
-            reg.status === Registration.APPROVED && 
-            reg.applicant?.id === userId 
-        );
-
-        console.log('Approval status:', hasApproved);
-        return hasApproved;
+        console.log('Approval status:', isApproved);
+        return isApproved;
 
     } catch (error) {
         console.error('Approval check failed:', error);

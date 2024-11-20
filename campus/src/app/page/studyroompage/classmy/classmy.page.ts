@@ -11,6 +11,7 @@ import { VideoCreateModalComponent } from '../../../component/video-create-modal
 import { Registration, Role } from 'src/app/models/enums/role.enums';
 import { HttpErrorResponse } from '@angular/common/http';
 import { CourseWithCourseRegistrationResponseData } from 'src/app/models/course/courses/course-with-courseregistration-resoinse.interface';
+import { CourseRegistration } from 'src/app/models/course/courses/course-registation-response.interface';
 
 @Component({
   selector: 'app-classmy',
@@ -18,7 +19,7 @@ import { CourseWithCourseRegistrationResponseData } from 'src/app/models/course/
   styleUrls: ['./classmy.page.scss'],
 })
 export class ClassmyPage implements OnInit {
-  course_id!: number;
+  course_id: number = 0;
   private routeSubscription?: Subscription;
   userRole: string = '';
 
@@ -36,79 +37,105 @@ export class ClassmyPage implements OnInit {
     private router: Router
   ) {}
 
-  private async checkApprovalStatus(courseId: number): Promise<boolean> {
-    try {
-      if (!courseId || courseId === 0) {
-        return false;
-      }
-  
-      // 현재 유저의 course_registration만 확인
-      const response: ApiResponse<CourseWithCourseRegistrationResponseData[]> = await firstValueFrom(
-        this.courseService.getAllinqueryUsers(courseId)
-      );
-      
-      // 현재 로그인한 유저의 registration만 필터링
-      const currentUserRegistrations = response.data.find(registration => 
-        registration.course_registration.some(reg => {
-          console.log('Registration status:', reg.status);
-          return reg.status === Registration.APPROVED;
-        })
-      );
-  
-      // 디버깅을 위한 로그
-      console.log('Current user registrations:', currentUserRegistrations);
-  
-      // 강사인 경우 항상 접근 허용
-      if (this.isInstructor()) {
-        return true;
-      }
-  
-      // 승인된 수강신청이 있는지 확인
-      return !!currentUserRegistrations;
-    } catch (error) {
-      console.error('Approval check failed:', error);
-      if (error instanceof HttpErrorResponse) {
-        switch (error.status) {
-          case 401:
-            this.router.navigate(['/loginpage']);
-            break;
-          case 404:
-            console.error('Course not found');
-            break;
-          default:
-            console.error('API error:', error);
-        }
-      }
-      return false;
-    }
-  }
-  
-  async ngOnInit() {
-    this.userRole = localStorage.getItem('Role') || '';
-    
-    // 관리자는 접근 불가
-    if (this.userRole === Role.ADMIN) {
-      this.router.navigate(['/classsignup']);
-      return;
-    }
 
-    this.routeSubscription = this.route.paramMap.subscribe(async params => {
-      const courseId = params.get('course_id');
-      if (courseId) {
-        this.course_id = +courseId;
-        const isApproved = await this.checkApprovalStatus(this.course_id);
-        
-        if (!isApproved) {
-          this.router.navigate(['/classnone']);
-          return;
+  // approved인지 확인하는 메서드 , 이게 문제있는듯
+  private async checkApprovalStatus(courseId: number): Promise<boolean> {
+    console.log('Checking approval for courseId:', courseId);
+    const userIdString = localStorage.getItem('UserId') || '';
+    console.log(userIdString)
+    const userId = Number(userIdString)
+    try {
+        if (!courseId || courseId === 0) {
+            return false;
         }
-        
-        await this.loadCourses();
-      } else {
-        console.error('Course ID가 설정되지 않았습니다.');
-        this.router.navigate(['/classnone']);
+
+        // 강사인 경우 항상 접근 허용
+        if (this.isInstructor()) {
+            return true;
+        }
+
+        // 해당 courseId에 대한 registration 정보만 조회
+        const response = await firstValueFrom(
+            this.courseService.getRegistration(courseId, userId)
+        );
+
+        console.log('API Response:', response.data);
+        console.log('API Response2:', response.data.course_registration_id);
+        console.log('API Response3:', response.data.user);
+        console.log('API Response4:', response.data.course);
+        console.log('check1:', response?.data.course_registration_status === Registration.APPROVED)
+        console.log('check2:', Number(response.data.user?.user_id) === userId)
+        console.log('check3:', response.data.course?.course_id === courseId)
+
+        // null 체크와 타입 검사를 포함한 조건문
+        const isApproved = Boolean(
+          response?.data.course_registration_status === Registration.APPROVED &&
+          Number(response.data.user?.user_id) === userId &&
+          response.data.course?.course_id === courseId
+      );
+
+      console.log('Approval status:', isApproved);
+      return isApproved;
+
+    } catch (error) {
+        console.error('Approval check failed:', error);
+        if (error instanceof HttpErrorResponse) {
+            switch (error.status) {
+                case 401:
+                    this.router.navigate(['/loginpage']);
+                    break;
+                case 404:
+                    console.error('Course not found');
+                    break;
+                default:
+                    console.error('API error:', error);
+            }
+        }
+        return false;
+    }
+}
+
+  // ngOnInit 수정
+  async ngOnInit() {
+      this.userRole = localStorage.getItem('Role') || '';
+      
+      // 관리자는 접근 불가
+      if (this.userRole === Role.ADMIN) {
+          this.router.navigate(['/classsignup']);
+          return;
       }
-    });
+
+      try {
+          const storedCourseIds = localStorage.getItem('courseId');
+          if (!storedCourseIds) {
+              console.error('Course ID를 찾을 수 없습니다.');
+              this.router.navigate(['/classnone']);
+              return;
+          }
+
+          const courseIds = JSON.parse(storedCourseIds);
+          if (!Array.isArray(courseIds) || courseIds.length === 0) {
+              console.error('유효한 Course ID가 없습니다.');
+              this.router.navigate(['/classnone']);
+              return;
+          }
+
+          // 첫 번째 courseId에 대해서만 승인 여부 확인
+          this.course_id = courseIds[0];
+          console.log('Checking course_id:', this.course_id);
+          
+          const isApproved = await this.checkApprovalStatus(this.course_id);
+          if (!isApproved) {
+              this.router.navigate(['/classnone']);
+              return;
+          }
+          
+          await this.loadCourses();
+          
+      } catch (error) {
+          console.error('Course ID 처리 중 오류 발생:', error);
+          this.router.navigate(['/classnone']);
+      }
   }
 
   // 강사 권한 체크
@@ -144,8 +171,8 @@ export class ClassmyPage implements OnInit {
     }
   }
 
-    // 모든 비디오 토픽을 가져오는 메서드
-    async getAllVideoTopics() {
+  // 모든 비디오 토픽을 가져오는 메서드
+  async getAllVideoTopics() {
       try {
         const response: ApiResponse<VideoTopicRequestData[]> = await firstValueFrom(
           this.courseService.getAllVideoTopic(this.course_id)
@@ -165,24 +192,24 @@ export class ClassmyPage implements OnInit {
       } catch (error) {
         console.error('비디오 주제 로드 중 오류 발생', error);
       }
-    }
+  }
 
-    setActiveSection(section: 'lecture' | 'material') {  // union type으로 타입 안정성 확보
+  setActiveSection(section: 'lecture' | 'material') {  // union type으로 타입 안정성 확보
       this.data.activeSection = section;
-    }
+  }
 
-    // 새로운 항목을 추가하고 초기 상태를 해제
-    addFirstLectureItem() {
+  // 새로운 항목을 추가하고 초기 상태를 해제
+  addFirstLectureItem() {
       this.data.isEmptyState = false;  // 초기 상태를 해제
       this.data.lectureItems.push({ title: '', newCourseTitle: '' }); // 첫 항목 추가
-    }
+  }
 
-    // index 위치에 새로운 항목을 추가하는 메서드
-    addLectureItem(index: number) {
+  // index 위치에 새로운 항목을 추가하는 메서드
+  addLectureItem(index: number) {
       this.data.lectureItems.splice(index + 1, 0, { title: '', newCourseTitle: '' });
-    }
+  }
 
-    async deleteVideo(courseId: number, videoTopicId: number) {
+  async deleteVideoTopic(courseId: number, videoTopicId: number) {
       const confirmed = confirm('이 비디오 주제를 삭제하시겠습니까?'); // 삭제 확인 다이얼로그
       if (!confirmed) {
         return; // 사용자가 삭제를 취소한 경우
@@ -194,10 +221,10 @@ export class ClassmyPage implements OnInit {
       } catch (error) {
         console.error('비디오 주제 삭제 중 오류 발생', error);
       }
-    }
+  }
 
-    // 비디오 주제를 생성하는 메서드
-    async videotopicRegister(i: number) {
+  // 비디오 주제를 생성하는 메서드
+  async videotopicRegister(i: number) {
       // null 체크를 명시적으로 수행
       if (!this.course_id) {
         console.error('courseId가 없습니다.');
@@ -227,21 +254,19 @@ export class ClassmyPage implements OnInit {
         console.error('비디오 주제 생성 중 오류 발생:', error);
         alert('비디오 주제 생성에 실패했습니다.');
       }
-    }
+  }
 
-    // Alert 메시지 표시를 위한 메서드
-    async showAlert(title: string, message: string) {
+  // Alert 메시지 표시를 위한 메서드
+  async showAlert(title: string, message: string) {
       alert(`${title}: ${message}`);
-    }
+  }
 
-    async openVideoCreateModal() {
+  async openVideoCreateModal() {
       const modal = await this.modalController.create({
         component: VideoCreateModalComponent,
       });
       return await modal.present();
-    }
-
-
-    }
+  }
+}
 
     

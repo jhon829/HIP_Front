@@ -66,7 +66,7 @@ export class CourseService {
   // 특정 강의 정보를 불러오는 메서드
   getOneCourses(courseId: number): Observable<ApiResponse<CourseResponseData[]>> {
     const headers = this.getAuthHeaders();
-    return this.http.get<ApiResponse<CourseResponseData[]>>(`${this.courseApiUrl}/${courseId}/read`, { headers });
+    return this.http.get<ApiResponse<CourseResponseData[]>>(`${this.courseApiUrl}/only-course-my/${courseId}`, { headers });
   }
 
   // 강의 정보 수정
@@ -100,10 +100,10 @@ export class CourseService {
 
 
   //수강신청 조회
-  getAllinqueryUsers(courseId:number): Observable<ApiResponse<CourseWithCourseRegistrationResponseData[]>> {
+  getRegistration(courseId: number, id: number): Observable<ApiResponse<CourseRegistration>> {
     const headers = this.getAuthHeaders();
-    const url = `${this.courseApiUrl}/course-docname-coursedoc/${courseId}`;
-    return this.http.get<ApiResponse<CourseWithCourseRegistrationResponseData[]>>(url, { headers });
+    const url = `${this.courseApiUrl}/course-courseregistration/${courseId}`;
+    return this.http.get<ApiResponse<CourseRegistration>>(`${this.courseApiUrl}/${courseId}/courseRegistration/${id}/approvedcourse`, { headers });
   }
 
 

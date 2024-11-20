@@ -199,7 +199,7 @@ export class AuthService {
         localStorage.setItem('UserId', payload.id || '');
         localStorage.setItem('Role', payload.role || '');
         localStorage.setItem('Name', payload.name || '');
-        localStorage.setItem('courseId', payload.courseIds || '');
+        localStorage.setItem('courseId', JSON.stringify(payload.courseIds || []));
         return payload;
       } catch (error) {
         console.error('Token parsing error:', error);
@@ -212,12 +212,6 @@ export class AuthService {
   isAuthenticated(): boolean {
     const token = localStorage.getItem('token');
     return !!token;
-  }
-
-  getUserId(): string | null {
-    const userId = localStorage.getItem('UserId');
-    // 단순히 userId를 반환하고 리다이렉션은 하지 않음
-    return userId;
   }
 
   getUserRole(): string {

@@ -23,9 +23,16 @@ export class CourseTitleComponent implements OnInit {
     private modalController: ModalController
   ) { 
     // localStorage에서 가져온 값을 number로 변환
-    const storedCourseId = localStorage.getItem('courseId');
-    if (storedCourseId) {
-      this.courseId = parseInt(storedCourseId, 10);
+    const storedCourseIds = localStorage.getItem('courseId');
+    if (storedCourseIds) {
+      try {
+        const courseIds = JSON.parse(storedCourseIds); // 배열로 파싱
+        if (Array.isArray(courseIds) && courseIds.length > 0) {
+          this.courseId = courseIds[0]; // 배열의 첫 번째 값 사용
+        }
+      } catch (error) {
+        console.error('Error parsing courseId:', error);
+      }
     }
   }
 

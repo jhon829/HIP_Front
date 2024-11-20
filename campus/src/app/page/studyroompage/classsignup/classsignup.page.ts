@@ -24,9 +24,9 @@ import { CourseRegistration } from 'src/app/models/course/courses/course-regista
 export class ClasssignupPage implements OnInit {
   registeredCourses: Set<number> = new Set();
   courses: CourseResponseData[] = [];
-  // 클래스의 맨 위에 타입 정의 추가
-  CourseWithCourseRegistrationResponseData: { [courseId: number]: CourseWithCourseRegistrationResponseData[] } = {};
-  generations: string[] = ['1기', '2기', '3기', '4기', '5기']; // 가능한 세대 목록(하드코딩)
+  // 클래스의 맨 위에 타입 정의 추가CourseWithCo
+  CourseRegistrationResponseData: { [courseId: number]: CourseRegistration[] } = {};
+  generations: string[] = ['1', '2', '3', '4', '5']; // 가능한 세대 목록(하드코딩)
   selectedGeneration: string = '3기' // 기본값으로 3세대 선택
   userRoleU : { [user_role : string ] : UserResponse[] } = {} ;
 
@@ -65,14 +65,49 @@ export class ClasssignupPage implements OnInit {
     }
   }*/
 
-// 강의 신청 유저 조회하기
+  // 강의 신청 유저 조회하기
   async courseinqueryUser(courseId: number, userId: number) {
     try {
-      const response: ApiResponse<CourseWithCourseRegistrationResponseData[]> = await firstValueFrom(
-        this.courseService.getAllinqueryUsers(courseId)
+      const response: ApiResponse<CourseRegistration> = await firstValueFrom(
+        this.courseService.getRegistration(courseId, userId)
       );
-
-      this.CourseWithCourseRegistrationResponseData[courseId] = response.data || [];
+  
+      if (response?.data) {        
+        // applicant와 currentCourse가 존재하는지 먼저 확인
+        const applicant = response.data.user;
+        const currentCourse = response.data.course;
+  
+        if (!applicant || !currentCourse) {
+          console.error('Required data is missing');
+          return;
+        }
+  
+        // 필수 데이터가 있는 경우에만 매핑 진행
+        const mappedRegistration: CourseRegistration = {
+          course_registration_id: response.data.course_registration_id,
+          course_registration_status: response.data.course_registration_status,
+          course_reporting_date: new Date(response.data.course_reporting_date),
+          user: {
+            user_id: applicant.user_id,
+            id: applicant.id || '',  // 여기서는 user_id 사용
+            user_name: applicant.user_name || '',
+            email: applicant.email || '',
+            user_role: applicant.user_role || ''
+          },
+          course: {
+            course_id: currentCourse.course_id,
+            course_title: currentCourse.course_title || '',
+            description: currentCourse.description || '',
+            instructor_name: currentCourse.instructor_name || '',
+            course_notice: currentCourse.course_notice || '',
+            generation: currentCourse.generation || ''
+          }
+        };
+  
+        this.CourseRegistrationResponseData[courseId] = [mappedRegistration];
+        console.log('Mapped registration data:', this.CourseRegistrationResponseData[courseId]);
+      }
+  
     } catch (error) {
       console.error(`Error loading registrations for course ${courseId}`, error);
       alert('강의 등록 정보를 불러오는 중 오류가 발생했습니다.');
@@ -189,14 +224,15 @@ async joinCourse(courseId: number) {
   try {
       const courseReportingDate = await this.getCurrentDate();
       const registrationData: CourseRegistration = {
-          id: 0, // 백엔드에서 생성될 ID
-          status: Registration.PENDING,
-          date: courseReportingDate,
-          applicant: {
-            id: localStorage.getItem('UserId') || '',          // user_id가 아닌 id
-            user_name: localStorage.getItem('UserName') || '', // name이 아닌 user_name
-            email: '',                                         // email은 필수 필드
-            user_role: localStorage.getItem('Role') || ''      // user_role도 필수 필드
+          course_registration_id: 0, // 백엔드에서 생성될 ID
+          course_registration_status: Registration.PENDING,
+          course_reporting_date: courseReportingDate,
+          user: {
+            user_id: Number(localStorage.getItem('UserId')),  // 숫자 타입의 user_id 사용
+            id: localStorage.getItem('LoginId') || '',        // 문자열 타입의 id 사용
+            user_name: localStorage.getItem('UserName') || '',
+            email: '',
+            user_role: localStorage.getItem('Role') || ''
           }
       };
 
