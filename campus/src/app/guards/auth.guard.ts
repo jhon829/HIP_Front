@@ -5,7 +5,6 @@ import { CourseService } from '../services/course/course.service';
 import { AuthService } from '../services/auth/auth.service';
 import { Role, Registration } from '../models/enums/role.enums';
 import { HttpErrorResponse } from '@angular/common/http';
-import { CourseRegistration } from '../models/course/courses/course-registation-response.interface';
 
 @Injectable({
   providedIn: 'root'

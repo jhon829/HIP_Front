@@ -10,8 +10,6 @@ import { ModalController } from '@ionic/angular';
 import { VideoCreateModalComponent } from '../../../component/video-create-modal/video-create-modal.component';
 import { Registration, Role } from 'src/app/models/enums/role.enums';
 import { HttpErrorResponse } from '@angular/common/http';
-import { CourseWithCourseRegistrationResponseData } from 'src/app/models/course/courses/course-with-courseregistration-resoinse.interface';
-import { CourseRegistration } from 'src/app/models/course/courses/course-registation-response.interface';
 
 @Component({
   selector: 'app-classmy',
@@ -97,46 +95,42 @@ export class ClassmyPage implements OnInit {
 
   // ngOnInit 수정
   async ngOnInit() {
-      this.userRole = localStorage.getItem('Role') || '';
-      
-      // 관리자는 접근 불가
-      if (this.userRole === Role.ADMIN) {
-          this.router.navigate(['/classsignup']);
-          return;
-      }
+    this.userRole = localStorage.getItem('Role') || '';
+    
+    // 관리자는 접근 불가
+    if (this.userRole === Role.ADMIN) {
+        this.router.navigate(['/classsignup']);
+        return;
+    }
 
-      try {
-          const storedCourseIds = localStorage.getItem('courseId');
-          if (!storedCourseIds) {
-              console.error('Course ID를 찾을 수 없습니다.');
-              this.router.navigate(['/classnone']);
-              return;
-          }
+    try {
+        // URL 파라미터에서 course_id 가져오기
+        this.route.params.subscribe(params => {
+            this.course_id = Number(params['course_id']);
+            console.log('URL course_id:', this.course_id);
+        });
 
-          const courseIds = JSON.parse(storedCourseIds);
-          if (!Array.isArray(courseIds) || courseIds.length === 0) {
-              console.error('유효한 Course ID가 없습니다.');
-              this.router.navigate(['/classnone']);
-              return;
-          }
+        // course_id가 유효한지 확인
+        if (!this.course_id) {
+            console.error('Invalid course_id');
+            this.router.navigate(['/classnone']);
+            return;
+        }
 
-          // 첫 번째 courseId에 대해서만 승인 여부 확인
-          this.course_id = courseIds[0];
-          console.log('Checking course_id:', this.course_id);
-          
-          const isApproved = await this.checkApprovalStatus(this.course_id);
-          if (!isApproved) {
-              this.router.navigate(['/classnone']);
-              return;
-          }
-          
-          await this.loadCourses();
-          
-      } catch (error) {
-          console.error('Course ID 처리 중 오류 발생:', error);
-          this.router.navigate(['/classnone']);
-      }
-  }
+        const isApproved = await this.checkApprovalStatus(this.course_id);
+        if (!isApproved) {
+            this.router.navigate(['/classnone']);
+            return;
+        }
+
+        // 강의 데이터 로드
+        await this.loadCourses();
+        
+    } catch (error) {
+        console.error('Course ID 처리 중 오류 발생:', error);
+        this.router.navigate(['/classnone']);
+    }
+}
 
   // 강사 권한 체크
   isInstructor(): boolean {

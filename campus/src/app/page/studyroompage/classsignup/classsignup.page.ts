@@ -9,7 +9,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { CourseWithCourseRegistrationResponseData } from 'src/app/models/course/courses/course-with-courseregistration-resoinse.interface';
 import { CourseResponseData } from 'src/app/models/course/courses/course-response.interface';
 import { UserResponse } from 'src/app/models/common/user-response';
-import { CourseRegistration } from 'src/app/models/course/courses/course-registation-response.interface';
+import { CourseRegistrationResponseData } from 'src/app/models/course/courses/course-registation-response.interface';
+import { CourseRegistrationRequestData } from 'src/app/models/course/courses/course-registration-request.interface';
 
 
 @Component({
@@ -25,8 +26,8 @@ export class ClasssignupPage implements OnInit {
   registeredCourses: Set<number> = new Set();
   courses: CourseResponseData[] = [];
   // 클래스의 맨 위에 타입 정의 추가CourseWithCo
-  CourseRegistrationResponseData: { [courseId: number]: CourseRegistration[] } = {};
-  generations: string[] = ['1', '2', '3', '4', '5']; // 가능한 세대 목록(하드코딩)
+  CourseRegistrationResponseData: { [courseId: number]: CourseRegistrationResponseData[] } = {};
+  generations: string[] = ['1기', '2기', '3기', '4기', '5기']; // 가능한 세대 목록(하드코딩)
   selectedGeneration: string = '3기' // 기본값으로 3세대 선택
   userRoleU : { [user_role : string ] : UserResponse[] } = {} ;
 
@@ -68,7 +69,7 @@ export class ClasssignupPage implements OnInit {
   // 강의 신청 유저 조회하기
   async courseinqueryUser(courseId: number, userId: number) {
     try {
-      const response: ApiResponse<CourseRegistration> = await firstValueFrom(
+      const response: ApiResponse<CourseRegistrationResponseData> = await firstValueFrom(
         this.courseService.getRegistration(courseId, userId)
       );
   
@@ -83,7 +84,7 @@ export class ClasssignupPage implements OnInit {
         }
   
         // 필수 데이터가 있는 경우에만 매핑 진행
-        const mappedRegistration: CourseRegistration = {
+        const mappedRegistration: CourseRegistrationResponseData = {
           course_registration_id: response.data.course_registration_id,
           course_registration_status: response.data.course_registration_status,
           course_reporting_date: new Date(response.data.course_reporting_date),
@@ -211,66 +212,55 @@ export class ClasssignupPage implements OnInit {
   }
 
   //강의신청
-// course.component.ts
-async joinCourse(courseId: number) {
-  const token = localStorage.getItem('token');
+  // course.component.ts
+  async joinCourse(courseId: number) {
+    const token = localStorage.getItem('token');
 
-  if (!token) {
-      console.error('토큰을 찾을 수 없습니다.');
-      alert('로그인이 필요합니다.');
-      return;
+    if (!token) {
+        console.error('토큰을 찾을 수 없습니다.');
+        alert('로그인이 필요합니다.');
+        return;
+    }
+
+    try {
+        const courseReportingDate = await this.getCurrentDate();
+        const registrationData: CourseRegistrationRequestData = {
+            course_registration_status: Registration.PENDING,
+            course_reporting_date: courseReportingDate,
+        };
+
+        const response = await firstValueFrom(
+            this.courseService.joinCourse(courseId, registrationData)
+        );
+
+        // response.message를 사용하여 성공 메시지 표시
+        console.log('back-end message:', response.message);
+        alert(response.message);  // 백엔드에서 보내준 메시지 사용
+        this.registeredCourses.add(courseId);
+
+    } catch (error) {
+        console.error('강의 신청 중 오류 발생:', error);
+        let errorMessage = '강의 신청 중 오류가 발생했습니다.';
+
+        if (error instanceof HttpErrorResponse) {
+            switch (error.status) {
+                case 400:
+                    errorMessage = '잘못된 요청입니다.';
+                    break;
+                case 401:
+                    errorMessage = '로그인이 필요합니다.';
+                    break;
+                case 409:
+                    errorMessage = '이미 신청한 강의입니다.';
+                    break;
+                default:
+                    errorMessage = '서버 오류가 발생했습니다.';
+            }
+        }
+
+        alert(errorMessage);
+    }
   }
-
-  try {
-      const courseReportingDate = await this.getCurrentDate();
-      const registrationData: CourseRegistration = {
-          course_registration_id: 0, // 백엔드에서 생성될 ID
-          course_registration_status: Registration.PENDING,
-          course_reporting_date: courseReportingDate,
-          user: {
-            user_id: Number(localStorage.getItem('UserId')),  // 숫자 타입의 user_id 사용
-            id: localStorage.getItem('LoginId') || '',        // 문자열 타입의 id 사용
-            user_name: localStorage.getItem('UserName') || '',
-            email: '',
-            user_role: localStorage.getItem('Role') || ''
-          }
-      };
-
-      const response = await firstValueFrom(
-          this.courseService.joinCourse(courseId, registrationData)
-      );
-
-      if (response.status === 200) {
-          console.log('강의 신청 성공:', response.message);
-          alert('강의 신청이 완료되었습니다.');
-          this.registeredCourses.add(courseId);
-      } else {
-          throw new Error(response.message || '강의 신청에 실패했습니다.');
-      }
-
-  } catch (error) {
-      console.error('강의 신청 중 오류 발생:', error);
-      let errorMessage = '강의 신청 중 오류가 발생했습니다.';
-
-      if (error instanceof HttpErrorResponse) {
-          switch (error.status) {
-              case 400:
-                  errorMessage = '잘못된 요청입니다.';
-                  break;
-              case 401:
-                  errorMessage = '로그인이 필요합니다.';
-                  break;
-              case 409:
-                  errorMessage = '이미 신청한 강의입니다.';
-                  break;
-              default:
-                  errorMessage = '서버 오류가 발생했습니다.';
-          }
-      }
-
-      alert(errorMessage);
-  }
-}
 
 
   //현재 강의를 신청했는지에 대한 변수
