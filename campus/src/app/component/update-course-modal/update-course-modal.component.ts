@@ -5,6 +5,7 @@ import { AlertController } from '@ionic/angular'; // AlertController import
 import { firstValueFrom } from 'rxjs'; // firstValueFrom import
 import { IonicModule } from '@ionic/angular'; // IonicModule import
 import { CourseResponseData } from 'src/app/models/course/courses/course-response.interface';
+import { CourseRequestData } from 'src/app/models/course/courses/course-request.interface';
 
 @Component({
   selector: 'app-update-course-modal',
@@ -45,18 +46,35 @@ export class UpdateCourseModalComponent  implements OnInit {
 
   async onSubmit() {
     if (this.courseForm.valid) {
-      const courseData = { ...this.course, ...this.courseForm.value }; // 기존 데이터와 폼 데이터를 병합
+      // 전송할 데이터만 포함
+      const courseData: CourseRequestData = {
+        course_title: this.courseForm.value.course_title || undefined,
+        instructor_name: this.courseForm.value.instructor_name || undefined,
+        description: this.courseForm.value.description || undefined
+      };  
+
+      // 실제 전송되는 데이터 로깅
+      console.log('Submitting course update:', courseData);
 
       try {
-        const response = await firstValueFrom(this.courseService.updateCourse(this.course.course_id, courseData));
+        const response = await firstValueFrom(
+          this.courseService.updateCourse(this.course.course_id, courseData)
+        );
         console.log('Course updated successfully:', response);
         await this.showAlert('성공', '클래스가 성공적으로 수정되었습니다.');
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error updating course:', error);
-        await this.showAlert('실패', '클래스 수정에 실패했습니다.');
+        // 에러 상세 정보 출력
+        console.error('Error details:', {
+          status: error.status,
+          message: error.error?.message,
+          error: error.error
+        });
+        const errorMessage = error.error?.message || '클래스 수정에 실패했습니다.';
+        await this.showAlert('실패', errorMessage);
       }
     }
-  }
+}
 
   // Alert 생성 메서드
   async showAlert(header: string, message: string) {
