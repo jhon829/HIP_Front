@@ -6,6 +6,7 @@ import { ModalController } from '@ionic/angular';
 import { CourseCreateModalComponent } from "../course-create-modal/course-create-modal.component";
 import { UpdateCourseModalComponent } from "../update-course-modal/update-course-modal.component";
 import { CourseResponseData } from 'src/app/models/course/courses/course-response.interface';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-course-title',
@@ -14,35 +15,42 @@ import { CourseResponseData } from 'src/app/models/course/courses/course-respons
 })
 export class CourseTitleComponent implements OnInit {
   courses: CourseResponseData[] = [];
-  courseId: number = 0;  // number 타입으로 수정
   isLoading: boolean = false;
   errorMessage: string = '';
+  userRole: string = '';
+  courseId: number = 0;
 
   constructor(
     private courseService: CourseService,
-    private modalController: ModalController
-  ) { 
-    // localStorage에서 가져온 값을 number로 변환
-    const storedCourseIds = localStorage.getItem('courseId');
-    if (storedCourseIds) {
-      try {
-        const courseIds = JSON.parse(storedCourseIds); // 배열로 파싱
-        if (Array.isArray(courseIds) && courseIds.length > 0) {
-          this.courseId = courseIds[0]; // 배열의 첫 번째 값 사용
-        }
-      } catch (error) {
-        console.error('Error parsing courseId:', error);
-      }
-    }
-  }
+    private modalController: ModalController,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    if (this.courseId) {
-      this.loadTitleCourses();
-    } else {
-      this.errorMessage = '강좌 ID를 찾을 수 없습니다.';
-      console.error('No courseId found in localStorage');
-    }
+    // 사용자 역할 가져오기
+    this.userRole = localStorage.getItem('Role') || '';
+
+    // route.params에서 course_id 가져오기
+    this.route.params.subscribe(params => {
+      if (params['course_id']) {
+        this.courseId = Number(params['course_id']);
+        console.log('URL course_id:', this.courseId);
+        // courseId를 localStorage에 저장
+        localStorage.setItem('courseId', this.courseId.toString());
+        this.loadTitleCourses();
+      } else {
+        // URL에 course_id가 없을 경우 localStorage에서 확인
+        const storedCourseId = localStorage.getItem('courseId');
+        if (storedCourseId) {
+          this.courseId = Number(storedCourseId);
+          this.loadTitleCourses();
+        } else {
+          this.errorMessage = '강좌 ID를 찾을 수 없습니다.';
+          console.error('No courseId found in URL or localStorage');
+        }
+      }
+    });
   }
 
   // 코스에 대한 data 반환
@@ -54,6 +62,8 @@ export class CourseTitleComponent implements OnInit {
       if (!this.courseId) {
         throw new Error('강좌 ID가 없습니다.');
       }
+
+      console.log('Loading courses for courseId:', this.courseId); // 디버깅 로그
 
       const response: ApiResponse<CourseResponseData[]> = await firstValueFrom(
         this.courseService.getOneCourses(this.courseId)
@@ -69,6 +79,9 @@ export class CourseTitleComponent implements OnInit {
       } else {
         this.courses = response.data;
       }
+
+      console.log('Loaded courses:', this.courses); // 디버깅 로그
+
     } catch (error) {
       console.error('Error loading courses:', error);
       this.errorMessage = error instanceof Error ? error.message : '강좌 정보를 불러오는 중 오류가 발생했습니다.';

@@ -1,8 +1,10 @@
+// video-create-modal.component.ts
 import { Component, OnInit } from '@angular/core';
-import { VideoService } from './video.service'; // 서비스 임포트
+import { ModalController } from '@ionic/angular';
+import { VideoService } from './video.service';
 
 interface Video {
-  file: File; // 파일 객체 추가
+  file: File;
   title: string;
 }
 
@@ -12,46 +14,59 @@ interface Video {
   styleUrls: ['./video-create-modal.component.scss'],
 })
 export class VideoCreateModalComponent implements OnInit {
-  videos: Video[] = [];
-  courseId: number = 0; // 초기값은 빈 문자열
-  videoTopicId: number = 0; // 초기값은 빈 문자열
-  
+  video: Video | null = null;
+  courseId: number = 0;
+  videoTopicId: number = 0;
+  selectedFile: File | null = null;
+  videoTitle: string = '';
+
   constructor(
+    private modalController: ModalController,
     private videoService: VideoService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    // 모달이 열릴 때 전달받은 데이터 처리
+    const currentCourse = localStorage.getItem('currentCourse');
+    if (currentCourse) {
+      this.courseId = JSON.parse(currentCourse).course_id;
+    }
+  }
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      const file = input.files[0];
-      const video: Video = {
-        file: file, // 파일 객체를 저장
-        title: '영상 제목 ' + (this.videos.length + 1),
+      this.selectedFile = input.files[0];
+      this.video = {
+        file: this.selectedFile,
+        title: this.videoTitle
       };
-      this.videos.push(video); // 비디오 목록에 추가
-      console.log(this.videos); // 콘솔에 현재 비디오 목록 출력
+
+      console.log('Selected file:', this.selectedFile);
     }
   }
 
-  uploadVideo(video: Video) { // Video 타입으로 변경
-    this.videoService.uploadVideo(this.courseId, this.videoTopicId, video.file).subscribe(
-      response => {
-        console.log('업로드 성공:', response);
-      },
-      error => {
-        console.error('업로드 실패:', error);
-      }
-    );
+  async onUpload() {
+    if (!this.selectedFile) {
+      alert('파일을 선택해주세요');
+      return;
+    }
+
+    try {
+      const response = await this.videoService
+        .uploadVideo(this.courseId, this.videoTitle, this.videoTopicId, this.selectedFile)
+        .toPromise();
+        
+      console.log('Upload success:', response);
+      alert('비디오가 성공적으로 업로드되었습니다.');
+      this.modalController.dismiss(true);
+    } catch (error) {
+      console.error('Upload failed:', error);
+      alert('업로드 중 오류가 발생했습니다.');
+    }
   }
 
-  onUpload() {
-    if (this.videos.length > 0) {
-      const video = this.videos[this.videos.length - 1]; // 마지막으로 추가된 비디오 객체
-      this.uploadVideo(video); // 파일 업로드
-    } else {
-      console.error('비디오 파일이 없습니다.');
-    }
+  dismiss() {
+    this.modalController.dismiss();
   }
 }

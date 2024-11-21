@@ -68,7 +68,9 @@
                   <div class="lecture-menu">
                     <!-- 강사만 볼 수 있는 관리 기능 -->
                     <ng-container *ngIf="isInstructor()">
-                      <div class="video-upload">영상파일 올리기</div>
+                      <div class="video-upload" (click)="openVideoCreateModal(VT.video_topic_id)" expand="full">
+                        영상파일 올리기
+                      </div>
                       <ion-icon *ngIf="VT.video_topic_id !== null" name="trash" style="cursor: pointer;"
                                 (click)="deleteVideoTopic(course_id, VT.video_topic_id)">
                       </ion-icon>
@@ -82,11 +84,6 @@
             </ul>
           </div>
         </div>
-
-        <!-- 강사만 볼 수 있는 강의 생성 버튼 -->
-        <ion-button *ngIf="isInstructor()" (click)="openVideoCreateModal()" expand="full">
-          강의생성
-        </ion-button>
       </div>
 
       <div *ngIf="data.activeSection === 'material'" class="active-section">

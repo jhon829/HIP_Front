@@ -12,6 +12,7 @@ import { VideoResponseData } from 'src/app/models/course/video/video-response.in
 import { DocNameResponseData } from 'src/app/models/course/doc_name/doc_name-request.interface';
 import { CourseRegistrationResponseData } from 'src/app/models/course/courses/course-registation-response.interface';
 import { CourseRegistrationRequestData } from 'src/app/models/course/courses/course-registration-request.interface';
+import { CourseRequestData } from 'src/app/models/course/courses/course-request.interface';
 
 
 @Injectable({
@@ -71,11 +72,16 @@ export class CourseService {
   }
 
   // 강의 정보 수정
-  updateCourse(courseId: number, courseData: any): Observable<ApiResponse<CourseResponseData>> {
-    const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
-    return this.http.patch<ApiResponse<CourseResponseData>>(`${this.courseApiUrl}/course/${courseId}/update`, courseData, { headers }); // PUT 요청
-
-  }
+  updateCourse(courseId: number, courseData: CourseRequestData): Observable<ApiResponse<CourseResponseData>> {
+    const headers = this.getAuthHeaders();
+    
+    // 백엔드의 라우트 패턴에 맞게 URL 수정
+    return this.http.patch<ApiResponse<CourseResponseData>>(
+      `${this.courseApiUrl}/update/${courseId}`,  // 백엔드 라우트와 일치하도록 수정
+      courseData,
+      { headers }
+    );
+}
 
   //course join(Post)
   /*
