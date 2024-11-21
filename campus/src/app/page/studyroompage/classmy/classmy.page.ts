@@ -255,11 +255,21 @@ export class ClassmyPage implements OnInit {
       alert(`${title}: ${message}`);
   }
 
-  async openVideoCreateModal() {
-      const modal = await this.modalController.create({
-        component: VideoCreateModalComponent,
-      });
-      return await modal.present();
+  async openVideoCreateModal(videoTopicId: number | null) {
+    if (!videoTopicId) {
+      alert('올바른 비디오 토픽이 아닙니다.');
+      return;
+    }
+    const modal = await this.modalController.create({
+      component: VideoCreateModalComponent,
+      componentProps: {
+        courseId: this.course_id,
+        videoTopicId: videoTopicId  // 파라미터로 받은 VideoTopic ID를 전달
+      }
+    });
+
+    const result = await modal.present();
+    return result;
   }
 }
 
