@@ -10,7 +10,8 @@ import { VideoTopicRequestData } from 'src/app/models/course/video_topic/video_t
 import { VideoRequestData } from 'src/app/models/course/video/video-request.interface';
 import { VideoResponseData } from 'src/app/models/course/video/video-response.interface';
 import { DocNameResponseData } from 'src/app/models/course/doc_name/doc_name-request.interface';
-import { CourseRegistration } from 'src/app/models/course/courses/course-registation-response.interface';
+import { CourseRegistrationResponseData } from 'src/app/models/course/courses/course-registation-response.interface';
+import { CourseRegistrationRequestData } from 'src/app/models/course/courses/course-registration-request.interface';
 
 
 @Injectable({
@@ -91,19 +92,18 @@ export class CourseService {
   */
 
 
-  //수강 신청 받음
-  joinCourse(courseId: number, registrationData: CourseRegistration): Observable<ApiResponse<CourseRegistration>> {
+  //수강 신청 보냄
+  joinCourse(courseId: number, registrationData: CourseRegistrationRequestData): Observable<ApiResponse<CourseRegistrationResponseData>> {
     const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
     const url = `${this.courseApiUrl}/${courseId}/courseRegistration/register`; // 올바른 URL 구성
-    return this.http.post<ApiResponse<CourseRegistration>>(url, registrationData, { headers }); // POST 요청으로 변경
+    return this.http.post<ApiResponse<CourseRegistrationResponseData>>(url, registrationData, { headers }); // POST 요청으로 변경
   }
 
 
   //수강신청 조회
-  getRegistration(courseId: number, id: number): Observable<ApiResponse<CourseRegistration>> {
+  getRegistration(courseId: number, id: number): Observable<ApiResponse<CourseRegistrationResponseData>> {
     const headers = this.getAuthHeaders();
-    const url = `${this.courseApiUrl}/course-courseregistration/${courseId}`;
-    return this.http.get<ApiResponse<CourseRegistration>>(`${this.courseApiUrl}/${courseId}/courseRegistration/${id}/approvedcourse`, { headers });
+    return this.http.get<ApiResponse<CourseRegistrationResponseData>>(`${this.courseApiUrl}/${courseId}/courseRegistration/${id}/approvedcourse`, { headers });
   }
 
 
@@ -197,7 +197,7 @@ export class CourseService {
   // 영상 주제 조회(GET | 전체 조회)
   getAllVideoTopic(courseId: number | null): Observable<ApiResponse<VideoTopicRequestData[]>> {
     const headers = this.getAuthHeaders();
-    return this.http.get<ApiResponse<VideoTopicRequestData[]>>(`${this.courseApiUrl}/${courseId}/videoTopics/gettopic`, { headers });
+    return this.http.get<ApiResponse<VideoTopicRequestData[]>>(`${this.courseApiUrl}/${courseId}/videoTopics/allVedioTopic`, { headers });
   }
 
   // 영상 주제 수정(PATCH)
