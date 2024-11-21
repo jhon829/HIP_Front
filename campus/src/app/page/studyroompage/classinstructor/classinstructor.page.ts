@@ -47,7 +47,13 @@ export class ClassinstructorPage implements OnInit {
   }
 
   // 특정 강의의 classmy 페이지로 이동
-  enterCourse(courseId: number) {
-    this.router.navigate(['/classmy', courseId]);
-  }
+  async enterCourse(courseId: number) {
+    const course = this.coursesList.find(c => c.course_id === courseId);
+    if (course) {
+        // 선택한 courseId만 courseIds 배열에 저장
+        localStorage.setItem('courseIds', JSON.stringify([courseId]));
+    }
+    // 해당 강의의 classmy 페이지로 라우팅
+    await this.router.navigate(['/classmy', courseId]);
+}
 }
