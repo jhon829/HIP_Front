@@ -46,7 +46,7 @@ const routes: Routes = [
   {
     path: 'exhibition/:id', loadChildren: () => import('./page/exhibitionpage/exhibition-details/exhibition-details.module').then(m => m.ExhibitionDetailsPageModule)
   },
-// 사이드 메뉴 경로
+  // 사이드 메뉴 경로
   {
     path: 'studyroom',
     loadChildren: () => import('./page/studyroompage/studyroom/studyroom.module').then(m => m.StudyroomPageModule)
