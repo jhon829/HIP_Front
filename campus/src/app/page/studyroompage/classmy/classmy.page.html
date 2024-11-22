@@ -74,9 +74,11 @@
                       <ion-icon *ngIf="VT.video_topic_id !== null" name="trash" style="cursor: pointer;"
                                 (click)="deleteVideoTopic(course_id, VT.video_topic_id)">
                       </ion-icon>
+
                       <button *ngIf="VT.video_topic_id !== null" (click)="deleteVideoTopic(course_id, VT.video_topic_id)" style="cursor: pointer;">
-                        Delete Video
+                        Delete VideoTopic
                       </button>
+                      
                     </ng-container>
                   </div>
                 </div>

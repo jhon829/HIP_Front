@@ -13,6 +13,7 @@ import { DocNameResponseData } from 'src/app/models/course/doc_name/doc_name-req
 import { CourseRegistrationResponseData } from 'src/app/models/course/courses/course-registation-response.interface';
 import { CourseRegistrationRequestData } from 'src/app/models/course/courses/course-registration-request.interface';
 import { CourseRequestData } from 'src/app/models/course/courses/course-request.interface';
+import { VideoTopicResponseData } from 'src/app/models/course/video_topic/video_topic-response.interface';
 
 
 @Injectable({
@@ -137,16 +138,19 @@ export class CourseService {
     const headers = this.getAuthHeaders();
     return this.http.get<ApiResponse<DocNameResponseData>>(`${this.courseApiUrl}/${courseId}/docNames/root`, { headers }
     ).pipe(
-        catchError(this.handleError)
+        catchError(this.handleError)  
     );
   }
 
   // 학습 자료 주제 조회(GET | 특정 pa_topic_id를 갖는 topic 조회) => topic_id로 특정 pa_topic_id를 갖는 topic들 반환, 즉 파라미터로 받는 topic_id를 pa_topic_id로 하는 모든 topic 조회
   getDocName(courseId: number, topicId: number): Observable<ApiResponse<DocNameResponseData>> {
     const headers = this.getAuthHeaders();
-    return this.http.get<ApiResponse<DocNameResponseData>>(`${this.courseApiUrl}/${courseId}/docNames/${topicId}/read`, { headers }
+    // URL은 doc-topics로 유지하되 API 호출만 docNames로
+    return this.http.get<ApiResponse<DocNameResponseData>>(
+      `${this.courseApiUrl}/${courseId}/docNames/${topicId}/read`, 
+      { headers }
     ).pipe(
-        catchError(this.handleError)
+      catchError(this.handleError)
     );
   }
 
@@ -207,9 +211,9 @@ export class CourseService {
   }
 
   // 영상 주제 수정(PATCH)
-  updateVideoTopic(courseId: number, videoTopicId: number, VideoTopicData: any): Observable<ApiResponse<VideoTopicRequestData>> {
+  updateVideoTopic(courseId: number, videoTopicId: number, VideoTopicData: VideoTopicRequestData): Observable<ApiResponse<VideoTopicResponseData>> {
     const headers = this.getAuthHeaders();
-    return this.http.patch<ApiResponse<VideoTopicRequestData>>(`${this.courseApiUrl}/${courseId}/videoTopics/${videoTopicId}/update`, VideoTopicData, { headers })
+    return this.http.patch<ApiResponse<VideoTopicResponseData>>(`${this.courseApiUrl}/${courseId}/videoTopics/${videoTopicId}/update`, VideoTopicData, { headers })
   }
 
   // 영상 주제 삭제(DELETE)

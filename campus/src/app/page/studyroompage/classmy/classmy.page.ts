@@ -188,8 +188,12 @@ export class ClassmyPage implements OnInit {
       }
   }
 
-  setActiveSection(section: 'lecture' | 'material') {  // union type으로 타입 안정성 확보
-      this.data.activeSection = section;
+  setActiveSection(section: ClassmyResponseData['activeSection']) {
+    this.data.activeSection = section;
+    if (section === 'material') {
+      // 학습자료 클릭 시 URL 변경
+      this.router.navigate([`/classmy/${this.course_id}/doc-topics`]);
+    }
   }
 
   // 새로운 항목을 추가하고 초기 상태를 해제
@@ -215,6 +219,17 @@ export class ClassmyPage implements OnInit {
       } catch (error) {
         console.error('비디오 주제 삭제 중 오류 발생', error);
       }
+  }
+
+
+  async updateVideoTopic(courseId: number, videoTopicId: number, videoTopicData: VideoTopicRequestData) {
+    try{
+      const response: ApiResponse<VideoTopicRequestData> = await firstValueFrom(this.courseService.updateVideoTopic(courseId, videoTopicId, videoTopicData));
+      console.log(response.message); // 삭제 성공 메시지 출력
+      this.loadCourses();
+    } catch (error) {
+      console.error('비디오 수정 중 오류가 발생했습니다.', error);
+    }
   }
 
   // 비디오 주제를 생성하는 메서드
