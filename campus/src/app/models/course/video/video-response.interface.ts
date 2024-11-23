@@ -1,4 +1,5 @@
 export interface VideoResponseData {
-    video_id: number,
-    video_key: string
-  }
+    video_topic_id: number;
+    video_topic_title: string;
+    //...
+}
