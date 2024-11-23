@@ -152,7 +152,6 @@ export class ClassmyPage implements OnInit {
       this.data.VideoTopics = response.data.map(videoTopic => ({
         video_topic_id: videoTopic.video_topic_id,
         video_topic_title: videoTopic.video_topic_title,
-        video_pa_topic_id: videoTopic.video_pa_topic_id,
       }));
 
       if (this.data.VideoTopics.length === 0) {
@@ -175,7 +174,6 @@ export class ClassmyPage implements OnInit {
         this.data.VideoTopics = response.data.map(videoTopic => ({
           video_topic_id: videoTopic.video_topic_id,
           video_topic_title: videoTopic.video_topic_title,
-          video_pa_topic_id: videoTopic.video_pa_topic_id,
         }));
 
         if (this.data.VideoTopics.length === 0) {
