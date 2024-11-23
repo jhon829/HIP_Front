@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CourseService } from '../../services/course/course.service';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { DocNameResponseData } from '../../models/course/doc_name/doc_name-request.interface';
 import { ApiResponse } from '../../models/common/api-response.interface';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-doc-topic',
@@ -14,69 +15,132 @@ export class DocTopicComponent implements OnInit {
   subFolders: DocNameResponseData[] = [];
   currentFolder: DocNameResponseData | null = null;
   showNewTopicForm: boolean = false;
-  newTopicTitle: string = '';
-  course_id = 14;
+  newTopicTitle: string = ''; 
   isInputValid: boolean = false;
   isLoading = false;
   errorMessage: string | null = null;
-
-  constructor(private courseService: CourseService) {}
+  course_id: number = 0;
+  currentTopicId: number | null = null;
+  folderHistory: number[] = [];
+  private routerSubscription: Subscription | null = null;
+  
+  constructor(
+    private route: ActivatedRoute,
+    private courseService: CourseService,
+    private router: Router,
+  ) {}
 
   ngOnInit() {
-    this.loadTopLevelFolders();
+    // URL 파라미터 변경 감지
+    this.route.params.subscribe(async params => {
+      this.course_id = Number(params['course_id']);
+      const topicId = params['topicId'];
+      
+      if (topicId) {
+        console.log('Topic ID detected:', topicId);  // topic_id 확인
+        // 특정 폴더 보기
+        await this.loadSubFolders(+topicId);
+        this.currentTopicId = +topicId;
+      } else {
+        console.log('Loading root folders');  // root 폴더 로딩 확인
+        // 루트 폴더 보기
+        await this.loadRootFolders();
+        this.currentTopicId = null;
+      }
+    });
   }
 
-  async loadTopLevelFolders() {
-    this.isLoading = true;
-    this.errorMessage = null;
+  // private async handleRouteChange() {
+  //   const topicId = this.route.snapshot.params['topicId'];
+    
+  //   if (topicId) {
+  //     // 특정 폴더 보기
+  //     await this.loadSubFolders(+topicId);
+  //     this.currentTopicId = +topicId;
+  //   } else {
+  //     // 루트 폴더 보기
+  //     await this.loadRootFolders();
+  //     this.currentTopicId = null;
+  //   }
+  // }
 
-    try {
-        const response = await firstValueFrom(
-            this.courseService.getFirstDocName(this.course_id)
-        );
-        
-        // root 응답은 이미 최상위 폴더만 반환하므로 필터링이 불필요
-        this.topLevelFolders = Array.isArray(response.data) 
-            ? response.data 
-            : [response.data];
-        
-    } catch (error) {
-        this.errorMessage = '상위 폴더를 불러오는 중 오류가 발생했습니다.';
-        console.error('상위 폴더 로드 에러:', error);
-    } finally {
-        this.isLoading = false;
+  ngOnDestroy() {
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
     }
   }
 
-  async loadSubFolders(parentId: number) {
+  async loadRootFolders() {
     this.isLoading = true;
-    this.errorMessage = null;
-
     try {
-        const response = await firstValueFrom(
-            this.courseService.getDocName(this.course_id, parentId)
-        );
-        
-        // sub_topics가 있는 경우 그것을 사용하고, 없으면 빈 배열
-        this.subFolders = response.data.sub_topics || [];
-        
+      const response = await firstValueFrom(
+        this.courseService.getFirstDocName(this.course_id)
+      );
+      if (response.data.pa_topic_id) {
+        // 만약 pa_topic_id가 있다면 (유효성 검사)
+      }
+      this.topLevelFolders = Array.isArray(response.data) 
+        ? response.data 
+        : [response.data];
     } catch (error) {
-        this.errorMessage = '하위 폴더를 불러오는 중 오류가 발생했습니다.';
-        console.error('하위 폴더 로드 에러:', error);
+      console.error('루트 폴더 로드 에러:', error);
     } finally {
-        this.isLoading = false;
+      this.isLoading = false;
+    }
+  }
+
+  async loadSubFolders(topicId: number) {
+    this.isLoading = true;
+    try {
+      const response = await firstValueFrom(
+        this.courseService.getDocName(this.course_id, topicId)
+      );
+      
+      if (response.data) {
+        // 현재 폴더 정보 저장
+        this.currentFolder = {
+          topic_id: response.data.topic_id,
+          topic_title: response.data.topic_title,
+          pa_topic_id: response.data.pa_topic_id,
+          course_doc: response.data.course_doc
+        };
+        
+        // 현재 선택된 topic_id를 pa_topic_id로 가지는 폴더들만 필터링
+        this.subFolders = response.data.sub_topics 
+          ? response.data.sub_topics.filter(topic => topic.pa_topic_id === topicId)
+          : [];
+          
+        this.currentTopicId = topicId;
+      }
+    } catch (error) {
+      console.error('하위 폴더 로드 에러:', error);
+      this.errorMessage = '폴더를 불러오는데 실패했습니다.';
+    } finally {
+      this.isLoading = false;
     }
   }
 
   openFolder(folder: DocNameResponseData) {
-    this.currentFolder = folder;
-    this.loadSubFolders(folder.topic_id);
+    // 현재 폴더를 새로운 상위 폴더로 설정하고 해당 폴더의 하위 폴더를 로드
+    this.currentTopicId = folder.topic_id;
+    
+    this.loadSubFolders(folder.topic_id).then(() => {
+      // 데이터 로드 후 URL 변경
+      this.router.navigate([`/classmy/${this.course_id}/doc-topics/${folder.topic_id}`]);
+    });
   }
 
-  closeFolder() {
-    this.currentFolder = null;
-    this.subFolders = [];
-    this.loadTopLevelFolders();
+  async closeFolder() {
+    if (this.currentFolder?.pa_topic_id) {
+      // 상위 폴더가 있는 경우
+      await this.loadSubFolders(this.currentFolder.pa_topic_id);
+      this.router.navigate([`/classmy/${this.course_id}/doc-topics/${this.currentFolder.pa_topic_id}`]);
+    } else {
+      // 루트로 이동
+      await this.loadRootFolders();
+      this.currentTopicId = null;
+      this.router.navigate([`/classmy/${this.course_id}/doc-topics`]);
+    }
   }
 
   showAddTopicForm() {

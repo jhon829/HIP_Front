@@ -52,7 +52,7 @@
           <!-- 선택한 폴더의 하위 폴더 -->
           <div *ngIf="isInSubfolder()" class="subfolder">
 
-            <div class="board-inner" (click)="openFolder(0)">
+            <div class="board-inner" (click)="openPopup()">
               <div class="board-title">
                 <div class="board-title-name">중간발표 대본</div>
                 <div class="board-title-detail-info">
@@ -66,11 +66,26 @@
               </div>
             </div>
 
+
+
             <div class="board-inner board-inner-add">
               <div style=" display: flex;  gap: 6px;">
                 <img style="width: 11px" src="assets/svg/plus.svg"/>
                 <div style="color: #969696">새 글쓰기</div>
               </div>
+            </div>
+          </div>
+
+          <!-- 하얀 박스 (팝업) -->
+          <div class="popup-box" *ngIf="isPopupVisible">
+            <div>ddd</div>
+            <div class="popup-content">
+              <!-- 팝업 내용 -->
+              <div >
+                <p>댓글</p>
+                <button (click)="closePopup()">닫기</button>
+              </div>
+              <p>여기에 내용을 추가하세요.</p>
             </div>
           </div>
 

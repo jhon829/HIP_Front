@@ -4,13 +4,16 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { catchError, Observable, throwError } from 'rxjs';
 import { CourseResponseData } from '../../models/course/courses/course-response.interface'; // 인터페이스 경로 수정
 import { ApiResponse } from 'src/app/models/common/api-response.interface';
-import { CourseRegistrationRequestDto } from 'src/app/models/course/courses/course-registration.interface';
 import { CourseWithCourseRegistrationResponseData } from 'src/app/models/course/courses/course-with-courseregistration-resoinse.interface';
 import { CourseDocRequestData } from 'src/app/models/course/course_doc/course_doc-request.interface';
 import { VideoTopicRequestData } from 'src/app/models/course/video_topic/video_topic-request.interface';
 import { VideoRequestData } from 'src/app/models/course/video/video-request.interface';
 import { VideoResponseData } from 'src/app/models/course/video/video-response.interface';
 import { DocNameResponseData } from 'src/app/models/course/doc_name/doc_name-request.interface';
+import { CourseRegistrationResponseData } from 'src/app/models/course/courses/course-registation-response.interface';
+import { CourseRegistrationRequestData } from 'src/app/models/course/courses/course-registration-request.interface';
+import { CourseRequestData } from 'src/app/models/course/courses/course-request.interface';
+import { VideoTopicResponseData } from 'src/app/models/course/video_topic/video_topic-response.interface';
 
 
 @Injectable({
@@ -66,15 +69,20 @@ export class CourseService {
   // 특정 강의 정보를 불러오는 메서드
   getOneCourses(courseId: number): Observable<ApiResponse<CourseResponseData[]>> {
     const headers = this.getAuthHeaders();
-    return this.http.get<ApiResponse<CourseResponseData[]>>(`${this.courseApiUrl}/${courseId}/read`, { headers });
+    return this.http.get<ApiResponse<CourseResponseData[]>>(`${this.courseApiUrl}/only-course-my/${courseId}`, { headers });
   }
 
   // 강의 정보 수정
-  updateCourse(courseId: number, courseData: any): Observable<ApiResponse<CourseResponseData>> {
-    const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
-    return this.http.patch<ApiResponse<CourseResponseData>>(`${this.courseApiUrl}/course/${courseId}/update`, courseData, { headers }); // PUT 요청
-
-  }
+  updateCourse(courseId: number, courseData: CourseRequestData): Observable<ApiResponse<CourseResponseData>> {
+    const headers = this.getAuthHeaders();
+    
+    // 백엔드의 라우트 패턴에 맞게 URL 수정
+    return this.http.patch<ApiResponse<CourseResponseData>>(
+      `${this.courseApiUrl}/update/${courseId}`,  // 백엔드 라우트와 일치하도록 수정
+      courseData,
+      { headers }
+    );
+}
 
   //course join(Post)
   /*
@@ -91,19 +99,18 @@ export class CourseService {
   */
 
 
-  //수강 신청 받음
-  joinCourse(courseId: number, registrationData: CourseRegistrationRequestDto): Observable<ApiResponse<CourseRegistrationRequestDto>> {
+  //수강 신청 보냄
+  joinCourse(courseId: number, registrationData: CourseRegistrationRequestData): Observable<ApiResponse<CourseRegistrationResponseData>> {
     const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
     const url = `${this.courseApiUrl}/${courseId}/courseRegistration/register`; // 올바른 URL 구성
-    return this.http.post<ApiResponse<CourseRegistrationRequestDto>>(url, registrationData, { headers }); // POST 요청으로 변경
+    return this.http.post<ApiResponse<CourseRegistrationResponseData>>(url, registrationData, { headers }); // POST 요청으로 변경
   }
 
 
   //수강신청 조회
-  getAllinqueryUsers(courseId:number): Observable<ApiResponse<CourseWithCourseRegistrationResponseData[]>> {
+  getRegistration(courseId: number, id: number): Observable<ApiResponse<CourseRegistrationResponseData>> {
     const headers = this.getAuthHeaders();
-    const url = `${this.courseApiUrl}/${courseId}/courseRegistration`;
-    return this.http.get<ApiResponse<CourseWithCourseRegistrationResponseData[]>>(url, { headers });
+    return this.http.get<ApiResponse<CourseRegistrationResponseData>>(`${this.courseApiUrl}/${courseId}/courseRegistration/${id}/approvedcourse`, { headers });
   }
 
 
@@ -131,16 +138,19 @@ export class CourseService {
     const headers = this.getAuthHeaders();
     return this.http.get<ApiResponse<DocNameResponseData>>(`${this.courseApiUrl}/${courseId}/docNames/root`, { headers }
     ).pipe(
-        catchError(this.handleError)
+        catchError(this.handleError)  
     );
   }
 
   // 학습 자료 주제 조회(GET | 특정 pa_topic_id를 갖는 topic 조회) => topic_id로 특정 pa_topic_id를 갖는 topic들 반환, 즉 파라미터로 받는 topic_id를 pa_topic_id로 하는 모든 topic 조회
   getDocName(courseId: number, topicId: number): Observable<ApiResponse<DocNameResponseData>> {
     const headers = this.getAuthHeaders();
-    return this.http.get<ApiResponse<DocNameResponseData>>(`${this.courseApiUrl}/${courseId}/docNames/${topicId}/read`, { headers }
+    // URL은 doc-topics로 유지하되 API 호출만 docNames로
+    return this.http.get<ApiResponse<DocNameResponseData>>(
+      `${this.courseApiUrl}/${courseId}/docNames/${topicId}/read`, 
+      { headers }
     ).pipe(
-        catchError(this.handleError)
+      catchError(this.handleError)
     );
   }
 
@@ -197,13 +207,13 @@ export class CourseService {
   // 영상 주제 조회(GET | 전체 조회)
   getAllVideoTopic(courseId: number | null): Observable<ApiResponse<VideoTopicRequestData[]>> {
     const headers = this.getAuthHeaders();
-    return this.http.get<ApiResponse<VideoTopicRequestData[]>>(`${this.courseApiUrl}/${courseId}/videoTopics/gettopic`, { headers });
+    return this.http.get<ApiResponse<VideoTopicRequestData[]>>(`${this.courseApiUrl}/${courseId}/videoTopics/allVedioTopic`, { headers });
   }
 
   // 영상 주제 수정(PATCH)
-  updateVideoTopic(courseId: number, videoTopicId: number, VideoTopicData: any): Observable<ApiResponse<VideoTopicRequestData>> {
+  updateVideoTopic(courseId: number, videoTopicId: number, VideoTopicData: VideoTopicRequestData): Observable<ApiResponse<VideoTopicResponseData>> {
     const headers = this.getAuthHeaders();
-    return this.http.patch<ApiResponse<VideoTopicRequestData>>(`${this.courseApiUrl}/${courseId}/videoTopics/${videoTopicId}/update`, VideoTopicData, { headers })
+    return this.http.patch<ApiResponse<VideoTopicResponseData>>(`${this.courseApiUrl}/${courseId}/videoTopics/${videoTopicId}/update`, VideoTopicData, { headers })
   }
 
   // 영상 주제 삭제(DELETE)

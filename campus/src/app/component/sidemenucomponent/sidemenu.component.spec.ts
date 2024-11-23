@@ -7,7 +7,7 @@ import { SidemenuComponent } from './sidemenu.component';
 
 describe('AppComponent', () => {
 
-
+ 
   beforeEach(async () => {
 
     await TestBed.configureTestingModule({
