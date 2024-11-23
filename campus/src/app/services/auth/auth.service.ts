@@ -190,24 +190,77 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
+//   getUserInfo() {
+//     const token = this.getToken();
+//     if (token) {
+//         try {
+//             const payload = JSON.parse(atob(token.split('.')[1]));
+//             localStorage.setItem('UserId', payload.id || '');
+//             localStorage.setItem('Role', payload.role || '');
+//             localStorage.setItem('Name', encodeURIComponent(payload.name || '')); // 인코딩
+//             localStorage.setItem('courseId', JSON.stringify(payload.courseIds || []));
+//             return payload;
+//         } catch (error) {
+//             console.error('Token parsing error:', error);
+//             return null;
+//         } 
+//     }
+//     return null;
+// }
+
   getUserInfo() {
     const token = this.getToken();
     if (token) {
-      try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        // 백엔드의 키 이름과 일치하도록 수정
-        localStorage.setItem('UserId', payload.id || '');
-        localStorage.setItem('Role', payload.role || '');
-        localStorage.setItem('Name', payload.name || '');
-        localStorage.setItem('courseId', JSON.stringify(payload.courseIds || []));
-        return payload;
-      } catch (error) {
-        console.error('Token parsing error:', error);
-        return null;
-      } 
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            localStorage.setItem('UserId', payload.id || '');
+            localStorage.setItem('Role', payload.role || '');
+            // 한글 이름을 그대로 저장
+            localStorage.setItem('Name', payload.name || ''); 
+            localStorage.setItem('courseId', JSON.stringify(payload.courseIds || []));
+            return payload; // 사용자 페이로드 반환
+        } catch (error) {
+            console.error('Token parsing error:', error);
+            return null;
+        } 
     }
     return null;
   }
+
+  getUserProfile(): { id: string; email: string; name: string; role: string } | null {
+    const token = this.getToken();
+    if (token) {
+        try {
+            // Base64 디코딩 시 UTF-8 처리를 위한 함수
+            const base64DecodeUnicode = (str: string): string => {
+                // base64를 디코드하여 바이너리 문자열로 변환
+                const binaryStr = atob(str);
+                // UTF-8로 인코딩된 바이너리 문자열을 Unicode로 변환
+                const bytes = new Uint8Array(binaryStr.length);
+                for (let i = 0; i < binaryStr.length; i++) {
+                    bytes[i] = binaryStr.charCodeAt(i);
+                }
+                return new TextDecoder('utf-8').decode(bytes);
+            };
+
+            // JWT 토큰의 payload 부분을 추출하고 디코딩
+            const payload = JSON.parse(
+                base64DecodeUnicode(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))
+            );
+
+            return {
+                id: payload.id?.toString() || '',
+                email: payload.email || '',
+                name: payload.name || '',
+                role: payload.role || ''
+            };
+        } catch (error) {
+            console.error('Token parsing error:', error);
+            return null;
+        }
+    }
+    return null;
+}
 
   isAuthenticated(): boolean {
     const token = localStorage.getItem('token');
@@ -227,4 +280,6 @@ export class AuthService {
   requestKakaoLogin(): Observable<any> {
     return this.http.get(`${this.authApiUrl}/kakao`); // 서버에 카카오 로그인 요청
   }
+
+  
 }

@@ -82,7 +82,7 @@ export class TopBarComponent implements OnInit {
       console.log('로그인 상태:', status);
       this.isLoggedIn = status; // 로그인 상태가 변경될 때 업데이트
       if (this.isLoggedIn) {
-        this.userProfile = this.authService.getUserInfo(); // 사용자 정보 가져오기
+        this.userProfile = this.authService.getUserProfile(); // 사용자 정보 가져오기
         console.log(this.userProfile)
       } else {
         this.userProfile = null; // 로그아웃 시 사용자 정보 초기화
