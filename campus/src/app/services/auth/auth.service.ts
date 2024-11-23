@@ -201,4 +201,13 @@ export class AuthService {
     return null;
   }
   
+  async handleKakaoCallback(kakaoAuthResCode: string): Promise<any> {
+    const response = await fetch(`${this.authApiUrl}/kakao/callback?code=${kakaoAuthResCode}`);
+    return response.json(); // 응답을 JSON으로 변환하여 반환
+  }
+  // 카카오 로그인 요청
+  requestKakaoLogin(): Observable<any> {
+    return this.http.get(`${this.authApiUrl}/kakao`); // 서버에 카카오 로그인 요청
+  }
+
 }
