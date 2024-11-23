@@ -10,6 +10,7 @@ import { ModalController } from '@ionic/angular';
 import { VideoCreateModalComponent } from '../../../component/video-create-modal/video-create-modal.component';
 import { Registration, Role } from 'src/app/models/enums/role.enums';
 import { HttpErrorResponse } from '@angular/common/http';
+import { VideoTopicResponseData } from 'src/app/models/course/video_topic/video_topic-response.interface';
 
 @Component({
   selector: 'app-classmy',
@@ -145,15 +146,12 @@ export class ClassmyPage implements OnInit {
 
   async loadCourses() {
     try {
-      const response: ApiResponse<VideoTopicRequestData[]> = await firstValueFrom(
+      const response: ApiResponse<VideoTopicResponseData[]> = await firstValueFrom(
         this.courseService.getAllVideoTopic(this.course_id)
       );
-
-      this.data.VideoTopics = response.data.map(videoTopic => ({
-        video_topic_id: videoTopic.video_topic_id,
-        video_topic_title: videoTopic.video_topic_title,
-      }));
-
+  
+      this.data.VideoTopics = response.data;
+  
       if (this.data.VideoTopics.length === 0) {
         console.log('비디오 주제가 없습니다.');
       } else {
@@ -167,14 +165,11 @@ export class ClassmyPage implements OnInit {
   // 모든 비디오 토픽을 가져오는 메서드
   async getAllVideoTopics() {
       try {
-        const response: ApiResponse<VideoTopicRequestData[]> = await firstValueFrom(
+        const response: ApiResponse<VideoTopicResponseData[]> = await firstValueFrom(
           this.courseService.getAllVideoTopic(this.course_id)
         );
-
-        this.data.VideoTopics = response.data.map(videoTopic => ({
-          video_topic_id: videoTopic.video_topic_id,
-          video_topic_title: videoTopic.video_topic_title,
-        }));
+    
+        this.data.VideoTopics = response.data;
 
         if (this.data.VideoTopics.length === 0) {
           console.log('비디오 주제가 없습니다.');
