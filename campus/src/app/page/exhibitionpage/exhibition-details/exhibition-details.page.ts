@@ -19,6 +19,7 @@ export class ExhibitionDetailsPage implements OnInit {
   imageUrl: string | null = null; // 프리사인드 URL을 저장할 변수 추가
   streamingUrl: SafeResourceUrl;
   showStreaming: boolean = false;
+  showButtons: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -109,7 +110,7 @@ export class ExhibitionDetailsPage implements OnInit {
   }
 
 
- 
+
   toggleButtons() {
     this.showButtons = !this.showButtons; // 현재 상태 반전
   }
