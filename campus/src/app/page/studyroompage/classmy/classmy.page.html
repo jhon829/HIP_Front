@@ -65,6 +65,14 @@
                     <span class="lecture-order">{{ i + 1 }}</span>
                     <div>{{ VT.video_topic_title }}</div>
                   </div>
+                  <ul class="video-list" *ngIf="VT?.videos?.length">
+                    <li *ngFor="let video of VT.videos" class="video-item">
+                      <div class="video-title">
+                        <span class="video-icon">▶</span>
+                        {{ video.video_title }}  <!-- video_topic_title 대신 video_title 사용 -->
+                      </div>
+                    </li>
+                  </ul>
                   <div class="lecture-menu">
                     <!-- 강사만 볼 수 있는 관리 기능 -->
                     <ng-container *ngIf="isInstructor()">
