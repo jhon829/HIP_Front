@@ -257,3 +257,23 @@ iframe {
   color: white;
 
 }
+
+.unreal-streaming-container {
+  padding: 20px;
+
+  h2 {
+    margin-bottom: 16px;
+  }
+
+  .streaming-button {
+    margin-bottom: 20px;
+    width: 500px;
+  }
+
+  iframe {
+    width: 100%;
+    aspect-ratio: 16/9; /* 또는 실제 컨텐츠의 비율에 맞게 조정 */
+    border: none;
+    background: #000;
+  }
+}
