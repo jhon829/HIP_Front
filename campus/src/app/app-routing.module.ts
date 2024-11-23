@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { SidemenuComponent } from './component/sidemenucomponent/sidemenu.component';
 import {TopBarComponent} from "./component/top-bar/top-bar.component";
+import { VideoCreateModalComponent } from './component/video-create-modal/video-create-modal.component';
+import { AuthGuard } from './guards/auth.guard';
 
 
 
@@ -18,7 +20,9 @@ const routes: Routes = [
   {
     path: 'sidemenu', component: SidemenuComponent
   },
-
+  {
+    path: 'video-create', component: VideoCreateModalComponent
+  },
   {
     path: 'main',
     loadChildren: () => import('./page/mainpage/firstpage/firstpage.module').then(m => m.FirstpagePageModule)
@@ -42,7 +46,7 @@ const routes: Routes = [
   {
     path: 'exhibition/:id', loadChildren: () => import('./page/exhibitionpage/exhibition-details/exhibition-details.module').then(m => m.ExhibitionDetailsPageModule)
   },
-// 사이드 메뉴 경로
+  // 사이드 메뉴 경로
   {
     path: 'studyroom',
     loadChildren: () => import('./page/studyroompage/studyroom/studyroom.module').then(m => m.StudyroomPageModule)
@@ -57,15 +61,23 @@ const routes: Routes = [
   },
   {
     path: 'classsignup',
-    loadChildren: () => import('./page/studyroompage/classsignup/classsignup.module').then(m => m.ClasssignupPageModule)
+    loadChildren: () => import('./page/studyroompage/classsignup/classsignup.module')
+      .then(m => m.ClasssignupPageModule),
   },
   {
-    path: 'classmy',
-    loadChildren: () => import('./page/studyroompage/classmy/classmy.module').then(m => m.ClassmyPageModule)
+    path: 'classmy/:course_id',
+    loadChildren: () => import('./page/studyroompage/classmy/classmy.module')
+      .then(m => m.ClassmyPageModule),
   },
   {
     path: 'classnone',
-    loadChildren: () => import('./page/studyroompage/classnone/classnone.module').then(m => m.ClassnonePageModule)
+    loadChildren: () => import('./page/studyroompage/classnone/classnone.module')
+      .then(m => m.ClassnonePageModule),
+  },
+  {
+    path: 'classinstructor',
+    loadChildren: () => import('./page/studyroompage/classinstructor/classinstructor.module')
+      .then(m => m.ClassinstructorPageModule),
   },
   {
     path: 'projectsearch',

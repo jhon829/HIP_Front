@@ -109,6 +109,11 @@ export class ExhibitionDetailsPage implements OnInit {
   }
 
 
+ 
+  toggleButtons() {
+    this.showButtons = !this.showButtons; // 현재 상태 반전
+  }
+
   async deleteExhibition() {
     const alert = await this.alertController.create({
       header: '전시물 삭제',
@@ -125,11 +130,12 @@ export class ExhibitionDetailsPage implements OnInit {
               this.exhibitionService.deleteExhibition(this.exhibitionId.toString()).subscribe(
                 () => {
                   console.log('전시물이 성공적으로 삭제되었습니다.');
-                  this.router.navigate(['/exhibitions']); // 전시물 목록 페이지로 이동
+                  this.router.navigate(['/exhibitionmain']).then(() => {
+                    window.location.reload(); // 페이지 새로고침
+                  });
                 },
                 (error) => {
                   console.error('전시물 삭제 실패:', error);
-                  this.error = '전시물 삭제에 실패했습니다.';
                 }
               );
             }
@@ -137,10 +143,10 @@ export class ExhibitionDetailsPage implements OnInit {
         }
       ]
     });
-
     await alert.present();
   }
-
 }
+
+
 
 

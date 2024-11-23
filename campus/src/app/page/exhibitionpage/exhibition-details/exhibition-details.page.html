@@ -107,8 +107,28 @@
       allow="autoplay; fullscreen">
     </iframe>
   </div>
+  
+  <div class="parent-container">
+  <div class="button-container" [ngClass]="{'show': showButtons}"> <!-- 버튼을 조건부로 렌더링 -->
+    <ion-button [routerLink]="['/exhibition-update', exhibitionDetails.exhibition_id]" class="custom-button">수정하기</ion-button>
+    <ion-button expand="block" color="danger" (click)="deleteExhibition()" class="custom-button">전시물 삭제</ion-button>
+  </div>
+  
+  <ion-button (click)="toggleButtons()" class="floating-button"> <!-- 동그란 + 아이콘 -->
+    <ion-icon name="add"></ion-icon> <!-- 또는 원하는 아이콘 사용 -->
+  </ion-button>
+</div>
 
-
+<div class="parent-container">
+  <div class="button-container" [ngClass]="{'show': showButtons}"> <!-- 버튼을 조건부로 렌더링 -->
+    <ion-button [routerLink]="['/exhibition-update', exhibitionDetails.exhibition_id]" class="custom-button">수정하기</ion-button>
+    <ion-button expand="block" color="danger" (click)="deleteExhibition()" class="custom-button">전시물 삭제</ion-button>
+  </div>
+  
+  <ion-button (click)="toggleButtons()" class="floating-button"> <!-- 동그란 + 아이콘 -->
+    <ion-icon name="add"></ion-icon> <!-- 또는 원하는 아이콘 사용 -->
+  </ion-button>
+</div>
 
 
 

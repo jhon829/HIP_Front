@@ -167,6 +167,38 @@
   font-size: 25px;
 }
 
+.parent-container {
+  position: relative; /* 부모 컨테이너를 상대적으로 설정 */
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column; /* 버튼을 세로로 배치 */
+  position: fixed; /* 스크롤 시에도 고정된 위치에 있도록 설정 */
+  bottom: 80px; /* + 아이콘 위에 위치하도록 조정 */
+  right: 20px; /* 오른쪽에 위치 */
+  z-index: 10; /* z-index로 버튼이 앞에 오도록 설정 */
+  opacity: 0; /* 버튼을 기본적으로 숨김 */
+  transition: opacity 0.3s ease; /* 부드러운 전환 효과 */
+}
+
+.button-container.show {
+  opacity: 1; /* show 클래스가 추가되면 버튼이 보임 */
+}
+
+.floating-button {
+  position: fixed; /* 고정 위치 설정 */
+  bottom: 20px; /* 화면 하단에서의 위치 */
+  right: 20px; /* 화면 오른쪽에서의 위치 */
+  border-radius: 50%; /* 동그란 모양 */
+  width: 56px; /* 버튼 크기 조정 */
+  height: 56px; /* 버튼 크기 조정 */
+  --background: #3880ff; /* 버튼 색상 */
+  --color: white; /* 아이콘 색상 */
+}
+
+
+
 
 .boundary{
   margin-bottom: 20px;
@@ -191,19 +223,6 @@
 .doc-image{
   width : 70%;
   height: 70%;
-}
-
-.parent-container {
-  display: flex;
-  justify-content: center; // 수평 중앙 정렬
-  align-items: center; // 수직 중앙 정렬
-}
-
-.button-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center; // 버튼을 중앙 정렬
-  width: 30%; // 컨테이너 너비 설정
 }
 
 ion-button {
