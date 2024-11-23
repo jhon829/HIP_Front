@@ -167,3 +167,13 @@ ion-button {
   min-width: 87px;
 }
 
+.inquiryBtn {
+  color: #4788fb;
+  cursor: pointer;
+
+  &:hover {
+    color: darken(#1a65eb, 10%);
+  }
+
+}
+
