@@ -4,7 +4,7 @@
     <div class="content-wrapper">
       <ion-header class="ion-no-border">
         <ion-toolbar>
-          <ion-title>클래스 신청</ion-title>
+          <ion-title>클래스 탐색</ion-title>
         </ion-toolbar>
       </ion-header>
       <div class="main-container">
@@ -39,27 +39,9 @@
               <ion-icon (click)="updateCourse(course)" class="update-icon" name="heart"></ion-icon>
             </ion-row>
           </ion-grid>
-
-          <!-- 해당 강의를 신청한 유저 조회 -->
-          <!-- <div class="applicants-box">
-            <div *ngIf="getApplicantsForCourse(course.course_id).length === 0">
-              이 강의에 신청한 유저가 없습니다.
-            </div>
-            <div class="project-box" *ngFor="let courseUser of getApplicantsForCourse(course.course_id)">
-              <ion-grid class="class1">
-                <ion-row>
-                  <ion-col>{{ courseUser.course_reporting_date }}</ion-col>
-                  <ion-col>{{ courseUser.applicant.user_name }}</ion-col>
-                  <ion-col>{{ courseUser.applicant.id }}</ion-col>
-                  <ion-col>
-                    <ion-button class="accept" (click)="acceptApplicant(courseUser)">수락</ion-button>
-                    <ion-button class="reject" (click)="rejectApplicant(courseUser)">거절</ion-button>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-            </div>
-          </div> -->
         </div>
+
+
       </div>
     </div>
   </div>
