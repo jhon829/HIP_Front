@@ -8,7 +8,6 @@ import { CourseWithCourseRegistrationResponseData } from 'src/app/models/course/
 import { CourseDocRequestData } from 'src/app/models/course/course_doc/course_doc-request.interface';
 import { VideoTopicRequestData } from 'src/app/models/course/video_topic/video_topic-request.interface';
 import { VideoRequestData } from 'src/app/models/course/video/video-request.interface';
-import { VideoResponseData } from 'src/app/models/course/video/video-response.interface';
 import { DocNameResponseData } from 'src/app/models/course/doc_name/doc_name-request.interface';
 import { CourseRegistrationResponseData } from 'src/app/models/course/courses/course-registation-response.interface';
 import { CourseRegistrationRequestData } from 'src/app/models/course/courses/course-registration-request.interface';
@@ -230,9 +229,9 @@ export class CourseService {
   }
 
   // 영상 조회(스트리밍, GET) => 추가적으로 로직 작성 필요
-  streamVideo(courseId: number, videoTopicId: number, videoId: number): Observable<ApiResponse<VideoResponseData>> {
+  streamVideo(courseId: number, videoTopicId: number, videoId: number): Observable<ApiResponse<{ url: string }>> {
     const headers = this.getAuthHeaders();
-    return this.http.get<ApiResponse<VideoResponseData>>(`${this.courseApiUrl}/${courseId}/videoTopics/${videoTopicId}/video/${videoId}/stream`, { headers })
+    return this.http.get<ApiResponse<{ url: string }>>(`${this.courseApiUrl}/${courseId}/videoTopics/${videoTopicId}/video/${videoId}/stream`, { headers })
   }
 
   // 영상 삭제(DELETE)
