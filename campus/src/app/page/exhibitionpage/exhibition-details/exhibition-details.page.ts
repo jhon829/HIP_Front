@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { ExhibitionService } from '../../../services/exhibition/exhibitionservice.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-exhibition-details',
@@ -16,13 +17,22 @@ export class ExhibitionDetailsPage implements OnInit {
   isLoading: boolean = true;
   error: string | null = null;
   imageUrl: string | null = null; // 프리사인드 URL을 저장할 변수 추가
+  streamingUrl: SafeResourceUrl;
+  showStreaming: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private exhibitionService: ExhibitionService,
-    private alertController: AlertController
-  ) {}
+    private alertController: AlertController,
+    private sanitizer: DomSanitizer
+  ) {
+    this.streamingUrl = this.sanitizer.bypassSecurityTrustResourceUrl('http://127.0.0.1/');
+  }
+
+  toggleStreaming() {
+    this.showStreaming = !this.showStreaming;
+  }
 
   ngOnInit() {
     this.exhibitionId = Number(this.route.snapshot.paramMap.get('id'));

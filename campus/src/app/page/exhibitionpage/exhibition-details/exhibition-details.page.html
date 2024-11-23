@@ -1,3 +1,5 @@
+<script src="https://unpkg.com/@epicgames-ps/lib-pixelstreamingfrontend@latest/dist/pixelstreamingfrontend.js"></script>
+
 <ion-header>
   <ion-toolbar>
     <ion-title>
@@ -87,9 +89,23 @@
   </div>
   <!--      // 프로젝트 체험하기-->
 
-  <div class="iframe-container">
-    <img src="assets/png/background.png" class="background-image">
-    <iframe src="https://share.arcware.cloud/v1/share-4f7f6223-2623-4c0f-8a5d-285faf8217e9" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+  <div class="unreal-streaming-container">
+    <h2>3D 전시물 보기</h2>
+    <div class="streaming-button">
+      <ion-button (click)="toggleStreaming()">
+        3D 전시물 실행하기
+      </ion-button>
+    </div>
+
+    <!-- 또는 iframe으로 직접 표시 -->
+    <iframe
+      *ngIf="showStreaming"
+      [src]="streamingUrl"
+      width="100%"
+      height="600"
+      frameborder="0"
+      allow="autoplay; fullscreen">
+    </iframe>
   </div>
 
 
@@ -98,14 +114,4 @@
 
 </ion-content>
 
-<ion-content *ngIf="isLoading">
-  <div class="loading">
-    <ion-spinner>로딩 중...</ion-spinner>
-  </div>
-</ion-content>
 
-<ion-content *ngIf="error">
-  <div class="error-message">
-    {{ error }}
-  </div>
-</ion-content>
