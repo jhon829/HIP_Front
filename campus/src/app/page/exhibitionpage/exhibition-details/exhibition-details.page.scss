@@ -147,6 +147,8 @@
 .member-item {
   text-align: center; /* 이름을 중앙 정렬 */
   margin: auto;
+  flex: 0 0 25%; /* 한 줄에 4명 (100% / 4명 = 25%) */
+  max-width: 25%; /* 최대 너비를 25%로 설정 */
 }
 
 .member-container {
