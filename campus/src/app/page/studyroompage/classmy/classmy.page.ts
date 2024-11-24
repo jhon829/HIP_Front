@@ -279,6 +279,13 @@ export class ClassmyPage implements OnInit {
     const result = await modal.present();
     return result;
   }
+
+  openVideoStream(videoId: number) {
+    // 새 창에서 비디오 스트림 컴포넌트 열기
+    const url = `/video-stream/${videoId}`;
+    window.open(url, '_blank', 'width=1280,height=720');
+  }
+  
 }
 
     
