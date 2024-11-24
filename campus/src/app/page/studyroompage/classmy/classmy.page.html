@@ -1,0 +1,102 @@
+<!-- classmy.page.html -->
+<ion-content>
+  <div class="layout">
+    <app-sidemenu class="sidemenu"></app-sidemenu>
+    <div class="content-wrapper">
+      <ion-header class="ion-no-border">
+        <ion-toolbar>
+          <ion-title></ion-title>
+        </ion-toolbar>
+      </ion-header>
+
+      <app-course-title></app-course-title>
+
+      <section class="lecture-page">
+        <h3 class="detail-menu">상세메뉴</h3>
+        <ul id="lecture-menu">
+          <li class="lecture-list" [ngClass]="{ active: data.activeSection === 'lecture' }" (click)="setActiveSection('lecture')">강의목록</li>
+          <li class="learn-material" [ngClass]="{ active: data.activeSection === 'material' }" (click)="setActiveSection('material')">학습자료</li>
+        </ul>
+        <hr/>
+      </section>
+
+      <div *ngIf="data.activeSection === 'lecture'" [ngClass]="{ active: data.activeSection === 'lecture' }" class="active-section">
+        <div class="lecture-entire-inner">
+          <div class="lecture-inner">
+            <div class="lecture-title-icon">
+              <img src="assets/svg/Video_Player.svg"/>
+              <span class="lecture-title-des">지난 날의 강의를 다시 복습할 수 있어요</span>
+            </div>
+
+            <div class="VideoTopics-length">총 {{ data.VideoTopics.length }}강의</div>
+            
+            <!-- 강사만 볼 수 있는 강의 생성/관리 기능 -->
+            <ng-container *ngIf="isInstructor()">
+              <ul class="lecture-item-list">
+                <li *ngIf="data.isEmptyState" class="lecture-item-empty">
+                  <div class="lecture-item lecture-item-add">
+                    <span>영상 주제를 추가해볼까요?</span>
+                    <div (click)="addFirstLectureItem()" class="create-btn"> + </div>
+                  </div>
+                </li>
+
+                <li *ngFor="let item of data.lectureItems; let i = index" class="lecture-item-entire">
+                  <div class="lecture-item lecture-item-add">
+                    <div class="lecture-order-name">
+                      <span class="lecture-order"></span>
+                      <div>{{ item.title }}</div>
+                      <input [(ngModel)]="item.newCourseTitle" placeholder="비디오 주제 입력" />
+                    </div>
+                    <div class="lecture-menu">
+                      <button (click)="videotopicRegister(i)">생성</button>
+                    </div>
+                  </div>
+                  <div (click)="addLectureItem(i)" class="create-btn"> + </div>
+                </li>
+              </ul>
+            </ng-container>
+
+            <!-- 모든 사용자가 볼 수 있는 강의 목록 -->
+            <ul class="lecture-item-list">
+              <li class="lecture-item-entire" *ngFor="let VT of data.VideoTopics; let i = index">
+                <div *ngIf="isInstructor()" class="create-btn">+</div>
+                <div class="lecture-item">
+                  <div class="lecture-order-name">
+                    <span class="lecture-order">{{ i + 1 }}</span>
+                    <div>{{ VT.video_topic_title }}</div>
+                  </div>
+                  <div class="lecture-menu">
+                    <ng-container *ngIf="isInstructor()">
+                      <div class="video-upload" (click)="openVideoCreateModal(VT.video_topic_id)" expand="full">
+                        영상파일 올리기
+                      </div>
+                      <ion-icon *ngIf="VT.video_topic_id !== null" name="trash" style="cursor: pointer;"
+                                (click)="deleteVideoTopic(course_id, VT.video_topic_id)">
+                      </ion-icon>
+                      <button *ngIf="VT.video_topic_id !== null" (click)="deleteVideoTopic(course_id, VT.video_topic_id)" style="cursor: pointer;">
+                        Delete VideoTopic
+                      </button>
+                    </ng-container>
+                  </div>
+                </div>
+                <!-- video-list를 lecture-item-entire 바로 다음으로 이동 -->
+                <ul class="video-list" *ngIf="VT?.videos?.length">
+                  <li *ngFor="let video of VT.videos" class="video-item">
+                    <div class="video-title">
+                      <span class="video-icon">▶</span>
+                      {{ video.video_title }}
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="data.activeSection === 'material'" class="active-section">
+        <app-doc-topic></app-doc-topic>
+      </div>
+    </div>
+  </div>
+</ion-content>
