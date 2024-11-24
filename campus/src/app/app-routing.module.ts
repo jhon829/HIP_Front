@@ -5,6 +5,7 @@ import {TopBarComponent} from "./component/top-bar/top-bar.component";
 import { VideoCreateModalComponent } from './component/video-create-modal/video-create-modal.component';
 import { AuthGuard } from './guards/auth.guard';
 import { LoginpagePage } from './page/mainpage/loginpage/loginpage.page';
+import { VideoStreamComponent } from './component/video-stream/video-stream.component';
 
 
 
@@ -97,7 +98,11 @@ const routes: Routes = [
     loadChildren: () => import('./page/exhibitionpage/exhibition-update/exhibition-update.module').then( m => m.ExhibitionUpdatePageModule)
   },
 
-  { path: 'auth/kakao/callback', component: LoginpagePage }, // 이 경로를 추가하세요
+  { path: 'auth/kakao/callback', component: LoginpagePage },
+  {
+    path: 'video-stream/:videoId',
+    component: VideoStreamComponent
+  }
 ];
 
 @NgModule({
