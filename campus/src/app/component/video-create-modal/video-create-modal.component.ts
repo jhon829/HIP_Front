@@ -1,7 +1,7 @@
 // video-create-modal.component.ts
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { VideoService } from './video.service';
+import { VideoService } from '../../services/course/video.service';
 
 interface Video {
   file: File;
