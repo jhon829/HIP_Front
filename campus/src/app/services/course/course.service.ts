@@ -231,7 +231,7 @@ export class CourseService {
   // 영상 조회(스트리밍, GET) => 추가적으로 로직 작성 필요
   streamVideo(courseId: number, videoTopicId: number, videoId: number): Observable<ApiResponse<{ url: string }>> {
     const headers = this.getAuthHeaders();
-    return this.http.get<ApiResponse<{ url: string }>>(`${this.courseApiUrl}/${courseId}/videoTopics/${videoTopicId}/video/${videoId}/stream`, { headers })
+    return this.http.get<ApiResponse<{ url: string }>>(`${this.courseApiUrl}/${courseId}/${videoTopicId}/video/${videoId}/stream`, { headers })
   }
 
   // 영상 삭제(DELETE)
