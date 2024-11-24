@@ -1,40 +1,40 @@
-# name: Deploy to S3
+name: Deploy to S3
 
-# on:
-#   push:
-#     branches:
-#       - main  # 배포할 브랜치
+on:
+  push:
+    branches:
+      - AWS  # 배포할 브랜치
 
-# jobs:
-#   build-and-deploy:
-#     runs-on: ubuntu-latest
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-#       - name: Set up Node.js
-#         uses: actions/setup-node@v2
-#         with:
-#           node-version: '18'  # LTS 버전 사용
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'  # LTS 버전 사용
 
-#       - name: Install dependencies
-#         run: |
-#           cd campus  # package.json이 있는 디렉토리로 이동
-#           npm install
+      - name: Install dependencies
+        run: |
+          cd campus  # package.json이 있는 디렉토리로 이동
+          npm install
 
-#       - name: Build the project
-#         run: |
-#           cd campus  # package.json이 있는 디렉토리로 이동
-#           npm run build --prod
+      - name: Build the project
+        run: |
+          cd campus  # package.json이 있는 디렉토리로 이동
+          npm run build --prod
 
-#       - name: Deploy to S3
-#         uses: jakejarvis/s3-sync-action@master
-#         with:
-#           args: --follow-symlinks --delete  # ACL 관련 옵션 제거
-#         env:
-#           AWS_S3_BUCKET: hipacademy.site  # S3 버킷 이름
-#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  # AWS Access Key ID
-#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # AWS Secret Access Key
-#           AWS_REGION: ap-northeast-2  # S3 버킷의 지역
-#           SOURCE_DIR: ./campus/www  # 빌드 결과물 경로
+      - name: Deploy to S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --follow-symlinks --delete  # ACL 관련 옵션 제거
+        env:
+          AWS_S3_BUCKET: hipacademy.site  # S3 버킷 이름
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  # AWS Access Key ID
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # AWS Secret Access Key
+          AWS_REGION: ap-northeast-2  # S3 버킷의 지역
+          SOURCE_DIR: ./campus/www  # 빌드 결과물 경로
