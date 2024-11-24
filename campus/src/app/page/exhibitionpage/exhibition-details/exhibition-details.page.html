@@ -82,10 +82,12 @@
       </div>
       <div class="streaming-button output texts" >
         <img
+          class="project-start"
           src="./assets/png/unreal.png"
           alt="3D 전시물 실행하기"
-          (click)="toggleStreaming()"
-          style="cursor: pointer; width: 50%; height: auto;" />
+          (click)="openStreamingInNewTab()"
+          style="cursor: pointer; width: 50%; height: auto;"
+        />
       </div>
 
 <!--      // 전시물 수정 & 삭제-->

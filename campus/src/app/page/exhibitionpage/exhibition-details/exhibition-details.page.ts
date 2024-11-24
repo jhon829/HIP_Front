@@ -115,6 +115,11 @@ export class ExhibitionDetailsPage implements OnInit {
     this.showButtons = !this.showButtons; // 현재 상태 반전
   }
 
+  openStreamingInNewTab() {
+    const streamingUrl = 'http://127.0.0.1/'; // 실제 스트리밍 URL로 변경해야 합니다
+    window.open(streamingUrl, '_blank');
+  }
+
   async deleteExhibition() {
     const alert = await this.alertController.create({
       header: '전시물 삭제',
