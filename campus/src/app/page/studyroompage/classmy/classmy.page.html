@@ -81,7 +81,7 @@
                 </div>
                 <!-- video-list를 lecture-item-entire 바로 다음으로 이동 -->
                 <ul class="video-list" *ngIf="VT?.videos?.length">
-                  <li *ngFor="let video of VT.videos" class="video-item">
+                  <li *ngFor="let video of VT.videos" class="video-item" (click)="openVideoStream(video.video_id)">
                     <div class="video-title">
                       <span class="video-icon">▶</span>
                       {{ video.video_title }}
