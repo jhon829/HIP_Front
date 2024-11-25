@@ -1,4 +1,4 @@
 export interface VideoRequestData {
     video_id: number,
-    video_key: string
+    file_path: string
 }
