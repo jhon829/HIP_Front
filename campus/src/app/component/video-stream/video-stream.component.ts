@@ -6,6 +6,8 @@ import { IonicModule } from '@ionic/angular';
 import { CourseService } from 'src/app/services/course/course.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { VideoResponseData } from 'src/app/models/course/video/video-response.interface';
+import { ApiResponse } from 'src/app/models/common/api-response.interface';
 
   @Component({
     selector: 'app-video-stream',
@@ -30,6 +32,8 @@ import { FormsModule } from '@angular/forms';
     isPlaying: boolean = false;
     isMuted: boolean = false;
     volume: number = 1;
+    isLoading: boolean = true;
+    errorMessage: string = '';
 
     constructor(
       private route: ActivatedRoute,
@@ -37,27 +41,60 @@ import { FormsModule } from '@angular/forms';
     ) {}
 
     ngOnInit() {
-      // URL에서 모든 필요한 파라미터 가져오기
-      this.route.params.subscribe(params => {
-        this.courseId = Number(params['courseId']);
-        this.videoTopicId = Number(params['videoTopicId']);
-        this.videoId = Number(params['videoId']);
-        this.loadVideo();
-      });
+      this.route.queryParams.subscribe(params => {
+        if (params['state']) {
+          // base64 디코딩하여 state 객체 복원
+          const state = JSON.parse(atob(params['state']));
+          this.courseId = state.courseId;
+          console.log('courseId', this.courseId);
+          this.videoTopicId = state.videoTopicId;
+          console.log('videoTopicId', this.videoTopicId);
+          this.videoId = state.videoId;
+          console.log('videoId', this.videoId);
+        }
+        if (isNaN(this.courseId) || isNaN(this.videoTopicId) || isNaN(this.videoId)) {
+          throw new Error('Invalid ID parameters');
+      }
+
+      this.loadVideo();
+    })
     }
 
     async loadVideo() {
       try {
-        const response = await firstValueFrom(
+        this.isLoading = true;
+        const response: ApiResponse<VideoResponseData> = await firstValueFrom(
           this.videoService.streamVideo(
             this.courseId,
             this.videoTopicId,
             this.videoId
           )
         );
-        this.videoUrl = response.data.url;
+
+        console.log('응답 전체 구조:', JSON.stringify(response, null, 2));
+        console.log('응답의 type:', typeof response);
+        console.log('응답의 keys:', Object.keys(response));
+        console.log('status 존재 여부:', 'status' in response);
+        console.log('data 존재 여부:', 'data' in response);
+        console.log('message 존재 여부:', 'message' in response);
+        
+        if (response.data?.url) {
+          this.videoUrl = response.data.url;
+          // 비디오 로드 후 자동 재생 (선택사항)
+          setTimeout(() => {
+            if (this.videoPlayer?.nativeElement) {
+              this.videoPlayer.nativeElement.play()
+                .catch(err => console.log('자동재생 실패:', err));
+            }
+          }, 0);
+        } else {
+          this.errorMessage = '비디오 URL을 받아오지 못했습니다.';
+        }
       } catch (error) {
         console.error('Error loading video:', error);
+        this.errorMessage = '비디오를 로드하는 중 오류가 발생했습니다.';
+      } finally {
+        this.isLoading = false;
       }
     }
 
@@ -115,4 +152,3 @@ import { FormsModule } from '@angular/forms';
       }
     }
   }
-  

@@ -1,13 +1,21 @@
-<!-- video-stream.component.html -->
 <ion-header>
   <ion-toolbar>
     <ion-title>비디오 플레이어</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content>
   <div class="video-container">
-    <div class="video-wrapper">
+    <!-- 로딩 표시 -->
+    <ion-spinner *ngIf="isLoading"></ion-spinner>
+    
+    <!-- 에러 메시지 -->
+    <ion-text color="danger" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </ion-text>
+
+    <!-- 비디오 플레이어 -->
+    <div class="video-wrapper" *ngIf="videoUrl && !isLoading">
       <video
         #videoPlayer
         class="video-player"
@@ -15,55 +23,56 @@
         controlsList="nodownload"
         (play)="onPlay()"
         (pause)="onPause()"
+        preload="auto"
       >
         <track kind="captions">
       </video>
+
+      <ion-card>
+        <ion-card-content>
+          <ion-grid>
+            <ion-row class="ion-align-items-center">
+              <!-- 재생/일시정지 버튼 -->
+              <ion-col size="2">
+                <ion-button fill="clear" (click)="togglePlay()">
+                  <ion-icon [name]="isPlaying ? 'pause' : 'play'"></ion-icon>
+                </ion-button>
+              </ion-col>
+
+              <!-- 볼륨 컨트롤 -->
+              <ion-col size="4">
+                <ion-button fill="clear" (click)="toggleMute()">
+                  <ion-icon [name]="isMuted ? 'volume-mute' : 'volume-high'"></ion-icon>
+                </ion-button>
+                <ion-range
+                  [(ngModel)]="volume"
+                  (ionChange)="onVolumeChange($event)"
+                  min="0"
+                  max="1"
+                  step="0.1"
+                  class="volume-slider"
+                ></ion-range>
+              </ion-col>
+
+              <!-- 화질 선택 -->
+              <ion-col size="6">
+                <ion-item>
+                  <ion-label>화질</ion-label>
+                  <ion-select
+                    interface="popover"
+                    (ionChange)="changeQuality($event)"
+                    value="1080"
+                  >
+                    <ion-select-option value="1080">1080p</ion-select-option>
+                    <ion-select-option value="720">720p</ion-select-option>
+                    <ion-select-option value="480">480p</ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
     </div>
-
-    <ion-card>
-      <ion-card-content>
-        <ion-grid>
-          <ion-row class="ion-align-items-center">
-            <!-- 재생/일시정지 버튼 -->
-            <ion-col size="2">
-              <ion-button fill="clear" (click)="togglePlay()">
-                <ion-icon [name]="isPlaying ? 'pause' : 'play'"></ion-icon>
-              </ion-button>
-            </ion-col>
-
-            <!-- 볼륨 컨트롤 -->
-            <ion-col size="4">
-              <ion-button fill="clear" (click)="toggleMute()">
-                <ion-icon [name]="isMuted ? 'volume-mute' : 'volume-high'"></ion-icon>
-              </ion-button>
-              <ion-range
-                [(ngModel)]="volume"
-                (ionChange)="onVolumeChange($event)"
-                min="0"
-                max="1"
-                step="0.1"
-                class="volume-slider"
-              ></ion-range>
-            </ion-col>
-
-            <!-- 화질 선택 -->
-            <ion-col size="6">
-              <ion-item>
-                <ion-label>화질</ion-label>
-                <ion-select
-                  interface="popover"
-                  (ionChange)="changeQuality($event)"
-                  value="1080"
-                >
-                  <ion-select-option value="1080">1080p</ion-select-option>
-                  <ion-select-option value="720">720p</ion-select-option>
-                  <ion-select-option value="480">480p</ion-select-option>
-                </ion-select>
-              </ion-item>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-card-content>
-    </ion-card>
   </div>
 </ion-content>
