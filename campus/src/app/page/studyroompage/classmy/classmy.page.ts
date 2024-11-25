@@ -280,9 +280,31 @@ export class ClassmyPage implements OnInit {
     return result;
   }
 
-  openVideoStream(videoId: number) {
-    // 새 창에서 비디오 스트림 컴포넌트 열기
-    const url = `/video-stream/${videoId}`;
+  openVideoStream(videoId: number, videoTopicId: number) {
+    
+    console.log(videoId);
+    console.log(videoTopicId)
+
+    this.route.params.subscribe(params => {
+      this.course_id = Number(params['course_id']);
+      console.log('URL course_id:', this.course_id);
+    });
+
+    const state = {
+      courseId: this.course_id,
+      videoTopicId: videoTopicId,
+      videoId: videoId
+    };
+
+    console.log('State before encoding:', state);
+    
+    // state를 base64로 인코딩하여 URL 파라미터로 전달
+    const stateParam = btoa(JSON.stringify(state));
+    console.log(stateParam);
+
+    const url = `/video-stream?state=${stateParam}`;
+    console.log(url);
+    
     window.open(url, '_blank', 'width=1280,height=720');
   }
   
