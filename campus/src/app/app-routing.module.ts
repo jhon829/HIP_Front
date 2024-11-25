@@ -100,8 +100,8 @@ const routes: Routes = [
 
   { path: 'auth/kakao/callback', component: LoginpagePage },
   {
-    path: 'video-stream/:videoId',
-    component: VideoStreamComponent
+    path: 'video-stream',
+    loadComponent: () => import('./component/video-stream/video-stream.component').then(m => m.VideoStreamComponent)
   }
 ];
 
