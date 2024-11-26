@@ -10,6 +10,19 @@
     display: flex;
     overflow: hidden;
   }
+
+  .icon-location {
+    position: absolute;
+    top: 20px; // 상단에서의 거리
+    left: 20px; // 왼쪽에서의 거리
+    z-index: 1000; // 다른 요소들 위에 표시되도록 z-index 설정
+    
+    #logo {
+      width: auto; // 로고의 원래 비율 유지
+      height: 55px; // 로고의 높이 설정
+      display: block;
+    }
+  }
   
   .video-container {
     background-color: var(--video-background);
@@ -125,17 +138,13 @@
     --min-height: 40px;
     --padding-start: 8px;
     --padding-end: 8px;
+    width: 100%; // 전체 너비 사용
     
-    ion-label {
-      color: var(--control-icon-color);
-      margin: 0;
-    }
-  
     ion-select {
       --placeholder-color: var(--control-icon-color);
       --placeholder-opacity: 1;
-      min-width: 80px;
-      max-width: 120px;
+      min-width: 80px; // 최소 너비 증가
+      max-width: 100px; // 최대 너비 증가
     }
   }
   
@@ -163,47 +172,35 @@
   
   // 반응형 디자인
   @media (max-width: 768px) {
-    .video-wrapper {
-      height: calc(100vh - 56px);
-    }
-    
     ion-card ion-grid {
       ion-col {
-        flex: 0 0 auto;
-        
         &:nth-child(1) {
           width: 40px;
+          order: 1;
         }
         
         &:nth-child(2) {
-          flex: 1;
+          width: auto;
+          order: 2;
         }
         
         &:nth-child(3) {
-          width: 120px;
+          width: 140px; // 모바일에서의 너비 증가
+          order: 3;
         }
       }
     }
-    
-    .volume-slider {
-      max-width: 60px;
-    }
   }
   
-  // 모바일 최적화
   @media (max-width: 480px) {
     ion-card ion-grid {
       ion-col:nth-child(3) {
-        width: auto;
+        width: 100px; // 작은 화면에서의 너비 조정
       }
     }
     
-    .volume-slider {
-      display: none;
-    }
-    
     ion-select {
-      min-width: 60px !important;
+      min-width: 80px !important;
     }
   }
   
