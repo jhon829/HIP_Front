@@ -62,7 +62,7 @@ export class CourseService {
   // 강의 삭제 메서드 추가
   deleteCourse(courseId: number): Observable<ApiResponse<void>> {
     const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
-    return this.http.delete<ApiResponse<void>>(`${this.courseApiUrl}/course/${courseId}/delete`, { headers }); // DELETE 요청
+    return this.http.delete<ApiResponse<void>>(`${this.courseApiUrl}/${courseId}/delete`, { headers }); // DELETE 요청
   }
 
   // 특정 강의 정보를 불러오는 메서드
