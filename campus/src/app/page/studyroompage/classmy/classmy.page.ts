@@ -36,8 +36,11 @@ export class ClassmyPage implements OnInit {
     private router: Router
   ) {}
 
+  refreshPage() {
+    window.location.reload();
+  }
 
-  // approved인지 확인하는 메서드 , 이게 문제있는듯
+  // approved인지 확인하는 메서드
   private async checkApprovalStatus(courseId: number): Promise<boolean> {
     console.log('Checking approval for courseId:', courseId);
     const userIdString = localStorage.getItem('UserId') || '';
@@ -208,7 +211,8 @@ export class ClassmyPage implements OnInit {
       try {
         const response: ApiResponse<void> = await firstValueFrom(this.courseService.deleteVideoTopic(courseId, videoTopicId)); // 비디오 주제 삭제 API 호출
         console.log(response.message); // 삭제 성공 메시지 출력
-        this.loadCourses(); // 삭제 후 목록 갱신
+        // this.loadCourses(); // 삭제 후 목록 갱신
+        this.refreshPage();
       } catch (error) {
         console.error('비디오 주제 삭제 중 오류 발생', error);
       }
@@ -252,6 +256,8 @@ export class ClassmyPage implements OnInit {
         // 새 비디오 주제 정보를 lectureItem에 저장
         lectureItem.title = lectureItem.newCourseTitle; // 성공적으로 생성 후 제목 설정
         lectureItem.newCourseTitle = ''; // 입력 초기화
+        // this.loadCourses();
+        this.refreshPage();
       } catch (error) {
         console.error('비디오 주제 생성 중 오류 발생:', error);
         alert('비디오 주제 생성에 실패했습니다.');
@@ -308,6 +314,13 @@ export class ClassmyPage implements OnInit {
     window.open(url, '_blank', 'width=1280,height=720');
   }
   
+  getTotalVideosCount(): number {
+    return this.data.VideoTopics.reduce((total, videoTopic) => {
+      // videos 배열이 있는 경우에만 length를 더함
+      return total + (videoTopic.videos?.length || 0);
+    }, 0);
+  }
+
 }
 
     
