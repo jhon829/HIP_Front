@@ -29,7 +29,7 @@ import { VideoStreamComponent } from './component/video-stream/video-stream.comp
     FormsModule, SidemenuComponent
 
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy},CourseService,],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, CourseService ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

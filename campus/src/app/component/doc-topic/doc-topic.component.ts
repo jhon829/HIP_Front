@@ -4,6 +4,8 @@ import { firstValueFrom, Subscription } from 'rxjs';
 import { DocNameResponseData } from '../../models/course/doc_name/doc_name-request.interface';
 import { ApiResponse } from '../../models/common/api-response.interface';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { AlertController, ModalController } from '@ionic/angular';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-doc-topic',
@@ -28,7 +30,45 @@ export class DocTopicComponent implements OnInit {
     private route: ActivatedRoute,
     private courseService: CourseService,
     private router: Router,
+    private alertController: AlertController,
+    private modalController: ModalController
   ) {}
+
+  refreshPage() {
+    window.location.reload();
+  }
+
+  docTopicPage() {
+    this.router.navigate([`/classmy/${this.course_id}/doc-topics`]);
+  }
+
+  // async goBack() {
+  //     this.loadRootFolders();
+  // }
+
+  // goForward(topicId: number) {
+  //   this.loadSubFolders(topicId);
+  // }
+
+  // Alert 표시 메서드
+  async showAlert(header: string, message: string, refresh: boolean = false) {
+    const alert = await this.alertController.create({
+      header: header,
+      message: message,
+      buttons: [
+        {
+          text: '확인',
+          handler: () => {
+            if (refresh) {
+              this.modalController.dismiss(true);
+              this.refreshPage();
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
 
   ngOnInit() {
     // URL 파라미터 변경 감지
@@ -175,6 +215,8 @@ export class DocTopicComponent implements OnInit {
 
       this.newTopicTitle = '';
       this.showNewTopicForm = false;
+      // this.showAlert('성공','폴더가 성공적으로 생성되었습니다.', true)
+      // this.docTopicPage();
     } catch (error) {
       console.error('폴더 생성 중 오류 발생:', error);
     }
@@ -191,6 +233,7 @@ export class DocTopicComponent implements OnInit {
       } else {
         this.topLevelFolders = this.topLevelFolders.filter(folder => folder.topic_id !== topicId);
       }
+      this.router.navigate([`/classmy/${this.course_id}/doc-topics/${topicId}`]);
     } catch (error) {
       console.error('폴더 삭제 중 오류 발생:', error);
     }
