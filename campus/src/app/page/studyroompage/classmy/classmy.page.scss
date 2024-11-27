@@ -204,23 +204,62 @@ ion-content {
 .video-list {
   list-style: none;
   padding: 10px 0 0 30px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
 
   .video-item {
-    cursor: pointer;
     padding: 8px 0;
+    width: 100%;
+    cursor: default; // 기본 커서로 변경하여 클릭 불가능해 보이게 함
 
     .video-title {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 8px;
+      width: 100%;
+      min-height: 19.26px;
+      padding: 8px 12px;
+      background: transparent;
 
-      .video-icon {
-        color: #666;
+      .play-content {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: 1;
+        cursor: pointer; // 이 영역만 클릭 가능하도록 표시
+        padding: 4px 8px;
+        border-radius: 4px;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.05); // 호버 효과로 클릭 가능한 영역 표시
+        }
+
+        // 제목 텍스트에 대한 스타일
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      .star-icon {
+        cursor: pointer;
+        padding: 4px 8px;
+        border-radius: 4px;
+        margin-left: 8px;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .video-icon {
+          color: #666;
+        }
       }
     }
   }
 }
-
 // 기타 유틸리티 클래스
 .input-box {
   margin-top: 10px;

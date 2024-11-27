@@ -81,10 +81,16 @@
                 </div>
                 <!-- video-list를 lecture-item-entire 바로 다음으로 이동 -->
                 <ul class="video-list" *ngIf="VT?.videos?.length">
-                  <li *ngFor="let video of VT.videos" class="video-item" (click)="openVideoStream(video.video_id, VT.video_topic_id)">
+                  <li *ngFor="let video of VT.videos" class="video-item">
                     <div class="video-title">
-                      <span class="video-icon">▶</span>
-                      {{ video.video_title }}
+                      <div class="play-content" (click)="openVideoStream(video.video_id, VT.video_topic_id)">
+                        <span class="video-icon">▶</span>
+                        {{ video.video_title }}
+                      </div>
+                      <!-- 별표 아이콘을 위한 별도 영역 -->
+                      <div class="star-icon" (click)="handleStarClick(video.video_id, VT.video_topic_id)">
+                        <span class="video-icon">★</span>
+                      </div>
                     </div>
                   </li>
                 </ul>
