@@ -6,7 +6,7 @@ import { CourseService } from '../../../services/course/course.service';
 import { ApiResponse } from '../../../models/common/api-response.interface';
 import { ClassmyResponseData } from '../../../models/course/dummy/classmy/classmy-response.interface'
 import { Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { VideoCreateModalComponent } from '../../../component/video-create-modal/video-create-modal.component';
 import { Registration, Role } from 'src/app/models/enums/role.enums';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -33,11 +33,32 @@ export class ClassmyPage implements OnInit {
     private courseService: CourseService,
     private modalController: ModalController,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private alertController: AlertController
   ) {}
 
   refreshPage() {
     window.location.reload();
+  }
+
+  // Alert 표시 메서드
+  async showAlert(header: string, message: string, refresh: boolean = false) {
+    const alert = await this.alertController.create({
+      header: header,
+      message: message,
+      buttons: [
+        {
+          text: '확인',
+          handler: () => {
+            if (refresh) {
+              this.modalController.dismiss(true);
+              this.refreshPage();
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
   }
 
   // approved인지 확인하는 메서드
@@ -262,11 +283,6 @@ export class ClassmyPage implements OnInit {
         console.error('비디오 주제 생성 중 오류 발생:', error);
         alert('비디오 주제 생성에 실패했습니다.');
       }
-  }
-
-  // Alert 메시지 표시를 위한 메서드
-  async showAlert(title: string, message: string) {
-      alert(`${title}: ${message}`);
   }
 
   async openVideoCreateModal(videoTopicId: number | null) {

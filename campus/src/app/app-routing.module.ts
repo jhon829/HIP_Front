@@ -6,6 +6,7 @@ import { VideoCreateModalComponent } from './component/video-create-modal/video-
 import { AuthGuard } from './guards/auth.guard';
 import { LoginpagePage } from './page/mainpage/loginpage/loginpage.page';
 import { VideoStreamComponent } from './component/video-stream/video-stream.component';
+import { DocTopicComponent } from './component/doc-topic/doc-topic.component';
 
 
 
@@ -102,6 +103,14 @@ const routes: Routes = [
   {
     path: 'video-stream',
     loadComponent: () => import('./component/video-stream/video-stream.component').then(m => m.VideoStreamComponent)
+  },
+  {
+    path: 'classmy/:course_id/doc-topics',
+    component: DocTopicComponent
+  },
+  {
+    path: 'classmy/:course_id/doc-topics/:topicId',
+    component: DocTopicComponent
   }
 ];
 
