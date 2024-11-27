@@ -43,7 +43,7 @@ export class UpdateCourseModalComponent  implements OnInit {
       });
     }
   }
-
+  
   async onSubmit() {
     if (this.courseForm.valid) {
       // 전송할 데이터만 포함
@@ -76,12 +76,23 @@ export class UpdateCourseModalComponent  implements OnInit {
     }
 }
 
-  // Alert 생성 메서드
+  refreshPage() {
+    window.location.reload();
+  }
+
+  // Alert 생성 메서드 수정
   async showAlert(header: string, message: string) {
     const alert = await this.alertController.create({
       header: header,
       message: message,
-      buttons: ['확인'],
+      buttons: [
+        {
+          text: '확인',
+          handler: () => {
+            this.refreshPage(); // 확인 버튼 클릭 시 새로고침
+          }
+        }
+      ]
     });
     await alert.present();
   }
