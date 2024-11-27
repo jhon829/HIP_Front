@@ -13,7 +13,7 @@ export class VideoService {
   private ApiUrl = 'http://localhost:3000/courses';
 
   constructor(private http: HttpClient) {}
-
+  
   getAuthHeaders() {
     const token = localStorage.getItem('token'); // 또는 다른 저장소에서 토큰 가져오기
     return {
@@ -36,10 +36,18 @@ export class VideoService {
   
   uploadVideo(courseId: number, videoTitle: string, videoTopicId: number, file: File): Observable<ApiResponse<VideoRequestData>> {
     const formData = new FormData();
+    console.log('File:', file);
+    console.log('Video Title:', videoTitle);
+
     formData.append('file', file);
     formData.append('video_title', videoTitle);
 
+    console.log('Request URL:', `${this.ApiUrl}/${courseId}/${videoTopicId}/video/upload`);
+    console.log('FormData:', formData);
+
     const headers = this.getFormDataAuthHeaders();
+    console.log('Headers:', headers);
+
     return this.http.post<ApiResponse<VideoRequestData>>(
       `${this.ApiUrl}/${courseId}/${videoTopicId}/video/upload`,
       formData,
