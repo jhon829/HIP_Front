@@ -18,7 +18,6 @@
               <h2 class="project-name">{{ exhibitionDetails.exhibition_title }}</h2>
               <p class="team-name"><ion-icon class="icons" name="people-outline"></ion-icon>
                 {{ exhibitionDetails.team_name }}
-                <span class="start">안녕하세요</span></p>
               <p class="class-name"><ion-icon class="icons" name="flag-outline"></ion-icon> {{ exhibitionDetails.generation }} <span class="description"><ion-icon class="icons" name="book-outline"></ion-icon>{{ exhibitionDetails.description }}</span></p>
             </div>
             <div class="part2right">
@@ -75,6 +74,20 @@
                  class="doc-image">
           </ng-container>
         </ng-container>
+
+      </div>
+      <ion-item class="boundary"></ion-item>
+      <div class="texts">
+        <ion-icon name="trophy-outline" class="icons"></ion-icon> 프로젝트 체험
+      </div>
+      <div class="streaming-button output texts" >
+        <img
+          class="project-start"
+          src="./assets/png/unreal.png"
+          alt="3D 전시물 실행하기"
+          (click)="openStreamingInNewTab()"
+          style="cursor: pointer; width: 50%; height: auto;"
+        />
       </div>
 
 <!--      // 전시물 수정 & 삭제-->
@@ -85,17 +98,14 @@
           <li *ngFor="let doc of exhibitionDetails.exhibitionDocs" class="doc-item">{{ doc.exhibition_doc_id }}</li>
         </ul> -->
       <!-- </div> -->
+
+
     </div>
   </div>
   <!--      // 프로젝트 체험하기-->
 
   <div class="unreal-streaming-container">
-    <h2>3D 전시물 보기</h2>
-    <div class="streaming-button">
-      <ion-button (click)="toggleStreaming()">
-        3D 전시물 실행하기
-      </ion-button>
-    </div>
+
 
     <!-- 또는 iframe으로 직접 표시 -->
     <iframe
@@ -107,13 +117,13 @@
       allow="autoplay; fullscreen">
     </iframe>
   </div>
-  
+
   <div class="parent-container">
   <div class="button-container" [ngClass]="{'show': showButtons}"> <!-- 버튼을 조건부로 렌더링 -->
     <ion-button [routerLink]="['/exhibition-update', exhibitionDetails.exhibition_id]" class="custom-button">수정하기</ion-button>
     <ion-button expand="block" color="danger" (click)="deleteExhibition()" class="custom-button">전시물 삭제</ion-button>
   </div>
-  
+
   <ion-button (click)="toggleButtons()" class="floating-button"> <!-- 동그란 + 아이콘 -->
     <ion-icon name="add"></ion-icon> <!-- 또는 원하는 아이콘 사용 -->
   </ion-button>
@@ -124,7 +134,7 @@
     <ion-button [routerLink]="['/exhibition-update', exhibitionDetails.exhibition_id]" class="custom-button">수정하기</ion-button>
     <ion-button expand="block" color="danger" (click)="deleteExhibition()" class="custom-button">전시물 삭제</ion-button>
   </div>
-  
+
   <ion-button (click)="toggleButtons()" class="floating-button"> <!-- 동그란 + 아이콘 -->
     <ion-icon name="add"></ion-icon> <!-- 또는 원하는 아이콘 사용 -->
   </ion-button>
