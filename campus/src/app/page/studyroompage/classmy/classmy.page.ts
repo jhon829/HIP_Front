@@ -11,6 +11,7 @@ import { VideoCreateModalComponent } from '../../../component/video-create-modal
 import { Registration, Role } from 'src/app/models/enums/role.enums';
 import { HttpErrorResponse } from '@angular/common/http';
 import { VideoTopicResponseData } from 'src/app/models/course/video_topic/video_topic-response.interface';
+import { VideoService } from 'src/app/services/course/video.service';
 
 @Component({
   selector: 'app-classmy',
@@ -34,7 +35,8 @@ export class ClassmyPage implements OnInit {
     private modalController: ModalController,
     private route: ActivatedRoute,
     private router: Router,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private videoService: VideoService
   ) {}
 
   refreshPage() {
@@ -337,6 +339,28 @@ export class ClassmyPage implements OnInit {
     }, 0);
   }
 
+  async handleStarClick(videoId: number, videoTopicId: number) {
+    // 현재 course_id를 route parameters에서 가져옵니다
+    this.route.params.subscribe(params => {
+      this.course_id = Number(params['course_id']);
+      console.log('URL course_id:', this.course_id);
+    });
+
+    console.log('비디오 ID:', videoId);
+    console.log('비디오 토픽 ID:', videoTopicId);
+
+    try {
+      // service를 통해 데이터를 가져옵니다
+      const response = await firstValueFrom(
+        this.videoService.STTVideo(this.course_id, videoTopicId, videoId)
+      );
+      
+    } catch (error: unknown) { // 명시적으로 unknown 타입 지정
+      console.error('데이터 조회 중 오류 발생:', error);
+      // 오류 발생 시 사용자에게 알립니다
+      this.showAlert('오류', '데이터를 불러오는 중 문제가 발생했습니다.');
+    }
+  }
 }
 
     

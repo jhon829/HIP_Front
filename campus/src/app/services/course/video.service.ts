@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { ApiResponse } from 'src/app/models/common/api-response.interface';
 import { VideoResponseData } from 'src/app/models/course/video/video-response.interface';
 import { VideoRequestData } from 'src/app/models/course/video/video-request.interface';
+import { VideoSummary } from 'src/app/models/course/video/video-summary.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -59,5 +60,15 @@ export class VideoService {
   streamVideo(courseId: number, videoTopicId: number, videoId: number): Observable<ApiResponse<VideoResponseData>> {
     const headers = this.getAuthHeaders();
     return this.http.get<ApiResponse<VideoResponseData>>(`${this.ApiUrl}/${courseId}/${videoTopicId}/video/${videoId}/stream`, { headers })
+  }
+
+  STTVideo(courseId: number, videoTopicId: number, videoId: number): Observable<ApiResponse<VideoSummary>> {
+    const headers = this.getAuthHeaders();
+    return this.http.post<ApiResponse<VideoSummary>>(`${this.ApiUrl}/${courseId}/${videoTopicId}/video/stt/${videoId}`, { headers })
+  }
+  
+  summaryVideo(courseId: number, videoTopicId: number, videoId: number): Observable<ApiResponse<VideoSummary>> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<ApiResponse<VideoSummary>>(`${this.ApiUrl}/${courseId}/${videoTopicId}/video/summary/${videoId}`, { headers })
   }
 }
