@@ -2,12 +2,13 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { VideoService } from '../../services/course/video.service';
 import { firstValueFrom } from 'rxjs';
-import { IonicModule } from '@ionic/angular';
+import { AlertController, IonicModule, ModalController } from '@ionic/angular';
 import { CourseService } from 'src/app/services/course/course.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { VideoResponseData } from 'src/app/models/course/video/video-response.interface';
 import { ApiResponse } from 'src/app/models/common/api-response.interface';
+import { HttpErrorResponse } from '@angular/common/http';
 
   @Component({
     selector: 'app-video-stream',
@@ -34,11 +35,40 @@ import { ApiResponse } from 'src/app/models/common/api-response.interface';
     volume: number = 1;
     isLoading: boolean = true;
     errorMessage: string = '';
+    videoSummary: string = '';
+    showSummary: boolean = false;
 
     constructor(
       private route: ActivatedRoute,
-      private videoService: VideoService
+      private videoService: VideoService,
+      private alertController: AlertController,
+      private modalController: ModalController,
     ) {}
+
+    refreshPage() {
+      window.location.reload();
+    }
+  
+    // Alert 표시 메서드
+    async showAlert(header: string, message: string, refresh: boolean = false) {
+      const alert = await this.alertController.create({
+        header: header,
+        message: message,
+        buttons: [
+          {
+            text: '확인',
+            handler: () => {
+              if (refresh) {
+                this.modalController.dismiss(true);
+                this.refreshPage();
+              }
+            }
+          }
+        ]
+      });
+      await alert.present();
+    }
+  
 
     ngOnInit() {
       this.route.queryParams.subscribe(params => {
@@ -151,4 +181,52 @@ import { ApiResponse } from 'src/app/models/common/api-response.interface';
           }
       }
     }
+
+    async handleSummaryClick() {
+      try {
+        console.log('요약 요청 파라미터:', {
+          courseId: this.courseId,
+          videoTopicId: this.videoTopicId,
+          videoId: this.videoId
+        });
+    
+        const response = await firstValueFrom(
+          this.videoService.summaryVideo(
+            this.courseId,
+            this.videoTopicId,
+            this.videoId
+          )
+        );
+        console.log(response);
+        console.log(response.data.summary);
+        // ApiResponse의 data 필드에서 summary를 가져옵니다
+        if (response && response.data) {
+          this.videoSummary = response.data.summary;
+          this.showSummary = true;
+          console.log('설정된 요약 텍스트:', this.videoSummary);
+        }
+        
+      } catch (error: unknown) {
+        console.error('요약 데이터 조회 실패:', error);
+        let errorMessage = '요약을 불러오는 중 문제가 발생했습니다';
+        if (error instanceof HttpErrorResponse) {
+          if (error.status === 404) {
+            errorMessage = '이 비디오에 대한 요약 정보가 아직 준비되지 않았습니다';
+          }
+        }
+        this.showAlert('알림', errorMessage);
+      }
+    }
+
+    toggleSummary() {
+      this.showSummary = !this.showSummary;
+    }
+
+    async handleToggleAndSummary() {
+      this.toggleSummary();  // 먼저 패널을 토글
+      if (this.showSummary && !this.videoSummary) {
+        await this.handleSummaryClick();  // 패널이 열리고 요약이 없을 때만 요약을 가져옴
+      }
+    }
+
   }

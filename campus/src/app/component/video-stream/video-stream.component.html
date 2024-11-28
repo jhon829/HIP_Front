@@ -1,24 +1,40 @@
-<!-- <ion-header>
-  <ion-toolbar>
-    <img src="../../../assets/svg/HIP-Logo.svg" id="logo" alt="Logo">
-  </ion-toolbar>
-</ion-header> -->
-
 <ion-content>
+  <!-- Main container -->
   <div class="video-container">
+    <!-- Logo -->
     <div class="icon-location">
       <img src="../../../assets/svg/HIP-Logo.svg" id="logo" alt="Logo">
     </div>
-    <!-- 로딩 표시 -->
+
+    <!-- Loading indicator -->
     <ion-spinner *ngIf="isLoading"></ion-spinner>
     
-    <!-- 에러 메시지 -->
+    <!-- Error message -->
     <ion-text color="danger" *ngIf="errorMessage">
       {{ errorMessage }}
     </ion-text>
 
-    <!-- 비디오 플레이어 -->
+    <!-- Video section -->
     <div class="video-wrapper" *ngIf="videoUrl && !isLoading">
+      <!-- Summary toggle button - 위치 고정 -->
+      <div class="summary-toggle" [class.active]="showSummary">
+        <ion-button (click)="handleToggleAndSummary()" fill="clear">
+          <ion-icon [name]="showSummary ? 'chevron-back' : 'chevron-forward'"></ion-icon>
+          <span *ngIf="!showSummary">Summary</span>
+        </ion-button>
+      </div>
+    
+      <!-- Summary side panel - showSummary로 표시 제어 -->
+      <div class="summary-panel" [class.show]="showSummary">
+        <div class="summary-content">
+          <h2>Video Summary</h2>
+          <div class="summary-text">
+            {{ videoSummary }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Video player -->
       <video
         #videoPlayer
         class="video-player"
@@ -31,18 +47,19 @@
         <track kind="captions">
       </video>
 
+      <!-- Video controls -->
       <ion-card>
         <ion-card-content>
           <ion-grid>
             <ion-row class="ion-align-items-center">
-              <!-- 재생/일시정지 버튼 -->
+              <!-- Play/Pause button -->
               <ion-col size="2">
                 <ion-button fill="clear" (click)="togglePlay()">
                   <ion-icon [name]="isPlaying ? 'pause' : 'play'"></ion-icon>
                 </ion-button>
               </ion-col>
 
-              <!-- 볼륨 컨트롤 -->
+              <!-- Volume control -->
               <ion-col size="4">
                 <ion-button fill="clear" (click)="toggleMute()">
                   <ion-icon [name]="isMuted ? 'volume-mute' : 'volume-high'"></ion-icon>
@@ -57,7 +74,7 @@
                 ></ion-range>
               </ion-col>
 
-              <!-- 화질 선택 -->
+              <!-- Quality selection -->
               <ion-col size="6">
                 <ion-item>
                   <ion-label>화질</ion-label>
