@@ -75,13 +75,15 @@ export class SidemenuComponent implements OnInit {
            if (page === 'classmy') {
                switch(userRole) {
                    case Role.STUDENT:
-                       const courseId = localStorage.getItem('courseId');
+                        const courseId = JSON.parse(localStorage.getItem('courseId') || '[]')[0];
                        if (!courseId) {
                            await this.showToast('수강 중인 강좌가 없습니다.');
                            await this.router.navigate(['/classnone']);
                            return;
                        }
-                       await this.router.navigate(['/classmy', courseId]);
+
+                        await this.router.navigate(['/classmy', courseId]);
+                        
                        await this.showToast('강의실로 이동합니다.', 'success');
                        break;
 
