@@ -1,16 +1,24 @@
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { IonicModule } from '@ionic/angular';
 
-import { VideoService } from '../../services/course/video.service';
+import { VideoCreateModalComponent } from './video-create-modal.component';
 
-describe('VideoService', () => {
-  let service: VideoService;
+describe('VideoCreateModalComponent', () => {
+  let component: VideoCreateModalComponent;
+  let fixture: ComponentFixture<VideoCreateModalComponent>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(VideoService);
-  });
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [ VideoCreateModalComponent ],
+      imports: [IonicModule.forRoot()]
+    }).compileComponents();
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+    fixture = TestBed.createComponent(VideoCreateModalComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 });

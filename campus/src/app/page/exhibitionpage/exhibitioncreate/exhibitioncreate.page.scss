@@ -115,6 +115,7 @@ button:hover {
   border-left: 4px solid #007bff;
   padding: 10px;
   border-radius: 4px;
+  margin: auto;
   margin-bottom: 10px;
 }
 
@@ -129,4 +130,10 @@ button:hover {
 
 .submittext{
   margin: auto ;
+}
+
+
+.ng-invalid{
+  width: 899px;
+  margin: auto;
 }
