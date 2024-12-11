@@ -6,11 +6,12 @@ import { CourseService } from '../../../services/course/course.service';
 import { ApiResponse } from '../../../models/common/api-response.interface';
 import { ClassmyResponseData } from '../../../models/course/dummy/classmy/classmy-response.interface'
 import { Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { VideoCreateModalComponent } from '../../../component/video-create-modal/video-create-modal.component';
 import { Registration, Role } from 'src/app/models/enums/role.enums';
 import { HttpErrorResponse } from '@angular/common/http';
 import { VideoTopicResponseData } from 'src/app/models/course/video_topic/video_topic-response.interface';
+import { VideoService } from 'src/app/services/course/video.service';
 
 @Component({
   selector: 'app-classmy',
@@ -33,11 +34,36 @@ export class ClassmyPage implements OnInit {
     private courseService: CourseService,
     private modalController: ModalController,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private alertController: AlertController,
+    private videoService: VideoService
   ) {}
 
+  refreshPage() {
+    window.location.reload();
+  }
 
-  // approved인지 확인하는 메서드 , 이게 문제있는듯
+  // Alert 표시 메서드
+  async showAlert(header: string, message: string, refresh: boolean = false) {
+    const alert = await this.alertController.create({
+      header: header,
+      message: message,
+      buttons: [
+        {
+          text: '확인',
+          handler: () => {
+            if (refresh) {
+              this.modalController.dismiss(true);
+              this.refreshPage();
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  // approved인지 확인하는 메서드
   private async checkApprovalStatus(courseId: number): Promise<boolean> {
     console.log('Checking approval for courseId:', courseId);
     const userIdString = localStorage.getItem('UserId') || '';
@@ -208,7 +234,8 @@ export class ClassmyPage implements OnInit {
       try {
         const response: ApiResponse<void> = await firstValueFrom(this.courseService.deleteVideoTopic(courseId, videoTopicId)); // 비디오 주제 삭제 API 호출
         console.log(response.message); // 삭제 성공 메시지 출력
-        this.loadCourses(); // 삭제 후 목록 갱신
+        // this.loadCourses(); // 삭제 후 목록 갱신
+        this.refreshPage();
       } catch (error) {
         console.error('비디오 주제 삭제 중 오류 발생', error);
       }
@@ -252,15 +279,12 @@ export class ClassmyPage implements OnInit {
         // 새 비디오 주제 정보를 lectureItem에 저장
         lectureItem.title = lectureItem.newCourseTitle; // 성공적으로 생성 후 제목 설정
         lectureItem.newCourseTitle = ''; // 입력 초기화
+        // this.loadCourses();
+        this.refreshPage();
       } catch (error) {
         console.error('비디오 주제 생성 중 오류 발생:', error);
         alert('비디오 주제 생성에 실패했습니다.');
       }
-  }
-
-  // Alert 메시지 표시를 위한 메서드
-  async showAlert(title: string, message: string) {
-      alert(`${title}: ${message}`);
   }
 
   async openVideoCreateModal(videoTopicId: number | null) {
@@ -278,6 +302,64 @@ export class ClassmyPage implements OnInit {
 
     const result = await modal.present();
     return result;
+  }
+
+  openVideoStream(videoId: number, videoTopicId: number) {
+    
+    console.log(videoId);
+    console.log(videoTopicId)
+
+    this.route.params.subscribe(params => {
+      this.course_id = Number(params['course_id']);
+      console.log('URL course_id:', this.course_id);
+    });
+
+    const state = {
+      courseId: this.course_id,
+      videoTopicId: videoTopicId,
+      videoId: videoId
+    };
+
+    console.log('State before encoding:', state);
+    
+    // state를 base64로 인코딩하여 URL 파라미터로 전달
+    const stateParam = btoa(JSON.stringify(state));
+    console.log(stateParam);
+
+    const url = `/video-stream?state=${stateParam}`;
+    console.log(url);
+    
+    window.open(url, '_blank', 'width=1280,height=720');
+  }
+  
+  getTotalVideosCount(): number {
+    return this.data.VideoTopics.reduce((total, videoTopic) => {
+      // videos 배열이 있는 경우에만 length를 더함
+      return total + (videoTopic.videos?.length || 0);
+    }, 0);
+  }
+
+  async handleStarClick(videoId: number, videoTopicId: number) {
+    // 현재 course_id를 route parameters에서 가져옵니다
+    this.route.params.subscribe(params => {
+      this.course_id = Number(params['course_id']);
+      console.log('URL course_id:', this.course_id);
+    });
+
+    console.log('비디오 ID:', videoId);
+    console.log('비디오 토픽 ID:', videoTopicId);
+
+    try {
+      // service를 통해 데이터를 가져옵니다
+      const response = await firstValueFrom(
+        this.videoService.STTVideo(this.course_id, videoTopicId, videoId)
+      );
+      
+    } catch (error: unknown) { // 명시적으로 unknown 타입 지정
+      console.error('데이터 조회 중 오류 발생:', error);
+      // 오류 발생 시 사용자에게 알립니다
+      this.showAlert('오류', '데이터를 불러오는 중 문제가 발생했습니다.');
+    }
   }
 }
 

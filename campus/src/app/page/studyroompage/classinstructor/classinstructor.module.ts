@@ -7,16 +7,14 @@ import { IonicModule } from '@ionic/angular';
 import { ClassinstructorPageRoutingModule } from './classinstructor-routing.module';
 
 import { ClassinstructorPage } from './classinstructor.page';
-import { SidemenuComponent } from '../../../component/sidemenucomponent/sidemenu.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ClassinstructorPageRoutingModule,
-    SidemenuComponent,
+    ClassinstructorPageRoutingModule
   ],
-  declarations: [ClassinstructorPage],
+  declarations: [ClassinstructorPage]
 })
 export class ClassinstructorPageModule {}

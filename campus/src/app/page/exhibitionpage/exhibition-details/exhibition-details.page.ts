@@ -152,7 +152,3 @@ export class ExhibitionDetailsPage implements OnInit {
     await alert.present();
   }
 }
-
-
-
-

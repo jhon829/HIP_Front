@@ -62,7 +62,7 @@ export class CourseService {
   // 강의 삭제 메서드 추가
   deleteCourse(courseId: number): Observable<ApiResponse<void>> {
     const headers = this.getAuthHeaders(); // 인증 헤더 가져오기
-    return this.http.delete<ApiResponse<void>>(`${this.courseApiUrl}/course/${courseId}/delete`, { headers }); // DELETE 요청
+    return this.http.delete<ApiResponse<void>>(`${this.courseApiUrl}/${courseId}/delete`, { headers }); // DELETE 요청
   }
 
   // 특정 강의 정보를 불러오는 메서드
@@ -223,16 +223,16 @@ export class CourseService {
 
   // Video
   // 영상 생성(업로드, POST)
-  createVideo(courseId: number, videoTopicId: number, VideoData: any): Observable<ApiResponse<VideoRequestData>> {
-    const headers = this.getAuthHeaders();
-    return this.http.post<ApiResponse<VideoRequestData>>(`${this.courseApiUrl}/${courseId}/videoTopics/${videoTopicId}/video/upload`, VideoData, { headers })
-  }
+  // createVideo(courseId: number, videoTopicId: number, VideoData: any): Observable<ApiResponse<VideoRequestData>> {
+  //   const headers = this.getAuthHeaders();
+  //   return this.http.post<ApiResponse<VideoRequestData>>(`${this.courseApiUrl}/${courseId}/videoTopics/${videoTopicId}/video/upload`, VideoData, { headers })
+  // }
 
   // 영상 조회(스트리밍, GET) => 추가적으로 로직 작성 필요
-  streamVideo(courseId: number, videoTopicId: number, videoId: number): Observable<ApiResponse<{ url: string }>> {
-    const headers = this.getAuthHeaders();
-    return this.http.get<ApiResponse<{ url: string }>>(`${this.courseApiUrl}/${courseId}/videoTopics/${videoTopicId}/video/${videoId}/stream`, { headers })
-  }
+  // streamVideo(courseId: number, videoTopicId: number, videoId: number): Observable<ApiResponse<{ url: string }>> {
+  //   const headers = this.getAuthHeaders();
+  //   return this.http.get<ApiResponse<{ url: string }>>(`${this.courseApiUrl}/${courseId}/${videoTopicId}/video/${videoId}/stream`, { headers })
+  // }
 
   // 영상 삭제(DELETE)
   deleteVideo(courseId: number, videoTopicId: number, videoId: number): Observable<ApiResponse<void>> {

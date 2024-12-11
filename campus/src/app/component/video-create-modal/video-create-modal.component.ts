@@ -1,7 +1,7 @@
 // video-create-modal.component.ts
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
-import { VideoService } from './video.service';
+import { AlertController, ModalController } from '@ionic/angular';
+import { VideoService } from '../../services/course/video.service';
 
 interface Video {
   file: File;
@@ -22,8 +22,33 @@ export class VideoCreateModalComponent implements OnInit {
 
   constructor(
     private modalController: ModalController,
-    private videoService: VideoService
+    private videoService: VideoService,
+    private alertController: AlertController // AlertController 주입
   ) {}
+
+  refreshPage() {
+    window.location.reload();
+  }
+
+  // Alert 표시 메서드
+  async showAlert(header: string, message: string, refresh: boolean = false) {
+    const alert = await this.alertController.create({
+      header: header,
+      message: message,
+      buttons: [
+        {
+          text: '확인',
+          handler: () => {
+            if (refresh) {
+              this.modalController.dismiss(true);
+              this.refreshPage();
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
 
   ngOnInit() {
     // 모달이 열릴 때 전달받은 데이터 처리
@@ -48,7 +73,7 @@ export class VideoCreateModalComponent implements OnInit {
 
   async onUpload() {
     if (!this.selectedFile) {
-      alert('파일을 선택해주세요');
+      await this.showAlert('알림', '파일을 선택해주세요', false);
       return;
     }
 
@@ -58,11 +83,11 @@ export class VideoCreateModalComponent implements OnInit {
         .toPromise();
         
       console.log('Upload success:', response);
-      alert('비디오가 성공적으로 업로드되었습니다.');
+      await this.showAlert('성공', '비디오가 성공적으로 업로드되었습니다.', true); // 성공 시 새로고침
       this.modalController.dismiss(true);
     } catch (error) {
       console.error('Upload failed:', error);
-      alert('업로드 중 오류가 발생했습니다.');
+      await this.showAlert('실패', '업로드 중 오류가 발생했습니다.', false); // 실패 시 새로고침하지 않음
     }
   }
 

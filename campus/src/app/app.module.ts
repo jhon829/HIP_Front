@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 import{ExhibitionComponent} from "./page/exhibitionpage/exhibition/exhibition.component";
 import { CourseService } from './services/course/course.service'; // 서비스 경로 확인
 import { VideoCreateModalComponent } from './component/video-create-modal/video-create-modal.component';
+import { VideoStreamComponent } from './component/video-stream/video-stream.component';
 
 @NgModule({
   declarations: [AppComponent, AttendanceModalComponent],
@@ -25,10 +26,10 @@ import { VideoCreateModalComponent } from './component/video-create-modal/video-
     TopBarComponent,
     CommonModule,
     ExhibitionComponent,
-    FormsModule, SidemenuComponent,
+    FormsModule, SidemenuComponent
 
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy},CourseService,],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, CourseService ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

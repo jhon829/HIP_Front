@@ -1,67 +1,25 @@
-<!--<ion-content>-->
-<!--  <ion-list>-->
-<!--    <ion-item *ngFor="let course of coursesList">-->
-<!--      <ion-label>-->
-<!--        <h2>{{ course.course_title }}</h2>-->
-<!--        <p>{{ course.description }}</p>-->
-<!--        <p>강사: {{ course.instructor_name }} | {{ course.generation }}기</p>-->
-<!--        <p *ngIf="course.course_notice">공지: {{ course.course_notice }}</p>-->
-<!--      </ion-label>-->
-<!--      <ion-button (click)="enterCourse(course.course_id)" slot="end">-->
-<!--        진입-->
-<!--      </ion-button>-->
-<!--    </ion-item>-->
-<!--  </ion-list>-->
-
-<!--  <ion-text *ngIf="coursesList.length === 0" class="ion-text-center">-->
-<!--    <p>진행 중인 강의가 없습니다.</p>-->
-<!--  </ion-text>-->
-<!--</ion-content>-->
-
-
-<!---->
-<ion-content>
-  <div class="layout">
-    <app-sidemenu class="sidemenu"></app-sidemenu>
-    <div class="content-wrapper">
-      <ion-header class="ion-no-border">
-        <ion-toolbar>
-          <ion-title>클래스 탐색</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <div class="main-container">
-        <div>
-          <div class="project-search">
-            <ion-icon name="search-outline" size="large"></ion-icon>
-            <h2 class="project-title">클래스 탐색</h2>
-          </div>
-        </div>
-
-        <hr/>
-
-        <div *ngFor="let course of coursesList; let i = index" class="project-box">
-          <ion-grid class="class1">
-            <ion-row>
-              <ion-col>{{ i + 1 }}</ion-col>
-              <ion-col size="2">{{ course.instructor_name }}</ion-col>
-              <ion-col class="class-title" size="8">
-                <ion-col class="col">{{ course.course_title }}</ion-col>
-                <br/>
-                <ion-col class="class-team">{{ course.description }}</ion-col>
-              </ion-col>
-              <ion-col>
-                <div (click)="enterCourse(course.course_id)" class="inquiryBtn">
-                  조회하기
-                </div>
-
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </div>
-
-
-      </div>
-    </div>
-  </div>
-</ion-content>
-
+<ion-header>
+    <ion-toolbar>
+      <ion-title>내 강의 목록</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <ion-list>
+      <ion-item *ngFor="let course of coursesList">
+        <ion-label>
+          <h2>{{ course.course_title }}</h2>
+          <p>{{ course.description }}</p>
+          <p>강사: {{ course.instructor_name }} | {{ course.generation }}</p>
+          <p *ngIf="course.course_notice">공지: {{ course.course_notice }}</p>
+        </ion-label>
+        <ion-button slot="end" (click)="enterCourse(course.course_id)">
+          진입
+        </ion-button>
+      </ion-item>
+    </ion-list>
+  
+    <ion-text *ngIf="coursesList.length === 0" class="ion-text-center">
+      <p>진행 중인 강의가 없습니다.</p>
+    </ion-text>
+  </ion-content>

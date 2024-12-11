@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { VideoCreateModalComponent } from './video-create-modal.component';
+import { VideoStreamComponent } from './video-stream.component';
 
-describe('VideoCreateModalComponent', () => {
-  let component: VideoCreateModalComponent;
-  let fixture: ComponentFixture<VideoCreateModalComponent>;
+describe('VideoStreamComponent', () => {
+  let component: VideoStreamComponent;
+  let fixture: ComponentFixture<VideoStreamComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ VideoCreateModalComponent ],
+      declarations: [ VideoStreamComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(VideoCreateModalComponent);
+    fixture = TestBed.createComponent(VideoStreamComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
