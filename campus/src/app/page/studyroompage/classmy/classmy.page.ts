@@ -67,8 +67,8 @@ export class ClassmyPage implements OnInit {
   private async checkApprovalStatus(courseId: number): Promise<boolean> {
     console.log('Checking approval for courseId:', courseId);
     const userIdString = localStorage.getItem('UserId') || '';
-    console.log(userIdString)
-    const userId = Number(userIdString)
+    console.log(userIdString);
+    const userId = Number(userIdString);
     try {
         if (!courseId || courseId === 0) {
             return false;
@@ -97,7 +97,7 @@ export class ClassmyPage implements OnInit {
           response?.data.course_registration_status === Registration.APPROVED &&
           Number(response.data.user?.user_id) === userId &&
           response.data.course?.course_id === courseId
-      );
+        );
 
       console.log('Approval status:', isApproved);
       return isApproved;
