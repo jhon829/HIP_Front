@@ -111,9 +111,13 @@ const routes: Routes = [
   {
     path: 'classmy/:course_id/doc-topics/:topicId',
     component: DocTopicComponent
-  }
+  },
+  {
+    path: 'registration-admin',
+    loadChildren: () => import('./page/studyroompage/registration-admin/registration-admin.module').then(m => m.RegistrationAdminPageModule)
+  },
+  { path: '**', redirectTo: '/main' } // 정의되지 않은 경로는 main으로 라우팅
 ];
-
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })],
