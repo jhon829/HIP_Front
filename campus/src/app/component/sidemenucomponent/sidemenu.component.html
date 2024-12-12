@@ -15,14 +15,24 @@
       <ion-icon [name]="classesVisible ? 'chevron-up' : 'chevron-down'" slot="end"></ion-icon>
     </ion-item>
 
+    <!-- 일반 사용자와 관리자에 따라 다른 메뉴 표시 -->
     <ion-list [ngClass]="{'slide-down': classesVisible, 'slide-up': !classesVisible}" *ngIf="classesVisible">
-      <ion-item button (click)="navigateTo('classmy')" [disabled]="isLoading">
-        <ion-label>내 클래스</ion-label>
-        <ion-spinner *ngIf="isLoading" name="dots"></ion-spinner>
-      </ion-item>
-      <ion-item button (click)="navigateTo('classsignup')">
-        <ion-label>클래스 신청</ion-label>
-      </ion-item>
+      <ng-container *ngIf="!isAdmin; else adminMenu">
+        <!-- 일반 사용자 메뉴 -->
+        <ion-item button (click)="navigateTo('classmy')" [disabled]="isLoading">
+          <ion-label>내 클래스</ion-label>
+          <ion-spinner *ngIf="isLoading" name="dots"></ion-spinner>
+        </ion-item>
+        <ion-item button (click)="navigateTo('classsignup')">
+          <ion-label>클래스 신청</ion-label>
+        </ion-item>
+      </ng-container>
+      <!-- 관리자 메뉴 -->
+      <ng-template #adminMenu>
+        <ion-item button (click)="navigateTo('registration-admin')">
+          <ion-label>클래스 관리</ion-label>
+        </ion-item>
+      </ng-template>
     </ion-list>
 
     <ion-item button (click)="toggleProjects()">

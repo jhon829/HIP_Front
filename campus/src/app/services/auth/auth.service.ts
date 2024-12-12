@@ -227,4 +227,9 @@ export class AuthService {
   requestKakaoLogin(): Observable<any> {
     return this.http.get(`${this.authApiUrl}/kakao`); // 서버에 카카오 로그인 요청
   }
+  isUserAdmin(): boolean {
+    const userRole = localStorage.getItem('Role');
+    console.log(userRole);
+    return userRole === 'admin';
+  }
 }

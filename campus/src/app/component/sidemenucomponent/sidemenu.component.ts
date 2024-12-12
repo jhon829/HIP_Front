@@ -27,16 +27,19 @@ export class SidemenuComponent implements OnInit {
    projectsVisible = false;
    isLoading = false;
    errorMessage: string = '';
+   isAdmin: boolean = false;
 
    constructor(
        private router: Router,
        private courseService: CourseService,
        private authService: AuthService,
-       private toastController: ToastController
+       private toastController: ToastController,
    ) { }
 
    ngOnInit() {
        this.validateAuthentication();
+       this.isAdmin = this.authService.isUserAdmin();
+       console.log('Admin status:', this.isAdmin);
    }
 
    // 토글 메서드

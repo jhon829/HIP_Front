@@ -126,7 +126,8 @@ export class ClassmyPage implements OnInit {
     
     // 관리자는 접근 불가
     if (this.userRole === Role.ADMIN) {
-        this.router.navigate(['/classsignup']);
+        this.router.navigate(['/registration-admin']);
+        this.showAlert('오류', '관리자는 강의 상세를 볼 수 없습니다.');
         return;
     }
 
