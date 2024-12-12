@@ -12,15 +12,11 @@ import { UserResponse } from 'src/app/models/common/user-response';
 import { CourseRegistrationResponseData } from 'src/app/models/course/courses/course-registation-response.interface';
 import { CourseRegistrationRequestData } from 'src/app/models/course/courses/course-registration-request.interface';
 
-
 @Component({
   selector: 'app-classsignup',
   templateUrl: './classsignup.page.html',
   styleUrls: ['./classsignup.page.scss'],
 })
-
-
-
 
 export class ClasssignupPage implements OnInit {
   registeredCourses: Set<number> = new Set();
@@ -52,11 +48,6 @@ export class ClasssignupPage implements OnInit {
     }
 
     this.loadCourses();
-
-    // courseId와 userId가 존재할 때만 courseinqueryUser 호출
-    if (courseId && userId) {
-      this.courseinqueryUser(courseId, userId);
-    }
   }
 
   /*
@@ -65,58 +56,6 @@ export class ClasssignupPage implements OnInit {
       await this.courseinqueryUser(course);
     }
   }*/
-
-  // 강의 신청 유저 조회하기
-  async courseinqueryUser(courseId: number, userId: number) {
-    try {
-      const response: ApiResponse<CourseRegistrationResponseData> = await firstValueFrom(
-        this.courseService.getRegistration(courseId, userId)
-      );
-  
-      if (response?.data) {        
-        // applicant와 currentCourse가 존재하는지 먼저 확인
-        const applicant = response.data.user;
-        const currentCourse = response.data.course;
-  
-        if (!applicant || !currentCourse) {
-          console.error('Required data is missing');
-          return;
-        }
-  
-        // 필수 데이터가 있는 경우에만 매핑 진행
-        const mappedRegistration: CourseRegistrationResponseData = {
-          course_registration_id: response.data.course_registration_id,
-          course_registration_status: response.data.course_registration_status,
-          course_reporting_date: new Date(response.data.course_reporting_date),
-          user: {
-            user_id: applicant.user_id,
-            id: applicant.id || '',  // 여기서는 user_id 사용
-            user_name: applicant.user_name || '',
-            email: applicant.email || '',
-            user_role: applicant.user_role || ''
-          },
-          course: {
-            course_id: currentCourse.course_id,
-            course_title: currentCourse.course_title || '',
-            description: currentCourse.description || '',
-            instructor_name: currentCourse.instructor_name || '',
-            course_notice: currentCourse.course_notice || '',
-            generation: currentCourse.generation || ''
-          }
-        };
-  
-        this.CourseRegistrationResponseData[courseId] = [mappedRegistration];
-        console.log('Mapped registration data:', this.CourseRegistrationResponseData[courseId]);
-      }
-  
-    } catch (error) {
-      console.error(`Error loading registrations for course ${courseId}`, error);
-      alert('강의 등록 정보를 불러오는 중 오류가 발생했습니다.');
-    }
-  }
-
-
-
 
 
   //courseId를 받고 generation이 같을 경우 반환
@@ -137,7 +76,6 @@ export class ClasssignupPage implements OnInit {
 
   //모든 강의 정보 로드
   async loadCourses() {
-
     try {
       const response: ApiResponse<CourseResponseData[]> = await firstValueFrom(this.courseService.getAllCourses());
       console.log('All courses:', response.data);
@@ -152,8 +90,6 @@ export class ClasssignupPage implements OnInit {
       console.error('Error loading courses', error);
     }
   }
-
-
 
   async createCourse() {
     const modal = await this.modalController.create({
@@ -179,8 +115,6 @@ export class ClasssignupPage implements OnInit {
           const updatedCourse = result.data;
           const response = await firstValueFrom(this.courseService.updateCourse(course.course_id, updatedCourse));
           console.log('Course updated successfully:', response);
-
-
           this.loadCourses();
         } catch (error) {
           console.error('Error updating course:', error);
@@ -190,8 +124,6 @@ export class ClasssignupPage implements OnInit {
 
     return await modal.present();
   }
-
-
 
   async deleteCourse(courseId: number) {
     const confirmed = confirm('이 강의를 삭제하시겠습니까?');
@@ -262,15 +194,10 @@ export class ClasssignupPage implements OnInit {
     }
   }
 
-
   //현재 강의를 신청했는지에 대한 변수
   isRegistered(courseId: number): boolean {
     return this.registeredCourses.has(courseId); // 강의 ID가 Set에 존재하는지 확인
   }
-
-
-
-
 
   /*//취소하기 기능
   async cancelRegistration(courseId: number) {
@@ -314,7 +241,4 @@ export class ClasssignupPage implements OnInit {
     // 유저 거절 로직을 여기에 구현
     console.log(`User ${userId} rejected.`);
   }
-
-
-
 }
