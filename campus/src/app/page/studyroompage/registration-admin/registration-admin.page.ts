@@ -147,5 +147,40 @@ export class RegistrationAdminPage implements OnInit {
     }
 
     // 거절 버튼, course_registration에 접근해서 status만 update
+    async rejectButton(courseId: number, registrationId: number) {
+        try{
+            const courseStatus = Registration.REJECTED;
+            const registrationData: CourseRegistrationRequestData = {
+                course_registration_status: courseStatus
+            };
+            const response = await firstValueFrom(
+                this.courseService.updateRegistration(courseId, registrationId, registrationData)
+            );
 
+            console.log('back-end message:', response.message);
+            alert(response.message);  // 백엔드에서 보내준 메시지 사용
+
+        } catch (error) {
+            console.error('강의 상태 수정 중 오류 발생:', error);
+            let errorMessage = '강의 상태 수정 중 오류가 발생했습니다.';
+    
+            if (error instanceof HttpErrorResponse) {
+                switch (error.status) {
+                    case 400:
+                        errorMessage = '잘못된 요청입니다.';
+                        break;
+                    case 401:
+                        errorMessage = 'auth 오류.';
+                        break;
+                    case 409:
+                        errorMessage = '이미 수정한 강의입니다.';
+                        break;
+                    default:
+                        errorMessage = '서버 오류가 발생했습니다.';
+                }
+            }
+    
+            alert(errorMessage);
+        }
+    }
 }
