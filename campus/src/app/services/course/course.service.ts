@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { catchError, Observable, throwError } from 'rxjs';
 import { CourseResponseData } from '../../models/course/courses/course-response.interface'; // 인터페이스 경로 수정
 import { ApiResponse } from 'src/app/models/common/api-response.interface';
-import { CourseWithCourseRegistrationResponseData } from 'src/app/models/course/courses/course-with-courseregistration-resoinse.interface';
+import { CourseWithCourseRegistrationResponseData } from 'src/app/models/course/courses/course-with-courseregistration-response.interface';
 import { CourseDocRequestData } from 'src/app/models/course/course_doc/course_doc-request.interface';
 import { VideoTopicRequestData } from 'src/app/models/course/video_topic/video_topic-request.interface';
 import { VideoRequestData } from 'src/app/models/course/video/video-request.interface';
@@ -112,7 +112,10 @@ export class CourseService {
     return this.http.get<ApiResponse<CourseRegistrationResponseData>>(`${this.courseApiUrl}/${courseId}/courseRegistration/${id}/approvedcourse`, { headers });
   }
 
-
+  getCourseWithCourseRegistration(courseId: number, id: number): Observable<ApiResponse<CourseWithCourseRegistrationResponseData>> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<ApiResponse<CourseWithCourseRegistrationResponseData>>(`${this.courseApiUrl}/${courseId}/courseRegistration/${id}/approvedcourse`, { headers });
+  }
     // 수강신청 상태 수정(변경)
     updateRegistration(courseId: number, id: number,  registrationData: CourseRegistrationRequestData): Observable<ApiResponse<CourseRegistrationResponseData>> {
         const headers = this.getAuthHeaders();

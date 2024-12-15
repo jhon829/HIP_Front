@@ -6,7 +6,8 @@ import { ApiResponse } from 'src/app/models/common/api-response.interface';
 import { CourseRegistrationResponseData } from 'src/app/models/course/courses/course-registation-response.interface';
 import { CourseRegistrationRequestData } from 'src/app/models/course/courses/course-registration-request.interface';
 import { CourseResponseData } from 'src/app/models/course/courses/course-response.interface';
-import { Registration, Role } from 'src/app/models/enums/role.enums';
+import { CourseWithCourseRegistrationResponseData } from 'src/app/models/course/courses/course-with-courseregistration-response.interface';
+import { Registration } from 'src/app/models/enums/role.enums';
 import { CourseService } from 'src/app/services/course/course.service';
 
 @Component({
@@ -18,7 +19,9 @@ export class RegistrationAdminPage implements OnInit {
     userRole: string = '';
     coursesList: CourseResponseData[] = [];
     CourseRegistrationResponseData: { [courseId: number]: CourseRegistrationResponseData[] } = {};
-    
+    registrationList: CourseRegistrationRequestData[] = [];
+    courseId: number = Number(localStorage.getItem('courseId')) || 0; // courseId 초기화
+
     constructor(
         private router: Router,
         private courseService: CourseService
@@ -42,8 +45,13 @@ export class RegistrationAdminPage implements OnInit {
         const response = await firstValueFrom(
             this.courseService.getAllCourses()  // 또는 getInstructorCourses() API가 있다면 사용
         );
-        // 현재 강사의 강의만 필터링 (강사 ID로 필터링하는 로직 필요)
-        this.coursesList = response.data;
+        
+        this.coursesList = response.data.map((course: any) => {
+            return {
+                ...course,
+                course_registration_id: course.course_registration_id || null // 등록 ID 포함
+            };
+        });
         console.log('강사 강의 목록:', this.coursesList);
         } catch (error) {
         console.error('강의 목록 로드 중 오류 발생:', error);
@@ -64,42 +72,47 @@ export class RegistrationAdminPage implements OnInit {
     // 강의 신청 유저 조회하기
     async courseinqueryUser(courseId: number, userId: number) {
         try {
-            const response: ApiResponse<CourseRegistrationResponseData> = await firstValueFrom(
-                this.courseService.getRegistration(courseId, userId)
+            const response: ApiResponse<CourseWithCourseRegistrationResponseData> = await firstValueFrom(
+                this.courseService.getCourseWithCourseRegistration(courseId, userId)
             );
-        
-            if (response?.data) {        
-                // applicant와 currentCourse가 존재하는지 먼저 확인
-                const applicant = response.data.user;
-                const currentCourse = response.data.course;
-            
-                if (!applicant || !currentCourse) {
-                    console.error('Required data is missing');
+
+            if (response?.data) {
+                const currentCourse = response.data; // CourseWithCourseRegistrationResponseData 전체 데이터
+                const courseRegistrations = currentCourse.course_registration; // course_registration 배열
+                const applicants = currentCourse.user; // user 배열
+
+                if (!courseRegistrations.length || !applicants.length) {
+                    console.error('No registrations or applicants found');
                     return;
                 }
-        
-                // 필수 데이터가 있는 경우에만 매핑 진행
-                const mappedRegistration: CourseRegistrationResponseData = {
-                    course_registration_id: response.data.course_registration_id,
-                    course_registration_status: response.data.course_registration_status,
-                    course_reporting_date: new Date(response.data.course_reporting_date),
-                    user: {
-                        user_id: applicant.user_id,
-                        id: applicant.id || '',
-                        user_name: applicant.user_name || '',
-                        email: applicant.email || '',
-                        user_role: applicant.user_role || ''
-                    },
-                    course: {
-                        course_id: currentCourse.course_id,
-                        course_title: currentCourse.course_title || '',
-                        description: currentCourse.description || '',
-                        instructor_name: currentCourse.instructor_name || '',
-                        course_notice: currentCourse.course_notice || '',
-                        generation: currentCourse.generation || ''
-                    }
-                };
-                this.CourseRegistrationResponseData[courseId] = [mappedRegistration];
+
+                // course_registration 배열을 매핑
+                this.CourseRegistrationResponseData[courseId] = courseRegistrations.map(registration => {
+                    const user = applicants.find(u => u.user_id === registration.user?.user_id) || null;
+                    return {
+                        course_registration_id: registration.course_registration_id,
+                        course_registration_status: registration.course_registration_status,
+                        course_reporting_date: new Date(registration.course_reporting_date),
+                        user: user
+                            ? {
+                                user_id: user.user_id,
+                                id: user.id || '',
+                                user_name: user.user_name || '',
+                                email: user.email || '',
+                                user_role: user.user_role || ''
+                            }
+                            : undefined,
+                        course: {
+                            course_id: currentCourse.course_id,
+                            course_title: currentCourse.course_title || '',
+                            description: currentCourse.description || '',
+                            instructor_name: currentCourse.instructor_name || '',
+                            course_notice: currentCourse.course_notice || '',
+                            generation: currentCourse.generation || ''
+                        }
+                    };
+                });
+
                 console.log('Mapped registration data:', this.CourseRegistrationResponseData[courseId]);
             }
         } catch (error) {
@@ -107,7 +120,7 @@ export class RegistrationAdminPage implements OnInit {
             alert('강의 등록 정보를 불러오는 중 오류가 발생했습니다.');
         }
     }
-    
+
     // 수락 버튼, course_registration에 접근해서 status만 update
     async approveButton(courseId: number, registrationId: number) {
         try{
