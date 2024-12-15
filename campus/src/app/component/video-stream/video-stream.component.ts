@@ -197,13 +197,16 @@ import { HttpErrorResponse } from '@angular/common/http';
             this.videoId
           )
         );
-        console.log(response);
-        console.log(response.data.summary);
+        console.log('응답:', response);
+        console.log('summary:', response.summary);
         // ApiResponse의 data 필드에서 summary를 가져옵니다
-        if (response && response.data) {
-          this.videoSummary = response.data.summary;
+        if (response && response.summary) {
+          this.videoSummary = response.summary;
           this.showSummary = true;
           console.log('설정된 요약 텍스트:', this.videoSummary);
+        } else {
+          console.error('요약 데이터가 없습니다:', response);
+          throw new Error('Invalid response format');
         }
         
       } catch (error: unknown) {

@@ -67,8 +67,13 @@ export class VideoService {
     return this.http.post<ApiResponse<VideoSummary>>(`${this.ApiUrl}/${courseId}/${videoTopicId}/video/stt/${videoId}`, { headers })
   }
   
-  summaryVideo(courseId: number, videoTopicId: number, videoId: number): Observable<ApiResponse<VideoSummary>> {
+  // summaryVideo(courseId: number, videoTopicId: number, videoId: number): Observable<ApiResponse<VideoSummary>> {
+  //   const headers = this.getAuthHeaders();
+  //   return this.http.get<ApiResponse<VideoSummary>>(`${this.ApiUrl}/${courseId}/${videoTopicId}/video/summary/${videoId}`, { headers })
+  // }
+
+  summaryVideo(courseId: number, videoTopicId: number, videoId: number): Observable<{ summary: string }> {
     const headers = this.getAuthHeaders();
-    return this.http.get<ApiResponse<VideoSummary>>(`${this.ApiUrl}/${courseId}/${videoTopicId}/video/summary/${videoId}`, { headers })
+    return this.http.get<{ summary: string }>(`${this.ApiUrl}/${courseId}/${videoTopicId}/video/summary/${videoId}`, { headers })
   }
 }
