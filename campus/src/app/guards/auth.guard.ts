@@ -102,48 +102,52 @@ export class AuthGuard implements CanActivate {
     const userId = Number(localStorage.getItem('UserId'));
     try {
         if (!courseId || courseId === 0) {
-            console.log('Invalid courseId');
+            console.log('유효하지 않은 courseId');
             return false;
         }
         
         if (!userId) {
-            console.log('No user ID found');
+            console.log('UserId가 없습니다');
             return false;
         }
 
         const response = await firstValueFrom(
-            this.courseService.getRegistration(courseId, userId)
+            this.courseService.getCourseWithCourseRegistration(courseId, userId)
         );
 
-        console.log('API Response:', response);
+        console.log('API 응답:', response);
 
         if (!response?.data) {
-            console.log('No data in response');
+            console.log('응답 데이터가 없습니다');
             return false;
         }
 
-        const isApproved = 
-            response.data.course_registration_status === Registration.APPROVED && 
-            Number(response.data.user?.id) === userId;
+        // course_registration 배열에서 APPROVED 상태를 가진 항목 찾기
+        const isApproved = response.data.course_registration.some(
+            (registration) =>
+                registration.course_registration_status === Registration.APPROVED &&
+                registration.user?.user_id === userId
+        );
 
-        console.log('Approval status:', isApproved);
+        console.log('승인 상태:', isApproved);
         return isApproved;
 
     } catch (error) {
-        console.error('Approval check failed:', error);
+        console.error('승인 상태 확인 실패:', error);
         if (error instanceof HttpErrorResponse) {
             switch (error.status) {
                 case 401:
                     await this.router.navigate(['/loginpage']);
                     break;
                 case 404:
-                    console.error('Course not found');
+                    console.error('강의를 찾을 수 없습니다');
                     break;
                 default:
-                    console.error('API error:', error);
+                    console.error('API 오류:', error);
             }
         }
         return false;
     }
 }
+
 }

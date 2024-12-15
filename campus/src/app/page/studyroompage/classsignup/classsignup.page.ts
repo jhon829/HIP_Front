@@ -6,7 +6,7 @@ import { firstValueFrom } from 'rxjs'; // firstValueFrom 가져오기
 import { ApiResponse } from 'src/app/models/common/api-response.interface';
 import { Registration } from '../../../models/enums/role.enums';
 import { HttpErrorResponse } from '@angular/common/http';
-import { CourseWithCourseRegistrationResponseData } from 'src/app/models/course/courses/course-with-courseregistration-resoinse.interface';
+import { CourseWithCourseRegistrationResponseData } from 'src/app/models/course/courses/course-with-courseregistration-response.interface';
 import { CourseResponseData } from 'src/app/models/course/courses/course-response.interface';
 import { UserResponse } from 'src/app/models/common/user-response';
 import { CourseRegistrationResponseData } from 'src/app/models/course/courses/course-registation-response.interface';
@@ -35,9 +35,7 @@ export class ClasssignupPage implements OnInit {
   ngOnInit() {
     const savedGeneration = localStorage.getItem('selectedGeneration');
     const savedUserRole = localStorage.getItem('userRole');
-    const courseId = Number(localStorage.getItem('courseId'));  // 예시: localStorage에서 courseId 가져오기
-    const userId = Number(localStorage.getItem('userId'));      // 예시: localStorage에서 userId 가져오기
-
+    
     if (savedGeneration) {
       this.selectedGeneration = savedGeneration;
     }
