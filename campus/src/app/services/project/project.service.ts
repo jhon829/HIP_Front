@@ -24,88 +24,124 @@ export class ProjectService {
   }
 
   // projects
-  createProject(projectData: any): Observable<ApiResponse<ProjectResponseData>> {
+  createProject(projectData: Partial<ProjectResponseData>): Observable<ApiResponse<ProjectResponseData>> {
+    const headers = this.getAuthHeaders();
     return this.http.post<ApiResponse<ProjectResponseData>>(
       `${this.projectApiUrl}/register`,
-      projectData
+      projectData, 
+      { headers }
     );
   }
 
   getAllProjects(): Observable<ApiResponse<ProjectResponseData[]>> {
-    return this.http.get<ApiResponse<ProjectResponseData[]>>(`${this.projectApiUrl}`);
+    const headers = this.getAuthHeaders();
+    return this.http.get<ApiResponse<ProjectResponseData[]>>(
+      `${this.projectApiUrl}`, 
+      { headers }
+    );
   }
 
   // 단일 프로젝트 가져오기
   getProjectById(id: number): Observable<ApiResponse<ProjectResponseData>> {
-    return this.http.get<ApiResponse<ProjectResponseData>>(`${this.projectApiUrl}/${id}`);
+    const headers = this.getAuthHeaders();
+    return this.http.get<ApiResponse<ProjectResponseData>>(
+      `${this.projectApiUrl}/${id}`,
+      { headers }
+    );
   }
 
   updateProject(id: number, projectData: any): Observable<ApiResponse<ProjectResponseData>> {
+    const headers = this.getAuthHeaders();
     return this.http.patch<ApiResponse<ProjectResponseData>>(
       `${this.projectApiUrl}/${id}/update`,
-      projectData
+      projectData,
+      { headers }
     );
   }
 
   deleteProject(id: number): Observable<ApiResponse<ProjectResponseData>> {
-    return this.http.delete<ApiResponse<ProjectResponseData>>(`${this.projectApiUrl}/${id}/delete`);
+    const headers = this.getAuthHeaders();
+    return this.http.delete<ApiResponse<ProjectResponseData>>(
+      `${this.projectApiUrl}/${id}/delete`,
+      { headers }
+    );
   }
 
   // project_doc
   createProjectDoc(projectId: number, projectDocData: any): Observable<ApiResponse<ProjectDocResponseData>> {
+    const headers = this.getAuthHeaders();
     return this.http.post<ApiResponse<ProjectDocResponseData>>(
       `${this.projectApiUrl}/${projectId}/projectDocs/register`,
-      projectDocData
+      projectDocData,
+      { headers }
     );
   }
 
   getAllProjectDoc(projectId: number): Observable<ApiResponse<ProjectDocResponseData>> {
-    return this.http.get<ApiResponse<ProjectDocResponseData>>(`${this.projectApiUrl}/${projectId}/projectDocs`);
+    const headers = this.getAuthHeaders();
+    return this.http.get<ApiResponse<ProjectDocResponseData>>(
+      `${this.projectApiUrl}/${projectId}/projectDocs`,
+      { headers }
+    );
   }
 
   getOneProjectDoc(projectId: number, projectDocId: number): Observable<ApiResponse<ProjectDocResponseData>> {
+    const headers = this.getAuthHeaders();
     return this.http.get<ApiResponse<ProjectDocResponseData>>(
-      `${this.projectApiUrl}/${projectId}/projectDocs/${projectDocId}/read`
+      `${this.projectApiUrl}/${projectId}/projectDocs/${projectDocId}/read`,
+      { headers }
     );
   }
 
   updateProjectDoc(projectId: number, projectDocId: number, projectDocData: any): Observable<ApiResponse<ProjectDocResponseData>> {
+    const headers = this.getAuthHeaders();
     return this.http.put<ApiResponse<ProjectDocResponseData>>(
       `${this.projectApiUrl}/${projectId}/projectDocs/${projectDocId}/update`,
-      projectDocData
+      projectDocData,
+      { headers }
     );
   }
 
   deleteProjectDoc(projectId: number, projectDocId: number): Observable<ApiResponse<ProjectDocResponseData>> {
+    const headers = this.getAuthHeaders();
     return this.http.delete<ApiResponse<ProjectDocResponseData>>(
-      `${this.projectApiUrl}/${projectId}/projectDocs/${projectDocId}/delete`
+      `${this.projectApiUrl}/${projectId}/projectDocs/${projectDocId}/delete`,
+      { headers }
     );
   }
 
   // feedback
   createFeedback(projectId: number, projectDocId: number, feedbackData: FeedbackRequestData): Observable<ApiResponse<FeedbackResponseData>> {
+    const headers = this.getAuthHeaders();
     return this.http.post<ApiResponse<FeedbackResponseData>>(
       `${this.projectApiUrl}/${projectId}/projectDocs/${projectDocId}/feedback/register`,
-      feedbackData
+      feedbackData,
+      { headers }
     );
   }
 
   getAllFeedback(projectId: number, projectDocId: number, feedbackId: number): Observable<ApiResponse<FeedbackResponseData>> {
+    const headers = this.getAuthHeaders();
     return this.http.get<ApiResponse<FeedbackResponseData>>(
-      `${this.projectApiUrl}/${projectId}/projectDocs/${projectDocId}/feedback/${feedbackId}`
+      `${this.projectApiUrl}/${projectId}/projectDocs/${projectDocId}/feedback/${feedbackId}`,
+      { headers }
     );
   }
 
   updateFeedback(projectId: number, projectDocId: number, feedbackId: number, feedbackData: any): Observable<ApiResponse<FeedbackResponseData>> {
+    const headers = this.getAuthHeaders();
     return this.http.patch<ApiResponse<FeedbackResponseData>>(
       `${this.projectApiUrl}/${projectId}/projectDocs/${projectDocId}/feedback/${feedbackId}/update`,
-      feedbackData
+      feedbackData,
+      { headers }
     );
   }
 
   deleteFeedback(projectId: number, projectDocId: number, feedbackId: number): Observable<ApiResponse<FeedbackResponseData>> {
+    const headers = this.getAuthHeaders();
     return this.http.delete<ApiResponse<FeedbackResponseData>>(
-      `${this.projectApiUrl}/${projectId}/projectDocs/${projectDocId}/feedback/${feedbackId}/delete`
+      `${this.projectApiUrl}/${projectId}/projectDocs/${projectDocId}/feedback/${feedbackId}/delete`,
+      { headers }
     );
   }
 }
