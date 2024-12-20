@@ -13,4 +13,4 @@ export interface ProjectRegistrationResponseData {
     registration_status: Registration;
     project_role: string;
     team_role: TeamRole;
-  }
+}

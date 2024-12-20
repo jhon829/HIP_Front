@@ -25,8 +25,7 @@ export class ProjectmyPage implements OnInit {
     class: '',
     project_status: 'in_progress',
     team_name: '',
-    profile: '',
-    requirements: '',
+    generation: ''
   };
 
   public projectsList: ProjectResponseData[] = [];
@@ -120,9 +119,7 @@ export class ProjectmyPage implements OnInit {
     const projectData = {
       topic: this.data.topic,
       class: this.data.class,
-      team_name: this.data.team_name,
-      profile: this.data.profile,
-      requirements: this.data.requirements,
+      team_name: this.data.team_name
     };
 
     try {
@@ -141,9 +138,7 @@ export class ProjectmyPage implements OnInit {
     const projectData = {
       topic: this.data.topic,
       class: this.data.class,
-      team_name: this.data.team_name,
-      profile: this.data.profile,
-      requirements: this.data.requirements,
+      team_name: this.data.team_name
     };
 
     try {
