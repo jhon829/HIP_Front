@@ -4,6 +4,5 @@ export interface ProjectResponseData {
     class: string;
     project_status: 'in_progress' | 'completed';
     team_name: string;
-    profile: string;
-    requirements: string;
+    generation: string;
   }
