@@ -1,12 +1,5 @@
-export enum Registration {
-    APPROVED = 'approved',
-    PENDING = 'pending',
-    REJECTED = 'rejected'
-}
-export enum TeamRole {
-    LEADER = 'leader',
-    MEMBER = 'member'
-}
+import { Registration, TeamRole } from "../../enums/role.enums";
+
 export interface ProjectRegistrationResponseData {
     registration_id: number;
     reporting_date: string;
