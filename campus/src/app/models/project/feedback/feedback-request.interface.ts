@@ -1,3 +1,3 @@
 export interface FeedbackRequestData {
-    feedback_content: string;
+    feedback_content?: string;
 }
